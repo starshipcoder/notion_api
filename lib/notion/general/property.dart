@@ -78,6 +78,8 @@ class Property {
     } else if (type == PropertiesTypes.Number) {
       NumberProp number = NumberProp.fromJson(json);
       return number;
+    } else if (type == PropertiesTypes.Date) {
+      return DateProp.fromJson(json);
     } else {
       return Property();
     }
@@ -310,3 +312,32 @@ class NumberProp extends Property {
         super(id: json['id']);
 }
 
+/// A representation of a date property for any Notion object.
+class DateProp extends Property {
+  DateTime startDate;
+
+  @override
+  final PropertiesTypes type = PropertiesTypes.Date;
+
+  DateProp({required this.startDate});
+
+  @override
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {'type': this.strType};
+
+    if (this.id != null) {
+      json['id'] = this.id;
+    }
+
+    json[this.strType] = {
+      "start":
+          "${startDate.year}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}"
+    };
+
+    return json;
+  }
+
+  DateProp.fromJson(Map<String, dynamic> json)
+      : this.startDate = DateTime.parse(json['date']['start']),
+        super(id: json['id']);
+}
