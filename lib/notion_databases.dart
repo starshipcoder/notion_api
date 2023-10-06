@@ -80,11 +80,14 @@ class NotionDatabasesClient extends BaseClient {
   ///
   /// _See more at https://developers.notion.com/reference/post-database-query
   Future<NotionResponse> query(
-      {required String id, required List<DatabaseSort> sorts}) async {
+      {required String id,
+      required List<DatabaseSort> sorts,
+      required Map<String, dynamic> filters}) async {
     http.Response res = await http.post(
       Uri.https(host, '/$v/$path/$id/query'),
       body: jsonEncode({
         "sorts": sorts.map((sort) => sort.toJson()).toList(),
+        "filter": filters
       }),
       headers: {
         'Authorization': 'Bearer $token',
