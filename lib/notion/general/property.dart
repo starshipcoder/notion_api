@@ -76,8 +76,9 @@ class Property {
           subfield: contentIsList ? null : 'options');
       return multi;
     } else if (type == PropertiesTypes.Number) {
-      NumberProp number = NumberProp.fromJson(json);
-      return number;
+      return NumberProp.fromJson(json);
+    } else if (type == PropertiesTypes.Checkbox) {
+      return CheckboxProp.fromJson(json);
     } else if (type == PropertiesTypes.Date) {
       return DateProp.fromJson(json);
     } else {
@@ -309,6 +310,31 @@ class NumberProp extends Property {
 
   NumberProp.fromJson(Map<String, dynamic> json)
       : this.value = json['number'],
+        super(id: json['id']);
+}
+
+/// A representation of a number property for any Notion object.
+class CheckboxProp extends Property {
+  bool value;
+
+  @override
+  final PropertiesTypes type = PropertiesTypes.Checkbox;
+
+  CheckboxProp(this.value);
+
+  @override
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {'type': 'checkbox', 'checkbox': this.value};
+
+    if (this.id != null) {
+      json['id'] = this.id;
+    }
+
+    return json;
+  }
+
+  CheckboxProp.fromJson(Map<String, dynamic> json)
+      : this.value = json['checkbox'],
         super(id: json['id']);
 }
 

@@ -75,4 +75,48 @@ class NotionDatabasesClient extends BaseClient {
 
     return NotionResponse.fromResponse(res);
   }
+
+  /// Query a database.
+  ///
+  /// _See more at https://developers.notion.com/reference/post-database-query
+  Future<NotionResponse> query(
+      {required String id, required List<DatabaseSort> sorts}) async {
+    http.Response res = await http.post(
+      Uri.https(host, '/$v/$path/$id/query'),
+      body: jsonEncode({
+        "sorts": sorts.map((sort) => sort.toJson()).toList(),
+      }),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Notion-Version': dateVersion,
+        'Content-Type': 'application/json',
+      },
+    );
+
+    return NotionResponse.fromResponse(res);
+  }
+}
+
+enum SortDirection { ascending, descending }
+
+class DatabaseSort {
+  final String property;
+  final SortDirection direction;
+
+  DatabaseSort(this.property, this.direction);
+
+  factory DatabaseSort.ascending(String property) {
+    return DatabaseSort(property, SortDirection.ascending);
+  }
+
+  factory DatabaseSort.descending(String property) {
+    return DatabaseSort(property, SortDirection.descending);
+  }
+
+  Map<String, String> toJson() {
+    return {
+      "property": property,
+      "direction": direction.name,
+    };
+  }
 }

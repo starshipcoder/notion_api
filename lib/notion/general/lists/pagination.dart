@@ -1,6 +1,7 @@
 import 'package:notion_api/notion/blocks/block.dart';
 import 'package:notion_api/notion/general/types/notion_types.dart';
 import 'package:notion_api/notion/objects/database.dart';
+import 'package:notion_api/notion/objects/pages.dart';
 import 'package:notion_api/utils/utils.dart';
 
 /// A representation of the pagination response from the Notion API. Also list of objects.
@@ -16,6 +17,7 @@ class Pagination {
 
   List<Block>? _blocks;
   List<Database>? _databases;
+  List<Page>? _pages;
 
   get list {
     if (this.isEmpty) {
@@ -35,6 +37,9 @@ class Pagination {
 
   /// The list of databases for when the response is for databases.
   List<Database> get databases => isEmpty ? [] : _databases!;
+
+  /// The list of pages for when the response is for pages.
+  List<Page> get pages => isEmpty ? [] : _pages!;
 
   /// Returns true if the result is a list of blocks.
   bool get isBlocksList => _blocks != null;
@@ -76,7 +81,11 @@ class Pagination {
         List<Database> databases = List<Database>.from(
             (json['results'] as List).map((e) => Database.fromJson(e)));
         pagination._databases = [...databases];
-      } else if (object == ObjectTypes.Page) {}
+      } else if (object == ObjectTypes.Page) {
+        List<Page> pages = List<Page>.from(
+            (json['results'] as List).map((e) => Page.fromJson(e)));
+        pagination._pages = [...pages];
+      }
     } else {
       pagination.isEmpty = true;
     }
