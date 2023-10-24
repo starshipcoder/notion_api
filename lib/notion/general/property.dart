@@ -76,6 +76,8 @@ class Property {
         MultiSelectProp multi = MultiSelectProp.fromJson(json,
             subfield: contentIsList ? null : 'options');
         return multi;
+      case PropertiesTypes.Select:
+        return SelectProp.fromJson(json);
       case PropertiesTypes.Number:
         return NumberProp.fromJson(json);
       case PropertiesTypes.Checkbox:
@@ -450,5 +452,31 @@ class URLProp extends Property {
 
   URLProp.fromJson(Map<String, dynamic> json)
       : this.url = json['url'],
+        super(id: json['id']);
+}
+
+class SelectProp extends Property {
+  String name;
+  String color;
+
+  @override
+  final PropertiesTypes type = PropertiesTypes.Select;
+
+  SelectProp(this.name, this.color);
+
+  @override
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {'type': this.strType};
+
+    if (this.id != null) {
+      json['id'] = this.id;
+    }
+
+    json[this.strType] = this.value?.toJson();
+
+    return json;
+  }
+  SelectProp.fromJson(Map<String, dynamic> json)
+      : this.name = json['select']['name'], this.color = json['select']['color'],
         super(id: json['id']);
 }
