@@ -90,6 +90,8 @@ class Property {
         return PhoneNumberProp.fromJson(json);
       case PropertiesTypes.URL:
         return URLProp.fromJson(json);
+      case PropertiesTypes.Status:
+        return StatusProp.fromJson(json);
       default:
         return Property();
     }
@@ -457,7 +459,7 @@ class URLProp extends Property {
 
 class SelectProp extends Property {
   String name;
-  String color;
+  ColorsTypes color;
 
   @override
   final PropertiesTypes type = PropertiesTypes.Select;
@@ -477,6 +479,32 @@ class SelectProp extends Property {
     return json;
   }
   SelectProp.fromJson(Map<String, dynamic> json)
-      : this.name = json['select']['name'], this.color = json['select']['color'],
+      : this.name = json['select']['name'], this.color = stringToColorType(json['select']['color'] ?? ''),
+        super(id: json['id']);
+}
+
+class StatusProp extends Property {
+  String name;
+  ColorsTypes color;
+
+  @override
+  final PropertiesTypes type = PropertiesTypes.Status;
+
+  StatusProp(this.name, this.color);
+
+  @override
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {'type': this.strType};
+
+    if (this.id != null) {
+      json['id'] = this.id;
+    }
+
+    json[this.strType] = this.value?.toJson();
+
+    return json;
+  }
+  StatusProp.fromJson(Map<String, dynamic> json)
+      : this.name = json['status']['name'], this.color = stringToColorType(json['status']['color'] ?? ''),
         super(id: json['id']);
 }

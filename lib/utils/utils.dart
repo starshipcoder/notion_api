@@ -204,6 +204,8 @@ String propertyTypeToString(PropertiesTypes type) {
       return 'last_edited_by';
     case PropertiesTypes.Title:
       return 'title';
+    case PropertiesTypes.Status:
+      return 'status';
     case PropertiesTypes.None:
       return '';
   }
@@ -250,6 +252,8 @@ PropertiesTypes stringToPropertyType(String type) {
       return PropertiesTypes.LastEditedBy;
     case 'title':
       return PropertiesTypes.Title;
+    case 'status':
+      return PropertiesTypes.Status;
     case '':
     default:
       return PropertiesTypes.None;

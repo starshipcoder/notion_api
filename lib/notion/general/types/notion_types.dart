@@ -46,6 +46,7 @@ enum PropertiesTypes {
   CreatedBy,
   LastEditedTime,
   LastEditedBy,
+  Status,
 }
 
 /// The basic colors.
