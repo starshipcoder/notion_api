@@ -65,24 +65,31 @@ class Property {
   /// Receive a [json] from where the information is extracted.
   static Property propertyFromJson(Map<String, dynamic> json) {
     PropertiesTypes type = extractPropertyType(json);
-    if (type == PropertiesTypes.Title) {
-      bool contentIsList = Property.contentIsList(json, type);
-      return TitleProp.fromJson(json, subfield: contentIsList ? null : 'title');
-    } else if (type == PropertiesTypes.RichText) {
-      return RichTextProp.fromJson(json);
-    } else if (type == PropertiesTypes.MultiSelect) {
-      bool contentIsList = MultiSelectProp.contentIsList(json);
-      MultiSelectProp multi = MultiSelectProp.fromJson(json,
-          subfield: contentIsList ? null : 'options');
-      return multi;
-    } else if (type == PropertiesTypes.Number) {
-      return NumberProp.fromJson(json);
-    } else if (type == PropertiesTypes.Checkbox) {
-      return CheckboxProp.fromJson(json);
-    } else if (type == PropertiesTypes.Date) {
-      return DateProp.fromJson(json);
-    } else {
-      return Property();
+    switch(type) {
+      case PropertiesTypes.Title:
+        bool contentIsList = Property.contentIsList(json, type);
+        return TitleProp.fromJson(json, subfield: contentIsList ? null : 'title');
+      case PropertiesTypes.RichText:
+        return RichTextProp.fromJson(json);
+      case PropertiesTypes.MultiSelect:
+        bool contentIsList = MultiSelectProp.contentIsList(json);
+        MultiSelectProp multi = MultiSelectProp.fromJson(json,
+            subfield: contentIsList ? null : 'options');
+        return multi;
+      case PropertiesTypes.Number:
+        return NumberProp.fromJson(json);
+      case PropertiesTypes.Checkbox:
+        return CheckboxProp.fromJson(json);
+      case PropertiesTypes.Date:
+        return DateProp.fromJson(json);
+      case PropertiesTypes.Email:
+        return EmailProp.fromJson(json);
+      case PropertiesTypes.PhoneNumber:
+        return PhoneNumberProp.fromJson(json);
+      case PropertiesTypes.URL:
+        return URLProp.fromJson(json);
+      default:
+        return Property();
     }
   }
 
@@ -365,5 +372,83 @@ class DateProp extends Property {
 
   DateProp.fromJson(Map<String, dynamic> json)
       : this.startDate = DateTime.parse(json['date']['start']),
+        super(id: json['id']);
+}
+
+class EmailProp extends Property {
+  String email;
+
+  @override
+  final PropertiesTypes type = PropertiesTypes.Email;
+
+  EmailProp({required this.email});
+
+  @override
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {'type': this.strType};
+
+    if (this.id != null) {
+      json['id'] = this.id;
+    }
+
+    json[this.strType] = this.email;
+
+    return json;
+  }
+
+  EmailProp.fromJson(Map<String, dynamic> json)
+      : this.email = json['email'],
+        super(id: json['id']);
+}
+
+class PhoneNumberProp extends Property {
+  String phone;
+
+  @override
+  final PropertiesTypes type = PropertiesTypes.PhoneNumber;
+
+  PhoneNumberProp({required this.phone});
+
+  @override
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {'type': this.strType};
+
+    if (this.id != null) {
+      json['id'] = this.id;
+    }
+
+    json[this.strType] = this.phone;
+
+    return json;
+  }
+
+  PhoneNumberProp.fromJson(Map<String, dynamic> json)
+      : this.phone = json['phone_number'],
+        super(id: json['id']);
+}
+
+class URLProp extends Property {
+  String url;
+
+  @override
+  final PropertiesTypes type = PropertiesTypes.URL;
+
+  URLProp({required this.url});
+
+  @override
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {'type': this.strType};
+
+    if (this.id != null) {
+      json['id'] = this.id;
+    }
+
+    json[this.strType] = this.url;
+
+    return json;
+  }
+
+  URLProp.fromJson(Map<String, dynamic> json)
+      : this.url = json['url'],
         super(id: json['id']);
 }
