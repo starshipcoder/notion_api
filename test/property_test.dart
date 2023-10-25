@@ -1,5 +1,4 @@
-import 'package:notion_api/notion/general/property.dart';
-import 'package:notion_api/notion/general/types/notion_types.dart';
+import 'package:notion_api/notion.dart';
 import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:notion_api/utils/utils.dart';
 import 'package:test/test.dart';
@@ -7,18 +6,18 @@ import 'package:test/test.dart';
 void main() {
   group('Main property =>', () {
     test('Create an instance of property', () {
-      Property prop = Property.empty();
+      PageProperty prop = PageProperty.empty();
       expect(prop.type, PropertiesTypes.None);
       expect(prop.value, false);
     });
 
     test('Create a json from empty property', () {
-      Property prop = Property.empty();
+      PageProperty prop = PageProperty.empty();
       expect(() => prop.toJson(), throwsA(isA<String>()));
     });
 
     test('Create a property from json', () {
-      Property prop = Property.propertyFromJson(
+      PageProperty prop = PageProperty.propertyFromJson(
           {"id": "title", "type": "title", "title": {}});
 
       expect(prop.isTitle, true);
@@ -27,7 +26,7 @@ void main() {
     });
 
     test('Create a properties map from json', () {
-      Map<String, Property> json = Property.propertiesFromJson({
+      Map<String, PageProperty> json = PageProperty.propertiesFromJson({
         "Tags": {
           "id": ">cp;",
           "type": "multi_select",
@@ -66,7 +65,7 @@ void main() {
     });
 
     test('Create json from Property inherited class', () {
-      Property prop = TitleProp(content: [Text('Title')]);
+      Property prop = TitlePageProperty(content: [Text('Title')]);
       Map<String, dynamic> json = prop.toJson();
 
       String strType = propertyTypeToString(PropertiesTypes.Title);
@@ -105,7 +104,7 @@ void main() {
 
   group('Title property =>', () {
     test('Create an instance of property', () {
-      TitleProp prop = TitleProp(content: [Text('TITLE')]);
+      TitlePageProperty prop = TitlePageProperty(content: [Text('TITLE')]);
 
       expect(prop.type, PropertiesTypes.Title);
       expect(prop.content, isNotEmpty);
@@ -113,7 +112,7 @@ void main() {
     });
 
     test('Create a json from property', () {
-      Map<String, dynamic> json = TitleProp(content: [Text('TITLE')]).toJson();
+      Map<String, dynamic> json = TitlePageProperty(content: [Text('TITLE')]).toJson();
 
       String strType = propertyTypeToString(PropertiesTypes.Title);
       expect(json['type'], strType);
@@ -124,7 +123,7 @@ void main() {
 
   group('RichText property =>', () {
     test('Create an instance of property', () {
-      RichTextProp rich = RichTextProp(content: [Text('A'), Text('B')]);
+      RichTextPageProperty rich = RichTextPageProperty(content: [Text('A'), Text('B')]);
 
       expect(rich.type, PropertiesTypes.RichText);
       expect(rich.content, isNotEmpty);
@@ -134,7 +133,7 @@ void main() {
     });
     test('Create a json from property', () {
       Map<String, dynamic> json =
-          RichTextProp(content: [Text('A'), Text('B')]).toJson();
+      RichTextPageProperty(content: [Text('A'), Text('B')]).toJson();
 
       String strType = propertyTypeToString(PropertiesTypes.RichText);
       expect(json['type'], strType);
@@ -145,8 +144,8 @@ void main() {
 
   group('MultiSelect property =>', () {
     test('Create an instance of property', () {
-      MultiSelectProp multi =
-          MultiSelectProp(options: [MultiSelectOption(name: 'A')]);
+      MultiSelectPageProperty multi =
+      MultiSelectPageProperty(options: [MultiSelectOption(name: 'A')]);
 
       expect(multi.type, PropertiesTypes.MultiSelect);
       expect(multi.options, isNotEmpty);
@@ -154,8 +153,8 @@ void main() {
     });
 
     test('Create an instance with mixed options', () {
-      MultiSelectProp multi =
-          MultiSelectProp(options: [MultiSelectOption(name: 'A')])
+      MultiSelectPageProperty multi =
+      MultiSelectPageProperty(options: [MultiSelectOption(name: 'A')])
               .addOption(MultiSelectOption(name: 'B'))
               .addOption(MultiSelectOption(name: 'C'));
 
@@ -184,7 +183,7 @@ void main() {
 
     test('Create a json from property', () {
       Map<String, dynamic> json =
-          MultiSelectProp(options: [MultiSelectOption(name: 'A')]).toJson();
+          MultiSelectPageProperty(options: [MultiSelectOption(name: 'A')]).toJson();
 
       String strType = propertyTypeToString(PropertiesTypes.MultiSelect);
       expect(json['type'], strType);
@@ -289,13 +288,13 @@ void main() {
       }
     };
     test('Map name from json response', () {
-      TitleProp prop = TitleProp.fromJson(json);
+      TitlePageProperty prop = TitlePageProperty.fromJson(json);
 
       expect(prop.content, isNotEmpty);
     });
 
     test('Create json from name json response', () {
-      Map<String, dynamic> jsonTest = TitleProp.fromJson(json).toJson();
+      Map<String, dynamic> jsonTest = TitlePageProperty.fromJson(json).toJson();
 
       String strType = propertyTypeToString(PropertiesTypes.Title);
       expect(jsonTest['type'], strType);
@@ -304,7 +303,7 @@ void main() {
     });
 
     test('Map details from json response', () {
-      RichTextProp prop = RichTextProp.fromJson(jsonDetails);
+      RichTextPageProperty prop = RichTextPageProperty.fromJson(jsonDetails);
 
       expect(prop.content, isNotEmpty);
       expect(prop.content.length, 4);
@@ -312,7 +311,7 @@ void main() {
 
     test('Create json from details json response', () {
       Map<String, dynamic> jsonTest =
-          RichTextProp.fromJson(jsonDetails).toJson();
+      RichTextPageProperty.fromJson(jsonDetails).toJson();
 
       String strType = propertyTypeToString(PropertiesTypes.RichText);
       expect(jsonTest['type'], strType);
@@ -322,14 +321,14 @@ void main() {
     });
 
     test('Map tag from json response without options subfield', () {
-      MultiSelectProp multi =
-          MultiSelectProp.fromJson(jsonMultiSelectWithoutSubfield);
+      MultiSelectPageProperty multi =
+      MultiSelectPageProperty.fromJson(jsonMultiSelectWithoutSubfield);
 
       expect(multi.options, isNotEmpty);
     });
 
     test('Map tag from json response with options subfield', () {
-      MultiSelectProp multi = MultiSelectProp.fromJson(
+      MultiSelectPageProperty multi = MultiSelectPageProperty.fromJson(
           jsonMultiSelectWithSubfield,
           subfield: 'options');
 
@@ -337,7 +336,7 @@ void main() {
     });
 
     test('Create json from tags json response', () {
-      Map<String, dynamic> multi = MultiSelectProp.fromJson(
+      Map<String, dynamic> multi = MultiSelectPageProperty.fromJson(
               jsonMultiSelectWithSubfield,
               subfield: 'options')
           .toJson();

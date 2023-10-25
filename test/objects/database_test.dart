@@ -1,5 +1,4 @@
-import 'package:notion_api/notion/general/properties/property.dart';
-import 'package:notion_api/notion/general/types/notion_types.dart';
+import 'package:notion_api/notion.dart';
 import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:notion_api/notion/objects/database.dart';
 import 'package:test/test.dart';
@@ -19,19 +18,19 @@ void main() {
       Database database = Database(title: [Text('Title')])
           .addProperty(
               name: 'Tags',
-              property: MultiSelectProp(options: [
+              property: MultiSelectDatabaseProperty(options: [
                 MultiSelectOption(name: 'Option A'),
                 MultiSelectOption(name: 'Option B'),
               ]))
           .addProperty(
               name: 'Details',
-              property: RichTextProp(content: [
+              property: RichTextDatabaseProperty(content: [
                 Text('Detail A'),
                 Text('Detail B'),
               ]))
           .addProperty(
               name: 'Name',
-              property: TitleProp(content: [Text('Something here...')]));
+              property: TitleDatabaseProperty(content: [Text('Something here...')]));
 
       expect(database, isNotNull);
       expect(database.title.length, 1);
@@ -45,19 +44,19 @@ void main() {
       Map<String, dynamic> database = Database(title: [Text('Title')])
           .addProperty(
               name: 'Tags',
-              property: MultiSelectProp(options: [
+              property: MultiSelectDatabaseProperty(options: [
                 MultiSelectOption(name: 'Option A'),
                 MultiSelectOption(name: 'Option B'),
               ]))
           .addProperty(
               name: 'Details',
-              property: RichTextProp(content: [
+              property: RichTextDatabaseProperty(content: [
                 Text('Detail A'),
                 Text('Detail B'),
               ]))
           .addProperty(
               name: 'Name',
-              property: TitleProp(content: [Text('Something here...')]))
+              property: TitleDatabaseProperty(content: [Text('Something here...')]))
           .toJson();
 
       expect(database, isNotNull);

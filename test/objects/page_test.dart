@@ -1,9 +1,7 @@
+import 'package:notion_api/notion.dart';
 import 'package:notion_api/notion/blocks/heading.dart';
 import 'package:notion_api/notion/general/lists/children.dart';
-import 'package:notion_api/notion/general/property.dart';
-import 'package:notion_api/notion/general/types/notion_types.dart';
 import 'package:notion_api/notion/general/rich_text.dart';
-import 'package:notion_api/notion/objects/pages.dart';
 import 'package:notion_api/notion/objects/parent.dart';
 import 'package:notion_api/utils/utils.dart';
 import 'package:test/test.dart';
@@ -48,19 +46,19 @@ void main() {
           NotionPage(parent: Parent.database(id: 'asdasdasd-asdasdasdas-asdasdasd'))
               .addProperty(
                   name: 'Tags',
-                  property: MultiSelectProp(options: [
+                  property: MultiSelectPageProperty(options: [
                     MultiSelectOption(name: 'Option A'),
                     MultiSelectOption(name: 'Option B'),
                   ]))
               .addProperty(
                   name: 'Details',
-                  property: RichTextProp(content: [
+                  property: RichTextPageProperty(content: [
                     Text('Detail A'),
                     Text('Detail B'),
                   ]))
               .addProperty(
                   name: 'Name',
-                  property: TitleProp(content: [Text('Something here...')]));
+                  property: TitlePageProperty(content: [Text('Something here...')]));
 
       expect(page.properties.entries, isNotEmpty);
       expect(page.properties.getByName('Tags').isMultiSelect, true);
@@ -73,19 +71,19 @@ void main() {
           NotionPage(parent: Parent.database(id: 'asdasdasd-asdasdasdas-asdasdasd'))
               .addProperty(
                   name: 'Tags',
-                  property: MultiSelectProp(options: [
+                  property: MultiSelectPageProperty(options: [
                     MultiSelectOption(name: 'Option A'),
                     MultiSelectOption(name: 'Option B'),
                   ]))
               .addProperty(
                   name: 'Details',
-                  property: RichTextProp(content: [
+                  property: RichTextPageProperty(content: [
                     Text('Detail A'),
                     Text('Detail B'),
                   ]))
               .addProperty(
                   name: 'Name',
-                  property: TitleProp(content: [Text('Something here...')]))
+                  property: TitlePageProperty(content: [Text('Something here...')]))
               .toJson();
 
       expect(page['object'], isNull);

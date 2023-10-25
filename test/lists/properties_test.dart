@@ -1,15 +1,15 @@
-import 'package:notion_api/notion/general/lists/properties.dart';
+import 'package:notion_api/notion.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Properties tests =>', () {
     test('Create an empty instance', () {
-      Properties properties = Properties.empty();
+      DatabaseProperties properties = DatabaseProperties.empty();
       expect(properties.isEmpty, true);
     });
 
     test('Create an instance from json', () {
-      Properties properties = Properties.fromJson({
+      DatabaseProperties properties = DatabaseProperties.fromJson({
         "Tags": {
           "id": ">cp;",
           "type": "multi_select",

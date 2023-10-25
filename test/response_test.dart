@@ -4,14 +4,8 @@ import 'package:dotenv/dotenv.dart' show load, env, clean;
 import 'package:notion_api/notion.dart';
 import 'package:notion_api/notion/blocks/paragraph.dart';
 import 'package:notion_api/notion/general/lists/children.dart';
-import 'package:notion_api/notion/general/property.dart';
 import 'package:notion_api/notion/general/rich_text.dart';
-import 'package:notion_api/notion/general/types/notion_types.dart';
-import 'package:notion_api/notion/objects/pages.dart';
 import 'package:notion_api/notion/objects/parent.dart';
-import 'package:notion_api/notion_blocks.dart';
-import 'package:notion_api/notion_databases.dart';
-import 'package:notion_api/notion_pages.dart';
 import 'package:notion_api/responses/notion_response.dart';
 import 'package:test/test.dart';
 
@@ -92,7 +86,7 @@ void main() {
         parent: Parent.database(id: testDatabaseId ?? ''),
       ).addProperty(
         name: 'TEST',
-        property: TitleProp(content: [Text('ABC')]),
+        property: TitlePageProperty(content: [Text('ABC')]),
       );
 
       var res = await pages.create(page);
