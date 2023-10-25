@@ -114,3 +114,54 @@ class MultiSelectOption {
   static List<MultiSelectOption> fromListJson(List<dynamic> options) =>
       options.map((e) => MultiSelectOption.fromJson(e)).toList();
 }
+
+class Option {
+  final String id;
+  final String name;
+  final String color;
+
+  Option(this.id, this.name, this.color);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'color': color,
+    };
+  }
+
+  factory Option.fromJson(Map<String, dynamic> json) {
+    return Option(
+      json['id'],
+      json['name'],
+      json['color'],
+    );
+  }
+}
+
+class Group {
+  final String id;
+  final String name;
+  final String color;
+  final List<String> optionIds;
+
+  Group(this.id, this.name, this.color, this.optionIds);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'color': color,
+      'option_ids': optionIds,
+    };
+  }
+
+  factory Group.fromJson(Map<String, dynamic> json) {
+    return Group(
+      json['id'],
+      json['name'],
+      json['color'],
+      List<String>.from(json['option_ids']),
+    );
+  }
+}

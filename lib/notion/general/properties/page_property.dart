@@ -61,7 +61,6 @@ class PageProperty extends Property {
       case PropertiesTypes.Date:
         return DatePageProperty.fromJson(json);
       case PropertiesTypes.Email:
-        print("------------json $json");
         return EmailPageProperty.fromJson(json);
       case PropertiesTypes.PhoneNumber:
         return PhoneNumberPageProperty.fromJson(json);
