@@ -13,7 +13,7 @@ class Properties {
   /// Main properties constructor.
   ///
   /// Can receive a properties [map].
-  Properties({Map<String, Property> map: const {}}) {
+  Properties({Map<String, Property> map = const {}}) {
     this._map.addAll(map);
   }
 
