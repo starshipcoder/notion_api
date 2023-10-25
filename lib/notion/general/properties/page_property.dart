@@ -4,7 +4,6 @@ import 'package:notion_api/utils/utils.dart';
 
 /// A representation of a single property for any Notion object.
 class PageProperty extends Property {
-
   /// Main property constructor.
   ///
   /// Can receive the property [id].
@@ -42,7 +41,7 @@ class PageProperty extends Property {
   /// Receive a [json] from where the information is extracted.
   static PageProperty propertyFromJson(Map<String, dynamic> json) {
     PropertiesTypes type = extractPropertyType(json);
-    switch(type) {
+    switch (type) {
       case PropertiesTypes.Title:
         bool contentIsList = Property.contentIsList(json, type);
         return TitlePageProperty.fromJson(json, subfield: contentIsList ? null : 'title');
@@ -50,8 +49,8 @@ class PageProperty extends Property {
         return RichTextPageProperty.fromJson(json);
       case PropertiesTypes.MultiSelect:
         bool contentIsList = MultiSelectPageProperty.contentIsList(json);
-        MultiSelectPageProperty multi = MultiSelectPageProperty.fromJson(json,
-            subfield: contentIsList ? null : 'options');
+        MultiSelectPageProperty multi =
+            MultiSelectPageProperty.fromJson(json, subfield: contentIsList ? null : 'options');
         return multi;
       case PropertiesTypes.Select:
         return SelectPageProperty.fromJson(json);
@@ -115,8 +114,7 @@ class TitlePageProperty extends PageProperty {
   TitlePageProperty.fromJson(Map<String, dynamic> json, {String? subfield})
       : this.name = json['name'] ?? '',
         this.content = Text.fromListJson(((subfield != null
-                    ? json[propertyTypeToString(PropertiesTypes.Title)]
-                        [subfield]
+                    ? json[propertyTypeToString(PropertiesTypes.Title)][subfield]
                     : json[propertyTypeToString(PropertiesTypes.Title)]) ??
                 []) as List)
             .toList(),
@@ -162,10 +160,9 @@ class RichTextPageProperty extends PageProperty {
   ///
   /// Receive a [json] from where the information is extracted.
   RichTextPageProperty.fromJson(Map<String, dynamic> json)
-      : this.content = Text.fromListJson(
-            json[propertyTypeToString(PropertiesTypes.RichText)] is List
-                ? json[propertyTypeToString(PropertiesTypes.RichText)] as List
-                : []),
+      : this.content = Text.fromListJson(json[propertyTypeToString(PropertiesTypes.RichText)] is List
+            ? json[propertyTypeToString(PropertiesTypes.RichText)] as List
+            : []),
         super(id: json['id']);
 
   /// Convert this to a valid json representation for the Notion API.
@@ -285,12 +282,25 @@ class CheckboxPageProperty extends PageProperty {
 
 /// A representation of a date property for any Notion object.
 class DatePageProperty extends PageProperty {
-  DateTime startDate;
+  DateTime? startDate;
+  DateTime? endDate;
+  String? timeZone;
+
+  // Utilisation d'un getter pour accéder à une représentation sous forme de chaîne de la date
+  String? get formattedStartDate => formatDate(startDate);
+
+  String? get formattedEndDate => formatDate(endDate);
 
   @override
   final PropertiesTypes type = PropertiesTypes.Date;
 
   DatePageProperty({required this.startDate});
+
+  // Méthode utilitaire pour formater une date
+  String? formatDate(DateTime? date) {
+    if (date == null) return null;
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  }
 
   @override
   Map<String, dynamic> toJson() {
@@ -300,17 +310,26 @@ class DatePageProperty extends PageProperty {
       json['id'] = this.id;
     }
 
-    json[this.strType] = {
-      "start":
-          "${startDate.year}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}"
-    };
+    json[this.strType] = {"start": formattedStartDate, "end": formattedEndDate, "time_zone": timeZone};
 
     return json;
   }
 
   DatePageProperty.fromJson(Map<String, dynamic> json)
-      : this.startDate = DateTime.parse(json['date']['start']),
+      : this.startDate = tryParseDate(json, 'start'),
+        this.endDate = tryParseDate(json, 'end'),
+        this.timeZone = json['date']?['time_zone'],
         super(id: json['id']);
+
+  // Méthode utilitaire pour essayer de parser une date
+  static DateTime? tryParseDate(Map<String, dynamic> json, String key) {
+    try {
+      return json['date'] != null && json['date'][key] != null ? DateTime.parse(json['date'][key]) : null;
+    } catch (e) {
+      print("Erreur lors du parsing de la date : $e");
+      return null;
+    }
+  }
 }
 
 class EmailPageProperty extends PageProperty {
@@ -361,7 +380,7 @@ class PhoneNumberPageProperty extends PageProperty {
   }
 
   PhoneNumberPageProperty.fromJson(Map<String, dynamic> json)
-      : this.phone = json['phone_number'],
+      : this.phone = json['phone_number'] ?? "",
         super(id: json['id']);
 }
 
@@ -412,8 +431,10 @@ class SelectPageProperty extends PageProperty {
 
     return json;
   }
+
   SelectPageProperty.fromJson(Map<String, dynamic> json)
-      : this.name = json['select']['name'], this.color = stringToColorType(json['select']['color'] ?? ''),
+      : this.name = json['select']['name'],
+        this.color = stringToColorType(json['select']['color'] ?? ''),
         super(id: json['id']);
 }
 
@@ -438,7 +459,9 @@ class StatusPageProperty extends PageProperty {
 
     return json;
   }
+
   StatusPageProperty.fromJson(Map<String, dynamic> json)
-      : this.name = json['status']['name'], this.color = stringToColorType(json['status']['color'] ?? ''),
+      : this.name = json['status']['name'],
+        this.color = stringToColorType(json['status']['color'] ?? ''),
         super(id: json['id']);
 }
