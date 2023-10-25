@@ -21,7 +21,7 @@ class Heading extends Block {
   Heading({
     Text? text,
     List<Text>? texts,
-    int type: 1,
+    int type = 1,
   }) {
     if (text != null) {
       _content.add(text);

@@ -24,10 +24,10 @@ class BaseFields {
   ///
   /// **Note:** This class is mainly (if no only) used by extending it.
   BaseFields({
-    this.object: ObjectTypes.Object,
-    this.id: '',
-    this.createdTime: '',
-    this.lastEditedTime: '',
+    this.object = ObjectTypes.Object,
+    this.id = '',
+    this.createdTime = '',
+    this.lastEditedTime = '',
   });
 
   /// Map the properties from a [json] map.

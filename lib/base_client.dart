@@ -17,8 +17,8 @@ abstract class BaseClient {
 
   BaseClient({
     required String token,
-    String version: latestVersion,
-    String dateVersion: latestDateVersion,
+    String version = latestVersion,
+    String dateVersion = latestDateVersion,
   })  : this.token = token,
         this.v = version,
         this.dateVersion = dateVersion;

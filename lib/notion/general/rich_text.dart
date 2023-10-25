@@ -58,7 +58,7 @@ class Text {
   /// // append => "A-B-"
   /// ```
   Map<String, dynamic> toJson(
-      {@Deprecated('Will not have replacement') String textSeparator: ''}) {
+      {@Deprecated('Will not have replacement') String textSeparator = ''}) {
     Map<String, dynamic> json = {
       'type': _type,
       'text': {
@@ -117,12 +117,12 @@ class TextAnnotations {
   ///
   /// Valid colors are defined by the Colors enum. By default the color type is... Default dah.
   TextAnnotations({
-    this.bold: false,
-    this.italic: false,
-    this.strikethrough: false,
-    this.underline: false,
-    this.code: false,
-    this.color: ColorsTypes.Default,
+    this.bold = false,
+    this.italic = false,
+    this.strikethrough = false,
+    this.underline = false,
+    this.code = false,
+    this.color = ColorsTypes.Default,
   });
 
   /// Create a new text annotation instance from json.

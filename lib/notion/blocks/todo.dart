@@ -35,10 +35,10 @@ class ToDo extends Block {
   /// Also a [textSeparator] can be anexed to separate the texts on the json generated using the `toJson()` function. The separator is used because when the text is displayed is all together without any kind of separation and adding the separator that behavior is avoided. By default the [textSeparator] is an space (" ").
   ToDo({
     Text? text,
-    List<Text> texts: const [],
-    List<Block> children: const [],
-    this.checked: false,
-    @deprecated this.textSeparator: ' ',
+    List<Text> texts = const [],
+    List<Block> children = const [],
+    this.checked = false,
+    @deprecated this.textSeparator = ' ',
   }) {
     if (text != null) {
       this._content.add(text);

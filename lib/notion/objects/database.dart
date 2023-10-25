@@ -29,10 +29,10 @@ class Database extends BaseFields {
   /// Can receive the [title], the [createdTime], the [lastEditedTime] and the database [id].
   ///
   Database({
-    this.title: const <Text>[],
-    @deprecated String createdTime: '',
-    @deprecated String lastEditedTime: '',
-    @deprecated String id: '',
+    this.title = const <Text>[],
+    @deprecated String createdTime = '',
+    @deprecated String lastEditedTime = '',
+    @deprecated String id = '',
   }) {
     this.id = id;
     this.setBaseProperties(
@@ -45,11 +45,11 @@ class Database extends BaseFields {
   ///
   /// Can receive the [parent] (none parent), [title] (empty), the [createdTime] (""), the [lastEditedTime] ("") and the database [id] ("") but every parameter is optional.
   Database.withDefaults({
-    this.parent: const Parent.none(),
-    this.title: const <Text>[],
-    String createdTime: '',
-    String lastEditedTime: '',
-    String id: '',
+    this.parent = const Parent.none(),
+    this.title = const <Text>[],
+    String createdTime = '',
+    String lastEditedTime = '',
+    String id = '',
   }) {
     this.id = id;
     this.setBaseProperties(
@@ -68,8 +68,8 @@ class Database extends BaseFields {
   ///
   Database.newDatabase({
     required this.parent,
-    this.title: const <Text>[],
-    String pagesColumnName: 'Name',
+    this.title = const <Text>[],
+    String pagesColumnName = 'Name',
     Properties? properties,
   }) : this.properties = Properties(map: {
           pagesColumnName: TitleProp(),

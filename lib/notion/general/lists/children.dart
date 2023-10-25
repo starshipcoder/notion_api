@@ -72,8 +72,8 @@ class Children {
   ///
   /// If all fields are included then all filters are applied as a chain following the next order: [exclude], [include], [onlyLeft], and the [id].
   List<Block> filterBlocks({
-    List<BlockTypes> exclude: const [],
-    List<BlockTypes> include: const [],
+    List<BlockTypes> exclude = const [],
+    List<BlockTypes> include = const [],
     BlockTypes? onlyLeft,
     String? id,
   }) {

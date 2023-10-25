@@ -18,8 +18,8 @@ class NotionBlockClient extends BaseClient {
   /// Require the [token] to authenticate the requests, and the API [version] where to make the calls, which is the latests by default (v1).
   NotionBlockClient({
     required String token,
-    String version: latestVersion,
-    String dateVersion: latestDateVersion,
+    String version = latestVersion,
+    String dateVersion = latestDateVersion,
   }) : super(token: token, version: version, dateVersion: dateVersion);
 
   /// Retrieve the block children from block with [id].

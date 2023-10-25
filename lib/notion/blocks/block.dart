@@ -57,12 +57,12 @@ class Block extends BaseFields {
   ///
   /// Also can receive the [createdTime] and the [lastEditedTime] of the block in case that the information is filled from response.
   Block({
-    this.id: '',
-    this.hasChildren: false,
-    this.jsonContent: const {},
-    this.type: BlockTypes.None,
-    String createdTime: '',
-    String lastEditedTime: '',
+    this.id = '',
+    this.hasChildren = false,
+    this.jsonContent = const {},
+    this.type = BlockTypes.None,
+    String createdTime = '',
+    String lastEditedTime = '',
   }) {
     this.setBaseProperties(
       createdTime: createdTime,

@@ -22,8 +22,8 @@ class BulletedListItem extends Block {
   /// Can receive a single [text] or a list of [texts]. If both are included also both fields are added to the heading content adding first the [text] field. Also can receive the [children] of the block.
   BulletedListItem({
     Text? text,
-    List<Text> texts: const [],
-    List<Block> children: const [],
+    List<Text> texts = const [],
+    List<Block> children = const [],
   }) {
     if (text != null) {
       _content.add(text);
