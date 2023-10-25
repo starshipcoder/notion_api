@@ -2,9 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:notion_api/base_client.dart';
-import 'package:notion_api/notion/general/lists/properties.dart';
+import 'package:notion_api/notion.dart';
 
-import 'notion/objects/pages.dart';
 import 'responses/notion_response.dart';
 import 'statics.dart';
 
@@ -60,10 +59,10 @@ class NotionPagesClient extends BaseClient {
   /// _See more at https://developers.notion.com/reference/patch-page_
   Future<NotionResponse> update(
     String id, {
-    Properties? properties,
+    PageProperties? properties,
     bool? archived,
   }) async {
-    Properties _properties = properties ?? Properties.empty();
+    PageProperties _properties = properties ?? PageProperties.empty();
     http.Response res = await http.patch(Uri.https(host, '/$v/$path/$id'),
         body: jsonEncode({
           'properties': _properties.toJson(),

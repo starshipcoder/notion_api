@@ -1,8 +1,6 @@
 import 'package:notion_api/notion/general/base_fields.dart';
-import 'package:notion_api/notion/general/lists/properties.dart';
-import 'package:notion_api/notion/general/property.dart';
 import 'package:notion_api/notion/general/rich_text.dart';
-import 'package:notion_api/notion/general/types/notion_types.dart';
+import 'package:notion_api/notion.dart';
 import 'package:notion_api/utils/utils.dart';
 
 import 'parent.dart';
@@ -20,7 +18,7 @@ class Database extends BaseFields {
   List<Text> title = <Text>[];
 
   /// The properties of this database.
-  Properties properties = Properties();
+  DatabaseProperties properties = DatabaseProperties();
 
   /// Main database constructor.
   ///
@@ -70,9 +68,9 @@ class Database extends BaseFields {
     required this.parent,
     this.title = const <Text>[],
     String pagesColumnName = 'Name',
-    Properties? properties,
-  }) : this.properties = Properties(map: {
-          pagesColumnName: TitleProp(),
+    DatabaseProperties? properties,
+  }) : this.properties = DatabaseProperties(map: {
+          pagesColumnName: TitleDatabaseProperty(),
           if (properties != null) ...properties.entries,
         }) {
     this.id = id;
@@ -103,7 +101,7 @@ class Database extends BaseFields {
   ///   ]),
   /// );
   /// ```
-  Database addProperty({required String name, required Property property}) {
+  Database addProperty({required String name, required DatabaseProperty property}) {
     this.properties.add(name: name, property: property);
     return this;
   }

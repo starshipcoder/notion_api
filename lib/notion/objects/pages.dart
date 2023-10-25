@@ -1,7 +1,5 @@
+import 'package:notion_api/notion.dart';
 import 'package:notion_api/notion/general/base_fields.dart';
-import 'package:notion_api/notion/general/lists/properties.dart';
-import 'package:notion_api/notion/general/property.dart';
-import 'package:notion_api/notion/general/types/notion_types.dart';
 import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:notion_api/notion/general/lists/children.dart';
 
@@ -23,7 +21,7 @@ class NotionPage extends BaseFields {
   Children? children;
 
   /// The properties of the page.
-  final Properties properties = Properties();
+  final PageProperties properties = PageProperties();
 
   /// Main constructor for the page.
   ///
@@ -74,11 +72,11 @@ class NotionPage extends BaseFields {
       this.properties.remove('title');
     }
 
-    this.properties.add(name: 'title', property: TitleProp(content: [title]));
+    this.properties.add(name: 'title', property: TitlePageProperty(content: [title]));
   }
 
   /// Add a [property] with a specific [name] to this properties.
-  NotionPage addProperty({required String name, required Property property}) {
+  NotionPage addProperty({required String name, required PageProperty property}) {
     this.properties.add(name: name, property: property);
     return this;
   }

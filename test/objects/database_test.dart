@@ -1,4 +1,4 @@
-import 'package:notion_api/notion/general/property.dart';
+import 'package:notion_api/notion/general/properties/property.dart';
 import 'package:notion_api/notion/general/types/notion_types.dart';
 import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:notion_api/notion/objects/database.dart';

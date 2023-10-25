@@ -309,7 +309,8 @@ const List<String> all_str_property_types = [
   'created_by',
   'last_edited_time',
   'last_edited_by',
-  'title'
+  'title',
+  'status',
 ];
 
 /// Extract the property type of a [json] property.

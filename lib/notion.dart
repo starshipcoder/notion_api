@@ -12,6 +12,17 @@ import 'notion_pages.dart';
 import 'notion_blocks.dart';
 import 'notion_databases.dart';
 
+export 'notion_pages.dart';
+export 'notion_blocks.dart';
+export 'notion_databases.dart';
+export 'package:notion_api/notion/general/properties/database_property.dart';
+export 'package:notion_api/notion/general/properties/page_property.dart';
+export 'package:notion_api/notion/general/properties/property.dart';
+export 'package:notion_api/notion/general/properties/properties.dart';
+export 'package:notion_api/notion/objects/pages.dart';
+export 'package:notion_api/notion/general/types/notion_types.dart';
+
+
 /// A Notion API client.
 class NotionClient {
   /// The Notion API client for pages requests.

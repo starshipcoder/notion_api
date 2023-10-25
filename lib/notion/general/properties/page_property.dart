@@ -1,40 +1,17 @@
-import 'package:notion_api/notion/general/types/notion_types.dart';
+import 'package:notion_api/notion.dart';
 import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:notion_api/utils/utils.dart';
 
 /// A representation of a single property for any Notion object.
-class Property {
-  /// The property type.
-  final PropertiesTypes type = PropertiesTypes.None;
-
-  /// The property id.
-  String? id;
-
-  /// The base getter for the content of any property.
-  dynamic get value => false;
-
-  /// The string value for this property type.
-  String get strType => propertyTypeToString(type);
-
-  /// Returns true if property is Title type.
-  bool get isTitle => type == PropertiesTypes.Title;
-
-  /// Returns true if property is RichText type.
-  bool get isRichText => type == PropertiesTypes.RichText;
-
-  /// Returns true if property is MultiSelect type.
-  bool get isMultiSelect => type == PropertiesTypes.MultiSelect;
-
-  /// Returns true if property don't have a known type.
-  bool get isNone => type == PropertiesTypes.None;
+class PageProperty extends Property {
 
   /// Main property constructor.
   ///
   /// Can receive the property [id].
-  Property({this.id});
+  PageProperty({super.id});
 
   /// Constructor for empty property.
-  Property.empty();
+  PageProperty.empty();
 
   /// Convert this to a valid json representation for the Notion API.
   Map<String, dynamic> toJson() {
@@ -52,10 +29,10 @@ class Property {
   }
 
   /// Map a list of properties from a [json] map.
-  static Map<String, Property> propertiesFromJson(Map<String, dynamic> json) {
-    Map<String, Property> properties = {};
+  static Map<String, PageProperty> propertiesFromJson(Map<String, dynamic> json) {
+    Map<String, PageProperty> properties = {};
     json.entries.forEach((entry) {
-      properties[entry.key] = Property.propertyFromJson(entry.value);
+      properties[entry.key] = PageProperty.propertyFromJson(entry.value);
     });
     return properties;
   }
@@ -63,37 +40,38 @@ class Property {
   /// Create a new Property instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
-  static Property propertyFromJson(Map<String, dynamic> json) {
+  static PageProperty propertyFromJson(Map<String, dynamic> json) {
     PropertiesTypes type = extractPropertyType(json);
     switch(type) {
       case PropertiesTypes.Title:
         bool contentIsList = Property.contentIsList(json, type);
-        return TitleProp.fromJson(json, subfield: contentIsList ? null : 'title');
+        return TitlePageProperty.fromJson(json, subfield: contentIsList ? null : 'title');
       case PropertiesTypes.RichText:
-        return RichTextProp.fromJson(json);
+        return RichTextPageProperty.fromJson(json);
       case PropertiesTypes.MultiSelect:
-        bool contentIsList = MultiSelectProp.contentIsList(json);
-        MultiSelectProp multi = MultiSelectProp.fromJson(json,
+        bool contentIsList = MultiSelectPageProperty.contentIsList(json);
+        MultiSelectPageProperty multi = MultiSelectPageProperty.fromJson(json,
             subfield: contentIsList ? null : 'options');
         return multi;
       case PropertiesTypes.Select:
-        return SelectProp.fromJson(json);
+        return SelectPageProperty.fromJson(json);
       case PropertiesTypes.Number:
-        return NumberProp.fromJson(json);
+        return NumberPageProperty.fromJson(json);
       case PropertiesTypes.Checkbox:
-        return CheckboxProp.fromJson(json);
+        return CheckboxPageProperty.fromJson(json);
       case PropertiesTypes.Date:
-        return DateProp.fromJson(json);
+        return DatePageProperty.fromJson(json);
       case PropertiesTypes.Email:
-        return EmailProp.fromJson(json);
+        print("------------json $json");
+        return EmailPageProperty.fromJson(json);
       case PropertiesTypes.PhoneNumber:
-        return PhoneNumberProp.fromJson(json);
+        return PhoneNumberPageProperty.fromJson(json);
       case PropertiesTypes.URL:
-        return URLProp.fromJson(json);
+        return URLPageProperty.fromJson(json);
       case PropertiesTypes.Status:
-        return StatusProp.fromJson(json);
+        return StatusPageProperty.fromJson(json);
       default:
-        return Property();
+        return PageProperty();
     }
   }
 
@@ -111,7 +89,7 @@ class Property {
 }
 
 /// A representation of a title property for any Notion object.
-class TitleProp extends Property {
+class TitlePageProperty extends PageProperty {
   /// The property type. Always Title for this.
   @override
   final PropertiesTypes type = PropertiesTypes.Title;
@@ -129,12 +107,12 @@ class TitleProp extends Property {
   /// Main title property constructor.
   ///
   /// Can receive a list ot texts as the title [content].
-  TitleProp({this.content = const <Text>[], this.name});
+  TitlePageProperty({this.content = const <Text>[], this.name});
 
   /// Create a new property instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
-  TitleProp.fromJson(Map<String, dynamic> json, {String? subfield})
+  TitlePageProperty.fromJson(Map<String, dynamic> json, {String? subfield})
       : this.name = json['name'] ?? '',
         this.content = Text.fromListJson(((subfield != null
                     ? json[propertyTypeToString(PropertiesTypes.Title)]
@@ -163,7 +141,7 @@ class TitleProp extends Property {
 }
 
 /// A representation of a rich text property for any Notion object.
-class RichTextProp extends Property {
+class RichTextPageProperty extends PageProperty {
   /// The property type. Always RichText for this.
   @override
   final PropertiesTypes type = PropertiesTypes.RichText;
@@ -178,12 +156,12 @@ class RichTextProp extends Property {
   /// Main RichText constructor.
   ///
   /// Can receive the [content] as a list of texts.
-  RichTextProp({this.content = const <Text>[]});
+  RichTextPageProperty({this.content = const <Text>[]});
 
   /// Create a new rich text instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
-  RichTextProp.fromJson(Map<String, dynamic> json)
+  RichTextPageProperty.fromJson(Map<String, dynamic> json)
       : this.content = Text.fromListJson(
             json[propertyTypeToString(PropertiesTypes.RichText)] is List
                 ? json[propertyTypeToString(PropertiesTypes.RichText)] as List
@@ -206,7 +184,7 @@ class RichTextProp extends Property {
 }
 
 /// A representation of the multi select Notion object.
-class MultiSelectProp extends Property {
+class MultiSelectPageProperty extends PageProperty {
   /// The property type. Always MultiSelect for this.
   @override
   final PropertiesTypes type = PropertiesTypes.MultiSelect;
@@ -220,16 +198,16 @@ class MultiSelectProp extends Property {
   /// Main multi select constructor.
   ///
   /// Can receive the list6 of the options.
-  MultiSelectProp({this.options = const <MultiSelectOption>[]});
+  MultiSelectPageProperty({this.options = const <MultiSelectOption>[]});
 
-  MultiSelectProp.fromJson(Map<String, dynamic> json, {String? subfield})
+  MultiSelectPageProperty.fromJson(Map<String, dynamic> json, {String? subfield})
       : this.options = MultiSelectOption.fromListJson((subfield != null
             ? json[propertyTypeToString(PropertiesTypes.MultiSelect)][subfield]
             : json[propertyTypeToString(PropertiesTypes.MultiSelect)]) as List),
         super(id: json['id']);
 
   /// Add a new [option] to the multi select options and returns this instance.
-  MultiSelectProp addOption(MultiSelectOption option) {
+  MultiSelectPageProperty addOption(MultiSelectOption option) {
     this.options.add(option);
     return this;
   }
@@ -253,58 +231,14 @@ class MultiSelectProp extends Property {
       fieldIsList(json[propertyTypeToString(PropertiesTypes.MultiSelect)]);
 }
 
-/// A representation of a multi select option property for any Notion object.
-class MultiSelectOption {
-  /// The option name.
-  String name;
-
-  /// The option id.
-  String? id;
-
-  /// The option color.
-  ColorsTypes color;
-
-  /// Main multi select option property constructor.
-  ///
-  /// Required the [name] field to display a text for the option. Also can receive the [id] and the [color] of the option.
-  MultiSelectOption(
-      {required this.name, this.id, this.color = ColorsTypes.Default});
-
-  /// Create a new multi select instance from json.
-  ///
-  /// Receive a [json] from where the information is extracted.
-  MultiSelectOption.fromJson(Map<String, dynamic> json)
-      : this.name = json['name'] ?? '',
-        this.id = json['id'],
-        this.color = stringToColorType(json['color'] ?? '');
-
-  /// Convert this to a valid json representation for the Notion API.
-  Map<String, dynamic> toJson() {
-    Map<String, dynamic> json = {
-      'name': name,
-      'color': colorTypeToString(color),
-    };
-
-    if (id != null) {
-      json['id'] = id;
-    }
-
-    return json;
-  }
-
-  /// Map a list of options from a [json] list with dynamics.
-  static List<MultiSelectOption> fromListJson(List<dynamic> options) =>
-      options.map((e) => MultiSelectOption.fromJson(e)).toList();
-}
-
 /// A representation of a number property for any Notion object.
-class NumberProp extends Property {
+class NumberPageProperty extends PageProperty {
   num? value;
 
   @override
   final PropertiesTypes type = PropertiesTypes.Number;
 
-  NumberProp(this.value);
+  NumberPageProperty(this.value);
 
   @override
   Map<String, dynamic> toJson() {
@@ -319,19 +253,19 @@ class NumberProp extends Property {
     return json;
   }
 
-  NumberProp.fromJson(Map<String, dynamic> json)
+  NumberPageProperty.fromJson(Map<String, dynamic> json)
       : this.value = json['number'],
         super(id: json['id']);
 }
 
 /// A representation of a number property for any Notion object.
-class CheckboxProp extends Property {
+class CheckboxPageProperty extends PageProperty {
   bool value;
 
   @override
   final PropertiesTypes type = PropertiesTypes.Checkbox;
 
-  CheckboxProp(this.value);
+  CheckboxPageProperty(this.value);
 
   @override
   Map<String, dynamic> toJson() {
@@ -344,19 +278,19 @@ class CheckboxProp extends Property {
     return json;
   }
 
-  CheckboxProp.fromJson(Map<String, dynamic> json)
+  CheckboxPageProperty.fromJson(Map<String, dynamic> json)
       : this.value = json['checkbox'],
         super(id: json['id']);
 }
 
 /// A representation of a date property for any Notion object.
-class DateProp extends Property {
+class DatePageProperty extends PageProperty {
   DateTime startDate;
 
   @override
   final PropertiesTypes type = PropertiesTypes.Date;
 
-  DateProp({required this.startDate});
+  DatePageProperty({required this.startDate});
 
   @override
   Map<String, dynamic> toJson() {
@@ -374,18 +308,18 @@ class DateProp extends Property {
     return json;
   }
 
-  DateProp.fromJson(Map<String, dynamic> json)
+  DatePageProperty.fromJson(Map<String, dynamic> json)
       : this.startDate = DateTime.parse(json['date']['start']),
         super(id: json['id']);
 }
 
-class EmailProp extends Property {
+class EmailPageProperty extends PageProperty {
   String email;
 
   @override
   final PropertiesTypes type = PropertiesTypes.Email;
 
-  EmailProp({required this.email});
+  EmailPageProperty({required this.email});
 
   @override
   Map<String, dynamic> toJson() {
@@ -400,18 +334,18 @@ class EmailProp extends Property {
     return json;
   }
 
-  EmailProp.fromJson(Map<String, dynamic> json)
-      : this.email = json['email'],
+  EmailPageProperty.fromJson(Map<String, dynamic> json)
+      : this.email = (json['email'] is String) ? json['email'] : "",
         super(id: json['id']);
 }
 
-class PhoneNumberProp extends Property {
+class PhoneNumberPageProperty extends PageProperty {
   String phone;
 
   @override
   final PropertiesTypes type = PropertiesTypes.PhoneNumber;
 
-  PhoneNumberProp({required this.phone});
+  PhoneNumberPageProperty({required this.phone});
 
   @override
   Map<String, dynamic> toJson() {
@@ -426,18 +360,18 @@ class PhoneNumberProp extends Property {
     return json;
   }
 
-  PhoneNumberProp.fromJson(Map<String, dynamic> json)
+  PhoneNumberPageProperty.fromJson(Map<String, dynamic> json)
       : this.phone = json['phone_number'],
         super(id: json['id']);
 }
 
-class URLProp extends Property {
+class URLPageProperty extends PageProperty {
   String url;
 
   @override
   final PropertiesTypes type = PropertiesTypes.URL;
 
-  URLProp({required this.url});
+  URLPageProperty({required this.url});
 
   @override
   Map<String, dynamic> toJson() {
@@ -452,19 +386,19 @@ class URLProp extends Property {
     return json;
   }
 
-  URLProp.fromJson(Map<String, dynamic> json)
+  URLPageProperty.fromJson(Map<String, dynamic> json)
       : this.url = json['url'],
         super(id: json['id']);
 }
 
-class SelectProp extends Property {
+class SelectPageProperty extends PageProperty {
   String name;
   ColorsTypes color;
 
   @override
   final PropertiesTypes type = PropertiesTypes.Select;
 
-  SelectProp(this.name, this.color);
+  SelectPageProperty(this.name, this.color);
 
   @override
   Map<String, dynamic> toJson() {
@@ -478,19 +412,19 @@ class SelectProp extends Property {
 
     return json;
   }
-  SelectProp.fromJson(Map<String, dynamic> json)
+  SelectPageProperty.fromJson(Map<String, dynamic> json)
       : this.name = json['select']['name'], this.color = stringToColorType(json['select']['color'] ?? ''),
         super(id: json['id']);
 }
 
-class StatusProp extends Property {
+class StatusPageProperty extends PageProperty {
   String name;
   ColorsTypes color;
 
   @override
   final PropertiesTypes type = PropertiesTypes.Status;
 
-  StatusProp(this.name, this.color);
+  StatusPageProperty(this.name, this.color);
 
   @override
   Map<String, dynamic> toJson() {
@@ -504,7 +438,7 @@ class StatusProp extends Property {
 
     return json;
   }
-  StatusProp.fromJson(Map<String, dynamic> json)
+  StatusPageProperty.fromJson(Map<String, dynamic> json)
       : this.name = json['status']['name'], this.color = stringToColorType(json['status']['color'] ?? ''),
         super(id: json['id']);
 }
