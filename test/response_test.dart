@@ -88,7 +88,7 @@ void main() {
     test('Invalid property', () async {
       final NotionPagesClient pages = NotionPagesClient(token: token ?? '');
 
-      final Page page = Page(
+      final NotionPage page = NotionPage(
         parent: Parent.database(id: testDatabaseId ?? ''),
       ).addProperty(
         name: 'TEST',

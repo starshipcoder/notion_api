@@ -19,7 +19,7 @@ class NotionResponse {
   Database? database;
 
   /// The page information if the result is a page.
-  Page? page;
+  NotionPage? page;
 
   /// The response status.
   int status;
@@ -99,7 +99,7 @@ class NotionResponse {
     } else if (_result.object == ObjectTypes.Database) {
       _result.database = Database.fromJson(json);
     } else if (_result.object == ObjectTypes.Page) {
-      _result.page = Page.fromJson(json);
+      _result.page = NotionPage.fromJson(json);
     }
 
     return _result;

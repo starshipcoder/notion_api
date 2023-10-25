@@ -39,7 +39,7 @@ class NotionPagesClient extends BaseClient {
   /// Create a new [page].
   ///
   /// _See more at https://developers.notion.com/reference/post-page_
-  Future<NotionResponse> create(Page page) async {
+  Future<NotionResponse> create(NotionPage page) async {
     http.Response res = await http.post(Uri.https(host, '/$v/$path'),
         body: jsonEncode(page.toJson()),
         headers: {

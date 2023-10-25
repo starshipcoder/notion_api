@@ -11,7 +11,7 @@ import 'package:test/test.dart';
 void main() {
   group('Page Instance =>', () {
     test('Create new empty instance', () {
-      Page page = Page.empty();
+      NotionPage page = NotionPage.empty();
 
       expect(page, isNotNull);
       expect(page.children, isNull);
@@ -22,7 +22,7 @@ void main() {
     });
 
     test('Override page title on set', () {
-      Page page = Page.empty();
+      NotionPage page = NotionPage.empty();
 
       const String oldTitle = 'OLD';
       page.title = Text(oldTitle);
@@ -44,8 +44,8 @@ void main() {
     });
 
     test('Create new instance with data', () {
-      Page page =
-          Page(parent: Parent.database(id: 'asdasdasd-asdasdasdas-asdasdasd'))
+      NotionPage page =
+          NotionPage(parent: Parent.database(id: 'asdasdasd-asdasdasdas-asdasdasd'))
               .addProperty(
                   name: 'Tags',
                   property: MultiSelectProp(options: [
@@ -70,7 +70,7 @@ void main() {
 
     test('Create json (for API) from instance', () {
       Map<String, dynamic> page =
-          Page(parent: Parent.database(id: 'asdasdasd-asdasdasdas-asdasdasd'))
+          NotionPage(parent: Parent.database(id: 'asdasdasd-asdasdasdas-asdasdasd'))
               .addProperty(
                   name: 'Tags',
                   property: MultiSelectProp(options: [
@@ -131,7 +131,7 @@ void main() {
           }
         }
       };
-      Map<String, dynamic> page = Page.fromJson(json).toJson(isResponse: true);
+      Map<String, dynamic> page = NotionPage.fromJson(json).toJson(isResponse: true);
 
       expect(page['object'], allOf([isNotNull, isNotEmpty]));
       expect(page['id'], allOf([isNotNull, isNotEmpty]));
@@ -146,12 +146,12 @@ void main() {
     test('Create json with & without children field', () {
       Parent parent = Parent(type: ParentType.Database, id: 'DATABASE_ID');
 
-      Page pageWithChildren = Page(
+      NotionPage pageWithChildren = NotionPage(
           parent: parent,
           children: Children.withBlocks([
             Heading(text: Text('A')),
           ]));
-      Page pageWithoutChildren = Page(parent: parent);
+      NotionPage pageWithoutChildren = NotionPage(parent: parent);
 
       Map<String, dynamic> jsonWithChildren = pageWithChildren.toJson();
       Map<String, dynamic> jsonWithoutChildren = pageWithoutChildren.toJson();
@@ -195,7 +195,7 @@ void main() {
         }
       };
 
-      Page page = Page.fromJson(json);
+      NotionPage page = NotionPage.fromJson(json);
 
       expect(page.id, isNotEmpty);
       expect(page.parent.type, ParentType.Database);
@@ -206,7 +206,7 @@ void main() {
     test('Map from wrong json', () {
       Map<String, dynamic> wrongJsonDatabase = {};
 
-      Page page = Page.fromJson(wrongJsonDatabase);
+      NotionPage page = NotionPage.fromJson(wrongJsonDatabase);
 
       expect(page.id, isEmpty);
       expect(page.properties.contains('title'), false);
@@ -214,7 +214,7 @@ void main() {
     });
 
     test('Add properties from json', () {
-      Page page = Page.empty().addPropertiesFromJson({
+      NotionPage page = NotionPage.empty().addPropertiesFromJson({
         "title": {"id": "title", "type": "title", "title": {}}
       });
 

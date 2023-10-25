@@ -17,7 +17,7 @@ class Pagination {
 
   List<Block>? _blocks;
   List<Database>? _databases;
-  List<Page>? _pages;
+  List<NotionPage>? _pages;
 
   get list {
     if (this.isEmpty) {
@@ -39,7 +39,7 @@ class Pagination {
   List<Database> get databases => isEmpty ? [] : _databases!;
 
   /// The list of pages for when the response is for pages.
-  List<Page> get pages => isEmpty ? [] : _pages!;
+  List<NotionPage> get pages => isEmpty ? [] : _pages!;
 
   /// Returns true if the result is a list of blocks.
   bool get isBlocksList => _blocks != null;
@@ -82,8 +82,8 @@ class Pagination {
             (json['results'] as List).map((e) => Database.fromJson(e)));
         pagination._databases = [...databases];
       } else if (object == ObjectTypes.Page) {
-        List<Page> pages = List<Page>.from(
-            (json['results'] as List).map((e) => Page.fromJson(e)));
+        List<NotionPage> pages = List<NotionPage>.from(
+            (json['results'] as List).map((e) => NotionPage.fromJson(e)));
         pagination._pages = [...pages];
       }
     } else {

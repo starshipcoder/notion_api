@@ -8,7 +8,7 @@ import 'package:notion_api/notion/general/lists/children.dart';
 import 'parent.dart';
 
 /// A representation of the Page Notion object.
-class Page extends BaseFields {
+class NotionPage extends BaseFields {
   /// The type of this object. Always Page for this.
   @override
   final ObjectTypes object = ObjectTypes.Page;
@@ -33,7 +33,7 @@ class Page extends BaseFields {
   ///
   /// The [children] and [title] fields are defined
   /// for when a new page is created.
-  Page({
+  NotionPage({
     required this.parent,
     this.archived: false,
     this.children,
@@ -50,13 +50,13 @@ class Page extends BaseFields {
   }
 
   /// Constructor for empty page.
-  Page.empty()
+  NotionPage.empty()
       : this.parent = Parent.none(),
         this.archived = false;
 
   /// Contructor from json.
-  factory Page.fromJson(Map<String, dynamic> json) {
-    Page page = Page(
+  factory NotionPage.fromJson(Map<String, dynamic> json) {
+    NotionPage page = NotionPage(
       id: json['id'] ?? '',
       parent: Parent.fromJson(json['parent'] ?? {}),
       archived: json['archived'] ?? false,
@@ -78,13 +78,13 @@ class Page extends BaseFields {
   }
 
   /// Add a [property] with a specific [name] to this properties.
-  Page addProperty({required String name, required Property property}) {
+  NotionPage addProperty({required String name, required Property property}) {
     this.properties.add(name: name, property: property);
     return this;
   }
 
   /// Add a multiples properties from a [json] to this properties.
-  Page addPropertiesFromJson(Map<String, dynamic> json) {
+  NotionPage addPropertiesFromJson(Map<String, dynamic> json) {
     this.properties.addAllFromJson(json);
     return this;
   }

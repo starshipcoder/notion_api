@@ -52,7 +52,7 @@ void main() {
       expect(res.status, 200);
       expect(res.isPage, true);
       expect(res.content, isNotNull);
-      expect(res.content, isA<Page>());
+      expect(res.content, isA<NotionPage>());
       expect(res.isOk, true);
     });
   });
@@ -61,7 +61,7 @@ void main() {
     test('Create a page', () async {
       final NotionPagesClient pages = NotionPagesClient(token: token ?? '');
 
-      final Page page = Page(
+      final NotionPage page = NotionPage(
         parent: Parent.database(id: testDatabaseId ?? ''),
         title: Text('NotionClient (v1): Page test'),
       );
@@ -74,7 +74,7 @@ void main() {
     test('Create a page with default title', () async {
       final NotionPagesClient pages = NotionPagesClient(token: token ?? '');
 
-      final Page page = Page(
+      final NotionPage page = NotionPage(
         parent: Parent.database(id: testDatabaseId ?? ''),
       );
 
@@ -174,7 +174,7 @@ void main() {
 
       final NotionClient notion = NotionClient(token: token ?? '');
 
-      final Page page = Page(
+      final NotionPage page = NotionPage(
         parent: Parent.database(id: testDatabaseId ?? ''),
         title: Text('notion_api example'),
       );
