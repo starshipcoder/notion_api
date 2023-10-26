@@ -37,10 +37,10 @@ class DatabaseProperties {
   }
 
   /// Remove the property with the specific [name] and return the deleted property. If not found return an empty instance.
-  Property remove(String name) => this._map.remove(name) ?? DatabaseProperty.empty();
+  Property? remove(String name) => this._map.remove(name) ?? null;
 
   /// Get the property with the specific [name]. If not found return an empty instance.
-  Property getByName(String name) => this._map[name] ?? DatabaseProperty.empty();
+  Property? getByName(String name) => this._map[name] ?? null;
 
   /// Returns true if the property with the specific [name] is contained.
   bool contains(String name) => this._map.containsKey(name);
@@ -93,10 +93,10 @@ class PageProperties {
   }
 
   /// Remove the property with the specific [name] and return the deleted property. If not found return an empty instance.
-  Property remove(String name) => this._map.remove(name) ?? PageProperty.empty();
+  Property? remove(String name) => this._map.remove(name) ?? null;
 
   /// Get the property with the specific [name]. If not found return an empty instance.
-  Property getByName(String name) => this._map[name] ?? PageProperty.empty();
+  Property? getByName(String name) => this._map[name] ?? null;
 
   /// Returns true if the property with the specific [name] is contained.
   bool contains(String name) => this._map.containsKey(name);

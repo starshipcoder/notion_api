@@ -4,10 +4,12 @@ import 'package:notion_api/utils/utils.dart';
 /// A representation of a single property for any Notion object.
 abstract class Property {
   /// The property type.
-  final PropertiesTypes type = PropertiesTypes.None;
+  final PropertyType type = PropertyType.None;
 
   /// The property id.
-  String? id;
+  final String id;
+
+  final String propName;
 
   /// The base getter for the content of any property.
   dynamic get value => false;
@@ -16,36 +18,35 @@ abstract class Property {
   String get strType => propertyTypeToString(type);
 
   /// Returns true if property is Title type.
-  bool get isTitle => type == PropertiesTypes.Title;
+  bool get isTitle => type == PropertyType.Title;
 
   /// Returns true if property is RichText type.
-  bool get isRichText => type == PropertiesTypes.RichText;
+  bool get isRichText => type == PropertyType.RichText;
 
   /// Returns true if property is MultiSelect type.
-  bool get isMultiSelect => type == PropertiesTypes.MultiSelect;
+  bool get isMultiSelect => type == PropertyType.MultiSelect;
 
   /// Returns true if property don't have a known type.
-  bool get isNone => type == PropertiesTypes.None;
+  bool get isNone => type == PropertyType.None;
 
   /// Main property constructor.
   ///
   /// Can receive the property [id].
-  Property({this.id});
+  Property({required this.id, required this.propName});
 
   /// Constructor for empty property.
-  Property.empty();
+  //Property.empty();
 
   /// Convert this to a valid json representation for the Notion API.
   Map<String, dynamic> toJson() {
-    if (type == PropertiesTypes.None) {
+    if (type == PropertyType.None) {
       throw 'None type for property';
     }
 
     Map<String, dynamic> json = {'type': strType};
 
-    if (id != null) {
-      json['id'] = id;
-    }
+    json['id'] = id;
+
 
     return json;
   }
@@ -59,7 +60,7 @@ abstract class Property {
   // abstract static Property propertyFromJson(Map<String, dynamic> json);
 
   /// Returns true if the properties are empty.
-  static bool isEmpty(Map<String, dynamic> json, PropertiesTypes type) {
+  static bool isEmpty(Map<String, dynamic> json, PropertyType type) {
     if (json[propertyTypeToString(type)] != null) {
       return json[propertyTypeToString(type)]!.isEmpty;
     }

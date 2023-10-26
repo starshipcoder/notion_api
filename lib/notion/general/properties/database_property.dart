@@ -6,22 +6,18 @@ class DatabaseProperty extends Property {
   /// Main property constructor.
   ///
   /// Can receive the property [id].
-  DatabaseProperty({super.id});
+  DatabaseProperty({required super.id, required super.propName});
 
-  /// Constructor for empty property.
-  DatabaseProperty.empty();
 
   /// Convert this to a valid json representation for the Notion API.
   Map<String, dynamic> toJson() {
-    if (type == PropertiesTypes.None) {
+    if (type == PropertyType.None) {
       throw 'None type for property';
     }
 
     Map<String, dynamic> json = {'type': strType};
 
-    if (id != null) {
-      json['id'] = id;
-    }
+    json['id'] = id;
 
     return json;
   }
@@ -30,7 +26,7 @@ class DatabaseProperty extends Property {
   static Map<String, DatabaseProperty> propertiesFromJson(Map<String, dynamic> json) {
     Map<String, DatabaseProperty> properties = {};
     json.entries.forEach((entry) {
-      properties[entry.key] = DatabaseProperty.propertyFromJson(entry.value);
+      properties[entry.key] = DatabaseProperty.propertyFromJson(entry.value, entry.key);
     });
     return properties;
   }
@@ -38,41 +34,41 @@ class DatabaseProperty extends Property {
   /// Create a new Property instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
-  static DatabaseProperty propertyFromJson(Map<String, dynamic> json) {
-    PropertiesTypes type = extractPropertyType(json);
+  static DatabaseProperty propertyFromJson(Map<String, dynamic> json, String propName) {
+    PropertyType type = extractPropertyType(json);
     switch (type) {
-      case PropertiesTypes.Title:
-        return TitleDatabaseProperty.fromJson(json);
-      case PropertiesTypes.RichText:
-        return RichTextDatabaseProperty.fromJson(json);
-      case PropertiesTypes.MultiSelect:
-        return MultiSelectDatabaseProperty.fromJson(json);
-      case PropertiesTypes.Status:
-        return StatusDatabaseProperty.fromJson(json);
-      case PropertiesTypes.Select:
-        return SelectDatabaseProperty.fromJson(json);
-      case PropertiesTypes.Number:
-        return NumberDatabaseProperty.fromJson(json);
-      case PropertiesTypes.Checkbox:
+      case PropertyType.Title:
+        return TitleDatabaseProperty.fromJson(json, propName);
+      case PropertyType.RichText:
+        return RichTextDatabaseProperty.fromJson(json, propName);
+      case PropertyType.MultiSelect:
+        return MultiSelectDatabaseProperty.fromJson(json, propName);
+      case PropertyType.Status:
+        return StatusDatabaseProperty.fromJson(json, propName);
+      case PropertyType.Select:
+        return SelectDatabaseProperty.fromJson(json, propName);
+      case PropertyType.Number:
+        return NumberDatabaseProperty.fromJson(json, propName);
+      case PropertyType.Checkbox:
       //     return CheckboxDatabaseProperty.fromJson(json);
       // case PropertiesTypes.Date:
       //   return DateDatabaseProperty.fromJson(json);
       // return EmailDatabaseProperty.fromJson(json);
       //   case PropertiesTypes.PhoneNumber:
       //     return PhoneNumberDatabaseProperty.fromJson(json);
-      case PropertiesTypes.URL:
+      case PropertyType.URL:
       //   return URLDatabaseProperty.fromJson(json);
 
-      case PropertiesTypes.PhoneNumber:
-      case PropertiesTypes.Date:
-      case PropertiesTypes.Email:
+      case PropertyType.PhoneNumber:
+      case PropertyType.Date:
+      case PropertyType.Email:
       default:
-        return DatabaseProperty();
+        return TypedDatabaseProperty(type: type, id: json['id'], propName: propName);
     }
   }
 
   /// Returns true if the properties are empty.
-  static bool isEmpty(Map<String, dynamic> json, PropertiesTypes type) {
+  static bool isEmpty(Map<String, dynamic> json, PropertyType type) {
     if (json[propertyTypeToString(type)] != null) {
       return json[propertyTypeToString(type)]!.isEmpty;
     }
@@ -80,11 +76,26 @@ class DatabaseProperty extends Property {
   }
 }
 
+class TypedDatabaseProperty extends DatabaseProperty {
+  final PropertyType type;
+
+  TypedDatabaseProperty({required this.type, required super.id, required super.propName});
+
+  @override
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {'type': this.strType};
+
+    json['id'] = this.id;
+
+    return json;
+  }
+}
+
 /// A representation of a title property for any Notion object.
 class TitleDatabaseProperty extends DatabaseProperty {
   /// The property type. Always Title for this.
   @override
-  final PropertiesTypes type = PropertiesTypes.Title;
+  final PropertyType type = PropertyType.Title;
 
   /// The property name.
   String? name;
@@ -99,29 +110,25 @@ class TitleDatabaseProperty extends DatabaseProperty {
   /// Main title property constructor.
   ///
   /// Can receive a list ot texts as the title [content].
-  TitleDatabaseProperty({this.content = const <NotionText>[], this.name});
+  TitleDatabaseProperty({this.content = const <NotionText>[], required super.propName, required super.id});
 
   /// Create a new property instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
-  TitleDatabaseProperty.fromJson(Map<String, dynamic> json)
+  TitleDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.name = json['name'] ?? '',
-        this.content = NotionText.fromListJson(((json[propertyTypeToString(PropertiesTypes.Title)]['title']) ??
+        this.content = NotionText.fromListJson(((json[propertyTypeToString(PropertyType.Title)]['title']) ??
                 []) as List)
             .toList(),
-        super(id: json['id']);
+        super(id: json['id'], propName: propName);
 
   /// Convert this to a valid json representation for the Notion API.
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': this.strType};
 
-    if (this.id != null) {
-      json['id'] = this.id;
-    }
-    if (this.name != null) {
-      json['name'] = this.name;
-    }
+    json['id'] = this.id;
+    json['name'] = this.name;
 
     json[this.strType] = this.content.map((e) => e.toJson()).toList();
 
@@ -133,7 +140,7 @@ class TitleDatabaseProperty extends DatabaseProperty {
 class RichTextDatabaseProperty extends DatabaseProperty {
   /// The property type. Always RichText for this.
   @override
-  final PropertiesTypes type = PropertiesTypes.RichText;
+  final PropertyType type = PropertyType.RichText;
 
   /// The list of rich text.
   List<NotionText> content;
@@ -145,25 +152,23 @@ class RichTextDatabaseProperty extends DatabaseProperty {
   /// Main RichText constructor.
   ///
   /// Can receive the [content] as a list of texts.
-  RichTextDatabaseProperty({this.content = const <NotionText>[]});
+  RichTextDatabaseProperty({this.content = const <NotionText>[], required super.id, required super.propName});
 
   /// Create a new rich text instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
-  RichTextDatabaseProperty.fromJson(Map<String, dynamic> json)
-      : this.content = NotionText.fromListJson(json[propertyTypeToString(PropertiesTypes.RichText)] is List
-            ? json[propertyTypeToString(PropertiesTypes.RichText)] as List
+  RichTextDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
+      : this.content = NotionText.fromListJson(json[propertyTypeToString(PropertyType.RichText)] is List
+            ? json[propertyTypeToString(PropertyType.RichText)] as List
             : []),
-        super(id: json['id']);
+        super(id: json['id'], propName: propName);
 
   /// Convert this to a valid json representation for the Notion API.
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': strType};
 
-    if (id != null) {
-      json['id'] = id;
-    }
+    json['id'] = id;
 
     json[strType] = content.map((e) => e.toJson()).toList();
 
@@ -175,7 +180,7 @@ class RichTextDatabaseProperty extends DatabaseProperty {
 class MultiSelectDatabaseProperty extends DatabaseProperty {
   /// The property type. Always MultiSelect for this.
   @override
-  final PropertiesTypes type = PropertiesTypes.MultiSelect;
+  final PropertyType type = PropertyType.MultiSelect;
 
   List<MultiSelectOption> options;
 
@@ -186,11 +191,11 @@ class MultiSelectDatabaseProperty extends DatabaseProperty {
   /// Main multi select constructor.
   ///
   /// Can receive the list6 of the options.
-  MultiSelectDatabaseProperty({this.options = const <MultiSelectOption>[]});
+  MultiSelectDatabaseProperty({this.options = const <MultiSelectOption>[], required super.id, required super.propName});
 
-  MultiSelectDatabaseProperty.fromJson(Map<String, dynamic> json)
-      : this.options = MultiSelectOption.fromListJson((json[propertyTypeToString(PropertiesTypes.MultiSelect)]['options']) as List),
-        super(id: json['id']);
+  MultiSelectDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
+      : this.options = MultiSelectOption.fromListJson((json[propertyTypeToString(PropertyType.MultiSelect)]['options']) as List),
+        super(id: json['id'], propName: propName);
 
   /// Add a new [option] to the multi select options and returns this instance.
   MultiSelectDatabaseProperty addOption(MultiSelectOption option) {
@@ -203,9 +208,7 @@ class MultiSelectDatabaseProperty extends DatabaseProperty {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': strType};
 
-    if (id != null) {
-      json['id'] = id;
-    }
+    json['id'] = id;
 
     json[strType] = {'options': options.map((e) => e.toJson()).toList()};
 
@@ -219,17 +222,15 @@ class NumberDatabaseProperty extends DatabaseProperty {
   final String format;
 
   @override
-  final PropertiesTypes type = PropertiesTypes.Number;
+  final PropertyType type = PropertyType.Number;
 
-  NumberDatabaseProperty(this.name, this.format);
+  NumberDatabaseProperty(this.name, this.format, {required super.id, required super.propName});
 
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': this.strType};
 
-    if (this.id != null) {
-      json['id'] = this.id;
-    }
+    json['id'] = this.id;
 
     json['number'] = {
       'name': name,
@@ -239,10 +240,10 @@ class NumberDatabaseProperty extends DatabaseProperty {
     return json;
   }
 
-  NumberDatabaseProperty.fromJson(Map<String, dynamic> json)
+  NumberDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.name = json['name'],
         this.format = json['number']['format'],
-        super(id: json['id']);
+        super(id: json['id'], propName: propName);
 }
 
 /// A representation of a number property for any Notion object.
@@ -250,24 +251,22 @@ class CheckboxDatabaseProperty extends DatabaseProperty {
   bool value;
 
   @override
-  final PropertiesTypes type = PropertiesTypes.Checkbox;
+  final PropertyType type = PropertyType.Checkbox;
 
-  CheckboxDatabaseProperty(this.value);
+  CheckboxDatabaseProperty(this.value, {required super.id, required super.propName});
 
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': 'checkbox', 'checkbox': this.value};
 
-    if (this.id != null) {
-      json['id'] = this.id;
-    }
+    json['id'] = this.id;
 
     return json;
   }
 
-  CheckboxDatabaseProperty.fromJson(Map<String, dynamic> json)
+  CheckboxDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.value = json['checkbox'],
-        super(id: json['id']);
+        super(id: json['id'], propName: propName);
 }
 
 /// A representation of a date property for any Notion object.
@@ -275,17 +274,15 @@ class DateDatabaseProperty extends DatabaseProperty {
   DateTime startDate;
 
   @override
-  final PropertiesTypes type = PropertiesTypes.Date;
+  final PropertyType type = PropertyType.Date;
 
-  DateDatabaseProperty({required this.startDate});
+  DateDatabaseProperty({required this.startDate, required super.id, required super.propName});
 
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': this.strType};
 
-    if (this.id != null) {
-      json['id'] = this.id;
-    }
+    json['id'] = this.id;
 
     json[this.strType] = {
       "start":
@@ -295,87 +292,82 @@ class DateDatabaseProperty extends DatabaseProperty {
     return json;
   }
 
-  DateDatabaseProperty.fromJson(Map<String, dynamic> json)
+  DateDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.startDate = DateTime.parse(json['date']['start']),
-        super(id: json['id']);
+        super(id: json['id'], propName: propName);
 }
 
 class EmailDatabaseProperty extends DatabaseProperty {
   String email;
 
   @override
-  final PropertiesTypes type = PropertiesTypes.Email;
+  final PropertyType type = PropertyType.Email;
 
-  EmailDatabaseProperty({required this.email});
+  EmailDatabaseProperty({required this.email, required super.id, required super.propName});
 
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': this.strType};
 
-    if (this.id != null) {
-      json['id'] = this.id;
-    }
+    json['id'] = this.id;
 
     json[this.strType] = this.email;
 
     return json;
   }
 
-  EmailDatabaseProperty.fromJson(Map<String, dynamic> json)
+  EmailDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.email = (json['email'] is String) ? json['email'] : "",
-        super(id: json['id']);
+        super(id: json['id'], propName: propName);
 }
 
 class PhoneNumberDatabaseProperty extends DatabaseProperty {
   String phone;
 
   @override
-  final PropertiesTypes type = PropertiesTypes.PhoneNumber;
+  final PropertyType type = PropertyType.PhoneNumber;
 
-  PhoneNumberDatabaseProperty({required this.phone});
+  PhoneNumberDatabaseProperty({required this.phone, required super.id, required super.propName});
 
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': this.strType};
 
-    if (this.id != null) {
-      json['id'] = this.id;
-    }
+    json['id'] = this.id;
 
     json[this.strType] = this.phone;
 
     return json;
   }
 
-  PhoneNumberDatabaseProperty.fromJson(Map<String, dynamic> json)
+  PhoneNumberDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.phone = json['phone_number'],
-        super(id: json['id']);
+        super(id: json['id'], propName: propName);
 }
 
 class URLDatabaseProperty extends DatabaseProperty {
   String url;
 
   @override
-  final PropertiesTypes type = PropertiesTypes.URL;
+  final PropertyType type = PropertyType.URL;
 
-  URLDatabaseProperty({required this.url});
+  URLDatabaseProperty({required this.url, required super.id, required super.propName});
 
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': this.strType};
 
-    if (this.id != null) {
-      json['id'] = this.id;
-    }
+    json['id'] = this.id;
+
 
     json[this.strType] = this.url;
 
     return json;
   }
 
-  URLDatabaseProperty.fromJson(Map<String, dynamic> json)
+  URLDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.url = json['url'],
-        super(id: json['id']);
+        super(id: json['id'], propName: propName);
 }
 
 class SelectDatabaseProperty extends DatabaseProperty {
@@ -383,17 +375,16 @@ class SelectDatabaseProperty extends DatabaseProperty {
   final List<Option> options;
 
   @override
-  final PropertiesTypes type = PropertiesTypes.Select;
+  final PropertyType type = PropertyType.Select;
 
-  SelectDatabaseProperty(this.name, this.options);
+  SelectDatabaseProperty(this.name, this.options, {required super.id, required super.propName});
 
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': this.strType};
 
-    if (this.id != null) {
-      json['id'] = this.id;
-    }
+    json['id'] = this.id;
+
 
     json[this.strType] = {
       'name': this.name,
@@ -403,10 +394,10 @@ class SelectDatabaseProperty extends DatabaseProperty {
     return json;
   }
 
-  SelectDatabaseProperty.fromJson(Map<String, dynamic> json)
+  SelectDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.name = json['name'],
         this.options = (json['select']['options'] as List).map((e) => Option.fromJson(e)).toList(),
-        super(id: json['id']);
+      super(id: json['id'], propName: propName);
 }
 
 class StatusDatabaseProperty extends DatabaseProperty {
@@ -415,17 +406,16 @@ class StatusDatabaseProperty extends DatabaseProperty {
   final List<Group> groups;
 
   @override
-  final PropertiesTypes type = PropertiesTypes.Status;
+  final PropertyType type = PropertyType.Status;
 
-  StatusDatabaseProperty(this.name, this.options, this.groups);
+  StatusDatabaseProperty(this.name, this.options, this.groups, {required super.id, required super.propName});
 
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': this.strType};
 
-    if (this.id != null) {
-      json['id'] = this.id;
-    }
+    json['id'] = this.id;
+
 
     json['status'] = {
       'name': name,
@@ -436,13 +426,12 @@ class StatusDatabaseProperty extends DatabaseProperty {
     return json;
   }
 
-  StatusDatabaseProperty.fromJson(Map<String, dynamic> json)
+  StatusDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.name = json['name'],
-        this.options = (json['status']['options'] as List)
-            .map((e) => Option.fromJson(e))
+        this.options = (json['status']['options'] as List)            .map((e) => Option.fromJson(e))
             .toList(),
         this.groups = (json['status']['groups'] as List)
             .map((e) => Group.fromJson(e))
             .toList(),
-        super(id: json['id']);
+        super(id: json['id'], propName: propName);
 }

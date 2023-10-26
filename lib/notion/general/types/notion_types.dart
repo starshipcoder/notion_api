@@ -25,7 +25,7 @@ enum ObjectTypes {
 }
 
 /// The notion objects properties types.
-enum PropertiesTypes {
+enum PropertyType {
   None,
   Title,
   RichText,

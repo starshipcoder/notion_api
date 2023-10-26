@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:notion_api/base_client.dart';
 import 'package:notion_api/notion/objects/database.dart';
+import 'package:notion_api/notion/request/notion_sort.dart';
 
 import 'responses/notion_response.dart';
 import 'statics.dart';
@@ -100,26 +101,4 @@ class NotionDatabasesClient extends BaseClient {
   }
 }
 
-enum SortDirection { ascending, descending }
 
-class DatabaseSort {
-  final String property;
-  final SortDirection direction;
-
-  DatabaseSort(this.property, this.direction);
-
-  factory DatabaseSort.ascending(String property) {
-    return DatabaseSort(property, SortDirection.ascending);
-  }
-
-  factory DatabaseSort.descending(String property) {
-    return DatabaseSort(property, SortDirection.descending);
-  }
-
-  Map<String, String> toJson() {
-    return {
-      "property": property,
-      "direction": direction.name,
-    };
-  }
-}

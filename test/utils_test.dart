@@ -18,13 +18,13 @@ void main() {
         'multi_select': []
       };
 
-      PropertiesTypes titleType = extractPropertyType(titleField);
-      PropertiesTypes richTextType = extractPropertyType(richTextField);
-      PropertiesTypes multiSelectType = extractPropertyType(multiSelectField);
+      PropertyType titleType = extractPropertyType(titleField);
+      PropertyType richTextType = extractPropertyType(richTextField);
+      PropertyType multiSelectType = extractPropertyType(multiSelectField);
 
-      expect(titleType, PropertiesTypes.Title);
-      expect(richTextType, PropertiesTypes.RichText);
-      expect(multiSelectType, PropertiesTypes.MultiSelect);
+      expect(titleType, PropertyType.Title);
+      expect(richTextType, PropertyType.RichText);
+      expect(multiSelectType, PropertyType.MultiSelect);
     });
 
     test('Get the property type (without type)', () {
@@ -36,19 +36,19 @@ void main() {
       };
       Map<String, dynamic> multiSelectField = {'multi_select': []};
 
-      PropertiesTypes titleType = extractPropertyType(titleField);
-      PropertiesTypes richTextType = extractPropertyType(richTextField);
-      PropertiesTypes multiSelectType = extractPropertyType(multiSelectField);
+      PropertyType titleType = extractPropertyType(titleField);
+      PropertyType richTextType = extractPropertyType(richTextField);
+      PropertyType multiSelectType = extractPropertyType(multiSelectField);
 
-      expect(titleType, PropertiesTypes.Title);
-      expect(richTextType, PropertiesTypes.RichText);
-      expect(multiSelectType, PropertiesTypes.MultiSelect);
+      expect(titleType, PropertyType.Title);
+      expect(richTextType, PropertyType.RichText);
+      expect(multiSelectType, PropertyType.MultiSelect);
     });
 
     test('Get the property type (no type)', () {
       Map<String, dynamic> field = {};
-      PropertiesTypes type = extractPropertyType(field);
-      expect(type, PropertiesTypes.None);
+      PropertyType type = extractPropertyType(field);
+      expect(type, PropertyType.None);
     });
   });
 
@@ -106,27 +106,27 @@ void main() {
 
   group('Utils tests (PropertiesTypes) =>', () {
     test('Return an ObjectTypes type', () {
-      PropertiesTypes type1 = stringToPropertyType('invalid_string');
-      PropertiesTypes type2 = stringToPropertyType('title');
-      PropertiesTypes type3 = stringToPropertyType('rich_text');
-      PropertiesTypes type4 = stringToPropertyType('number');
-      PropertiesTypes type5 = stringToPropertyType('select');
+      PropertyType type1 = stringToPropertyType('invalid_string');
+      PropertyType type2 = stringToPropertyType('title');
+      PropertyType type3 = stringToPropertyType('rich_text');
+      PropertyType type4 = stringToPropertyType('number');
+      PropertyType type5 = stringToPropertyType('select');
 
       expect([type1, type2, type3, type4, type5],
-          everyElement(isA<PropertiesTypes>()));
-      expect(type1, PropertiesTypes.None);
-      expect(type2, PropertiesTypes.Title);
-      expect(type3, PropertiesTypes.RichText);
-      expect(type4, PropertiesTypes.Number);
-      expect(type5, PropertiesTypes.Select);
+          everyElement(isA<PropertyType>()));
+      expect(type1, PropertyType.None);
+      expect(type2, PropertyType.Title);
+      expect(type3, PropertyType.RichText);
+      expect(type4, PropertyType.Number);
+      expect(type5, PropertyType.Select);
     });
 
     test('Invalid string return None type', () {
-      PropertiesTypes type1 = stringToPropertyType('invalid_string');
-      PropertiesTypes type2 = stringToPropertyType('asdlfknasdkjl');
-      PropertiesTypes type3 = stringToPropertyType('');
+      PropertyType type1 = stringToPropertyType('invalid_string');
+      PropertyType type2 = stringToPropertyType('asdlfknasdkjl');
+      PropertyType type3 = stringToPropertyType('');
 
-      expect([type1, type2, type3], everyElement(PropertiesTypes.None));
+      expect([type1, type2, type3], everyElement(PropertyType.None));
     });
   });
 
@@ -146,7 +146,7 @@ void main() {
     });
 
     test('None types', () {
-      String propertyType = propertyTypeToString(PropertiesTypes.None);
+      String propertyType = propertyTypeToString(PropertyType.None);
       String blockType = blockTypeToString(BlockTypes.None);
       String objectType = objectTypeToString(ObjectTypes.None);
       String parentType = parentTypeToString(ParentType.None);

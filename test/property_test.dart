@@ -7,7 +7,7 @@ void main() {
   group('Main property =>', () {
     test('Create an instance of property', () {
       PageProperty prop = PageProperty.empty();
-      expect(prop.type, PropertiesTypes.None);
+      expect(prop.type, PropertyType.None);
       expect(prop.value, false);
     });
 
@@ -21,8 +21,8 @@ void main() {
           {"id": "title", "type": "title", "title": {}});
 
       expect(prop.isTitle, true);
-      expect(prop.type, PropertiesTypes.Title);
-      expect(prop.strType, propertyTypeToString(PropertiesTypes.Title));
+      expect(prop.type, PropertyType.Title);
+      expect(prop.strType, propertyTypeToString(PropertyType.Title));
     });
 
     test('Create a properties map from json', () {
@@ -68,7 +68,7 @@ void main() {
       Property prop = TitlePageProperty(content: [NotionText('Title')]);
       Map<String, dynamic> json = prop.toJson();
 
-      String strType = propertyTypeToString(PropertiesTypes.Title);
+      String strType = propertyTypeToString(PropertyType.Title);
       expect(json['type'], strType);
       expect(json, contains(strType));
       expect((json[strType] as List).length, 1);
@@ -76,7 +76,7 @@ void main() {
 
     test('Check if property is empty', () {
       bool isEmptyTrue = Property.isEmpty(
-          {'id': 'title', 'type': 'title', 'title': []}, PropertiesTypes.Title);
+          {'id': 'title', 'type': 'title', 'title': []}, PropertyType.Title);
       bool isEmptyFalse = Property.isEmpty({
         'id': 'title',
         'type': 'title',
@@ -96,7 +96,7 @@ void main() {
             "href": null
           }
         ]
-      }, PropertiesTypes.Title);
+      }, PropertyType.Title);
       expect(isEmptyTrue, true);
       expect(isEmptyFalse, false);
     });
@@ -106,7 +106,7 @@ void main() {
     test('Create an instance of property', () {
       TitlePageProperty prop = TitlePageProperty(content: [NotionText('TITLE')]);
 
-      expect(prop.type, PropertiesTypes.Title);
+      expect(prop.type, PropertyType.Title);
       expect(prop.content, isNotEmpty);
       expect(prop.content.length, 1);
     });
@@ -114,7 +114,7 @@ void main() {
     test('Create a json from property', () {
       Map<String, dynamic> json = TitlePageProperty(content: [NotionText('TITLE')]).toJson();
 
-      String strType = propertyTypeToString(PropertiesTypes.Title);
+      String strType = propertyTypeToString(PropertyType.Title);
       expect(json['type'], strType);
       expect(json, contains(strType));
       expect((json[strType] as List).length, 1);
@@ -125,7 +125,7 @@ void main() {
     test('Create an instance of property', () {
       RichTextPageProperty rich = RichTextPageProperty(content: [NotionText('A'), NotionText('B')]);
 
-      expect(rich.type, PropertiesTypes.RichText);
+      expect(rich.type, PropertyType.RichText);
       expect(rich.content, isNotEmpty);
       expect(rich.content.length, 2);
       expect(rich.value, isNotEmpty);
@@ -135,7 +135,7 @@ void main() {
       Map<String, dynamic> json =
       RichTextPageProperty(content: [NotionText('A'), NotionText('B')]).toJson();
 
-      String strType = propertyTypeToString(PropertiesTypes.RichText);
+      String strType = propertyTypeToString(PropertyType.RichText);
       expect(json['type'], strType);
       expect(json, contains(strType));
       expect((json[strType] as List).length, 2);
@@ -147,7 +147,7 @@ void main() {
       MultiSelectPageProperty multi =
       MultiSelectPageProperty(options: [MultiSelectOption(name: 'A')]);
 
-      expect(multi.type, PropertiesTypes.MultiSelect);
+      expect(multi.type, PropertyType.MultiSelect);
       expect(multi.options, isNotEmpty);
       expect(multi.options.length, 1);
     });
@@ -158,7 +158,7 @@ void main() {
               .addOption(MultiSelectOption(name: 'B'))
               .addOption(MultiSelectOption(name: 'C'));
 
-      expect(multi.type, PropertiesTypes.MultiSelect);
+      expect(multi.type, PropertyType.MultiSelect);
       expect(multi.options, hasLength(3));
       expect(multi.options.first.name, 'A');
       expect(multi.options.last.name, 'C');
@@ -185,7 +185,7 @@ void main() {
       Map<String, dynamic> json =
           MultiSelectPageProperty(options: [MultiSelectOption(name: 'A')]).toJson();
 
-      String strType = propertyTypeToString(PropertiesTypes.MultiSelect);
+      String strType = propertyTypeToString(PropertyType.MultiSelect);
       expect(json['type'], strType);
       expect(json, contains(strType));
       expect(json[strType], contains('options'));
@@ -296,7 +296,7 @@ void main() {
     test('Create json from name json response', () {
       Map<String, dynamic> jsonTest = TitlePageProperty.fromJson(json).toJson();
 
-      String strType = propertyTypeToString(PropertiesTypes.Title);
+      String strType = propertyTypeToString(PropertyType.Title);
       expect(jsonTest['type'], strType);
       expect(jsonTest, contains(strType));
       expect(jsonTest[strType], isList);
@@ -313,7 +313,7 @@ void main() {
       Map<String, dynamic> jsonTest =
       RichTextPageProperty.fromJson(jsonDetails).toJson();
 
-      String strType = propertyTypeToString(PropertiesTypes.RichText);
+      String strType = propertyTypeToString(PropertyType.RichText);
       expect(jsonTest['type'], strType);
       expect(jsonTest['id'], isNotNull);
       expect(jsonTest, contains(strType));

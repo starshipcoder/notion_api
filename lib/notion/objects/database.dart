@@ -79,7 +79,7 @@ class Database extends BaseFields {
     String pagesColumnName = 'Name',
     DatabaseProperties? properties,
   }) : this.properties = DatabaseProperties(map: {
-          pagesColumnName: TitleDatabaseProperty(),
+          pagesColumnName: TitleDatabaseProperty(propName: pagesColumnName, id: ''),
           if (properties != null) ...properties.entries,
         }) {
     this.id = id;

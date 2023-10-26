@@ -82,7 +82,7 @@ class NotionPage extends BaseFields {
       this.properties.remove('title');
     }
 
-    this.properties.add(name: 'title', property: TitlePageProperty(content: [title]));
+    this.properties.add(name: 'title', property: TitlePageProperty(propName: 'title', id: '', content: [title]));
   }
 
   /// Add a [property] with a specific [name] to this properties.

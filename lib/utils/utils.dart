@@ -3,7 +3,7 @@ import 'package:notion_api/notion/general/types/notion_types.dart';
 // Lists of types
 const List<ObjectTypes> objects = ObjectTypes.values;
 const List<BlockTypes> blocks = BlockTypes.values;
-const List<PropertiesTypes> properties = PropertiesTypes.values;
+const List<PropertyType> properties = PropertyType.values;
 const List<ColorsTypes> colors = ColorsTypes.values;
 
 /// The heading types.
@@ -164,99 +164,99 @@ ObjectTypes stringToObjectType(String type) {
 }
 
 /// Returns the string value of the given property [type].
-String propertyTypeToString(PropertiesTypes type) {
+String propertyTypeToString(PropertyType type) {
   switch (type) {
-    case PropertiesTypes.RichText:
+    case PropertyType.RichText:
       return 'rich_text';
-    case PropertiesTypes.Number:
+    case PropertyType.Number:
       return 'number';
-    case PropertiesTypes.Select:
+    case PropertyType.Select:
       return 'select';
-    case PropertiesTypes.MultiSelect:
+    case PropertyType.MultiSelect:
       return 'multi_select';
-    case PropertiesTypes.Date:
+    case PropertyType.Date:
       return 'date';
-    case PropertiesTypes.People:
+    case PropertyType.People:
       return 'people';
-    case PropertiesTypes.File:
+    case PropertyType.File:
       return 'file';
-    case PropertiesTypes.Checkbox:
+    case PropertyType.Checkbox:
       return 'checkbox';
-    case PropertiesTypes.URL:
+    case PropertyType.URL:
       return 'url';
-    case PropertiesTypes.Email:
+    case PropertyType.Email:
       return 'email';
-    case PropertiesTypes.PhoneNumber:
+    case PropertyType.PhoneNumber:
       return 'phone_number';
-    case PropertiesTypes.Formula:
+    case PropertyType.Formula:
       return 'formula';
-    case PropertiesTypes.Relation:
+    case PropertyType.Relation:
       return 'relation';
-    case PropertiesTypes.Rollup:
+    case PropertyType.Rollup:
       return 'rollup';
-    case PropertiesTypes.CreatedTime:
+    case PropertyType.CreatedTime:
       return 'created_time';
-    case PropertiesTypes.CreatedBy:
+    case PropertyType.CreatedBy:
       return 'created_by';
-    case PropertiesTypes.LastEditedTime:
+    case PropertyType.LastEditedTime:
       return 'last_edited_time';
-    case PropertiesTypes.LastEditedBy:
+    case PropertyType.LastEditedBy:
       return 'last_edited_by';
-    case PropertiesTypes.Title:
+    case PropertyType.Title:
       return 'title';
-    case PropertiesTypes.Status:
+    case PropertyType.Status:
       return 'status';
-    case PropertiesTypes.None:
+    case PropertyType.None:
       return '';
   }
 }
 
 /// Returns the property type of the given property [type] string.
-PropertiesTypes stringToPropertyType(String type) {
+PropertyType stringToPropertyType(String type) {
   switch (type) {
     case 'rich_text':
-      return PropertiesTypes.RichText;
+      return PropertyType.RichText;
     case 'number':
-      return PropertiesTypes.Number;
+      return PropertyType.Number;
     case 'select':
-      return PropertiesTypes.Select;
+      return PropertyType.Select;
     case 'multi_select':
-      return PropertiesTypes.MultiSelect;
+      return PropertyType.MultiSelect;
     case 'date':
-      return PropertiesTypes.Date;
+      return PropertyType.Date;
     case 'people':
-      return PropertiesTypes.People;
+      return PropertyType.People;
     case 'file':
-      return PropertiesTypes.File;
+      return PropertyType.File;
     case 'checkbox':
-      return PropertiesTypes.Checkbox;
+      return PropertyType.Checkbox;
     case 'url':
-      return PropertiesTypes.URL;
+      return PropertyType.URL;
     case 'email':
-      return PropertiesTypes.Email;
+      return PropertyType.Email;
     case 'phone_number':
-      return PropertiesTypes.PhoneNumber;
+      return PropertyType.PhoneNumber;
     case 'formula':
-      return PropertiesTypes.Formula;
+      return PropertyType.Formula;
     case 'relation':
-      return PropertiesTypes.Relation;
+      return PropertyType.Relation;
     case 'rollup':
-      return PropertiesTypes.Rollup;
+      return PropertyType.Rollup;
     case 'created_time':
-      return PropertiesTypes.CreatedTime;
+      return PropertyType.CreatedTime;
     case 'created_by':
-      return PropertiesTypes.CreatedBy;
+      return PropertyType.CreatedBy;
     case 'last_edited_time':
-      return PropertiesTypes.LastEditedTime;
+      return PropertyType.LastEditedTime;
     case 'last_edited_by':
-      return PropertiesTypes.LastEditedBy;
+      return PropertyType.LastEditedBy;
     case 'title':
-      return PropertiesTypes.Title;
+      return PropertyType.Title;
     case 'status':
-      return PropertiesTypes.Status;
+      return PropertyType.Status;
     case '':
     default:
-      return PropertiesTypes.None;
+      return PropertyType.None;
   }
 }
 
@@ -316,11 +316,11 @@ const List<String> all_str_property_types = [
 /// Extract the property type of a [json] property.
 ///
 /// This because sometimes the json response doesn't contain a `type` field but the type can be deduced by the field with the content.
-PropertiesTypes extractPropertyType(Map<String, dynamic> json) {
+PropertyType extractPropertyType(Map<String, dynamic> json) {
   if (json.keys.contains('type')) {
     return stringToPropertyType(json['type']);
   } else {
-    PropertiesTypes type = PropertiesTypes.None;
+    PropertyType type = PropertyType.None;
     json.keys.forEach((key) {
       if (all_str_property_types.contains(key)) {
         type = stringToPropertyType(key);
