@@ -58,10 +58,6 @@ abstract class Property {
   // /// Receive a [json] from where the information is extracted.
   // abstract static Property propertyFromJson(Map<String, dynamic> json);
 
-  /// Check if the specific json have a content list.
-  static bool contentIsList(Map<String, dynamic> json, PropertiesTypes type) =>
-      fieldIsList(json[propertyTypeToString(type)]);
-
   /// Returns true if the properties are empty.
   static bool isEmpty(Map<String, dynamic> json, PropertiesTypes type) {
     if (json[propertyTypeToString(type)] != null) {

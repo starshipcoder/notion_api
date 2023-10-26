@@ -4,24 +4,6 @@ import 'package:test/test.dart';
 
 void main() {
   group('Utils tests (General)', () {
-    test('Check if a dynamic field is a list (List)', () {
-      dynamic field = [1, 2, 3];
-      bool isList = fieldIsList(field);
-      expect(isList, true);
-    });
-
-    test('Check if a dynamic field is a list (Map)', () {
-      dynamic field = {1: 'A', 2: 'B'};
-      bool isList = fieldIsList(field);
-      expect(isList, false);
-    });
-
-    test('Check if a dynamic field is a list (String)', () {
-      dynamic field = 'ABC';
-      bool isList = fieldIsList(field);
-      expect(isList, false);
-    });
-
     test('Get the property type (with type)', () {
       Map<String, dynamic> titleField = {
         'type': 'title',

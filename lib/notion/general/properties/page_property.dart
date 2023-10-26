@@ -43,15 +43,11 @@ class PageProperty extends Property {
     PropertiesTypes type = extractPropertyType(json);
     switch (type) {
       case PropertiesTypes.Title:
-        bool contentIsList = Property.contentIsList(json, type);
-        return TitlePageProperty.fromJson(json, subfield: contentIsList ? null : 'title');
+        return TitlePageProperty.fromJson(json);
       case PropertiesTypes.RichText:
         return RichTextPageProperty.fromJson(json);
       case PropertiesTypes.MultiSelect:
-        bool contentIsList = MultiSelectPageProperty.contentIsList(json);
-        MultiSelectPageProperty multi =
-            MultiSelectPageProperty.fromJson(json, subfield: contentIsList ? null : 'options');
-        return multi;
+        return MultiSelectPageProperty.fromJson(json);
       case PropertiesTypes.Select:
         return SelectPageProperty.fromJson(json);
       case PropertiesTypes.Number:
@@ -72,10 +68,6 @@ class PageProperty extends Property {
         return PageProperty();
     }
   }
-
-  /// Check if the specific json have a content list.
-  static bool contentIsList(Map<String, dynamic> json, PropertiesTypes type) =>
-      fieldIsList(json[propertyTypeToString(type)]);
 
   /// Returns true if the properties are empty.
   static bool isEmpty(Map<String, dynamic> json, PropertiesTypes type) {
@@ -110,11 +102,9 @@ class TitlePageProperty extends PageProperty {
   /// Create a new property instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
-  TitlePageProperty.fromJson(Map<String, dynamic> json, {String? subfield})
+  TitlePageProperty.fromJson(Map<String, dynamic> json)
       : this.name = json['name'] ?? '',
-        this.content = NotionText.fromListJson(((subfield != null
-                    ? json[propertyTypeToString(PropertiesTypes.Title)][subfield]
-                    : json[propertyTypeToString(PropertiesTypes.Title)]) ??
+        this.content = NotionText.fromListJson(((json[propertyTypeToString(PropertiesTypes.Title)]) ??
                 []) as List)
             .toList(),
         super(id: json['id']);
@@ -196,10 +186,8 @@ class MultiSelectPageProperty extends PageProperty {
   /// Can receive the list6 of the options.
   MultiSelectPageProperty({this.options = const <MultiSelectOption>[]});
 
-  MultiSelectPageProperty.fromJson(Map<String, dynamic> json, {String? subfield})
-      : this.options = MultiSelectOption.fromListJson((subfield != null
-            ? json[propertyTypeToString(PropertiesTypes.MultiSelect)][subfield]
-            : json[propertyTypeToString(PropertiesTypes.MultiSelect)]) as List),
+  MultiSelectPageProperty.fromJson(Map<String, dynamic> json)
+      : this.options = MultiSelectOption.fromListJson((json[propertyTypeToString(PropertiesTypes.MultiSelect)]) as List),
         super(id: json['id']);
 
   /// Add a new [option] to the multi select options and returns this instance.
@@ -221,10 +209,6 @@ class MultiSelectPageProperty extends PageProperty {
 
     return json;
   }
-
-  /// Returns true if a json field is a list.
-  static bool contentIsList(Map<String, dynamic> json) =>
-      fieldIsList(json[propertyTypeToString(PropertiesTypes.MultiSelect)]);
 }
 
 /// A representation of a number property for any Notion object.

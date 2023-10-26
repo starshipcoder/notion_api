@@ -329,6 +329,3 @@ PropertiesTypes extractPropertyType(Map<String, dynamic> json) {
     return type;
   }
 }
-
-/// Find if a json [field] is a List
-bool fieldIsList(dynamic field) => field is List;

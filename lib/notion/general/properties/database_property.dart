@@ -46,10 +46,7 @@ class DatabaseProperty extends Property {
       case PropertiesTypes.RichText:
         return RichTextDatabaseProperty.fromJson(json);
       case PropertiesTypes.MultiSelect:
-        bool contentIsList = MultiSelectDatabaseProperty.contentIsList(json);
-        MultiSelectDatabaseProperty multi =
-            MultiSelectDatabaseProperty.fromJson(json, subfield: contentIsList ? null : 'options');
-        return multi;
+        return MultiSelectDatabaseProperty.fromJson(json);
       case PropertiesTypes.Status:
         return StatusDatabaseProperty.fromJson(json);
       case PropertiesTypes.Select:
@@ -73,10 +70,6 @@ class DatabaseProperty extends Property {
         return DatabaseProperty();
     }
   }
-
-  /// Check if the specific json have a content list.
-  static bool contentIsList(Map<String, dynamic> json, PropertiesTypes type) =>
-      fieldIsList(json[propertyTypeToString(type)]);
 
   /// Returns true if the properties are empty.
   static bool isEmpty(Map<String, dynamic> json, PropertiesTypes type) {
@@ -195,10 +188,8 @@ class MultiSelectDatabaseProperty extends DatabaseProperty {
   /// Can receive the list6 of the options.
   MultiSelectDatabaseProperty({this.options = const <MultiSelectOption>[]});
 
-  MultiSelectDatabaseProperty.fromJson(Map<String, dynamic> json, {String? subfield})
-      : this.options = MultiSelectOption.fromListJson((subfield != null
-            ? json[propertyTypeToString(PropertiesTypes.MultiSelect)][subfield]
-            : json[propertyTypeToString(PropertiesTypes.MultiSelect)]) as List),
+  MultiSelectDatabaseProperty.fromJson(Map<String, dynamic> json)
+      : this.options = MultiSelectOption.fromListJson((json[propertyTypeToString(PropertiesTypes.MultiSelect)]['options']) as List),
         super(id: json['id']);
 
   /// Add a new [option] to the multi select options and returns this instance.
@@ -220,10 +211,6 @@ class MultiSelectDatabaseProperty extends DatabaseProperty {
 
     return json;
   }
-
-  /// Returns true if a json field is a list.
-  static bool contentIsList(Map<String, dynamic> json) =>
-      fieldIsList(json[propertyTypeToString(PropertiesTypes.MultiSelect)]);
 }
 
 /// A representation of a number property for any Notion object.

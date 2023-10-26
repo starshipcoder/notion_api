@@ -327,25 +327,5 @@ void main() {
       expect(multi.options, isNotEmpty);
     });
 
-    test('Map tag from json response with options subfield', () {
-      MultiSelectPageProperty multi = MultiSelectPageProperty.fromJson(
-          jsonMultiSelectWithSubfield,
-          subfield: 'options');
-
-      expect(multi.options, isNotEmpty);
-    });
-
-    test('Create json from tags json response', () {
-      Map<String, dynamic> multi = MultiSelectPageProperty.fromJson(
-              jsonMultiSelectWithSubfield,
-              subfield: 'options')
-          .toJson();
-
-      String strType = propertyTypeToString(PropertiesTypes.MultiSelect);
-      expect(multi['type'], strType);
-      expect(multi['id'], isNotNull);
-      expect(multi, contains(strType));
-      expect(multi[strType], isMap);
-    });
   });
 }
