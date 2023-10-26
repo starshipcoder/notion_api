@@ -1,5 +1,4 @@
 import 'package:notion_api/notion/general/base_fields.dart';
-import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:notion_api/notion.dart';
 import 'package:notion_api/utils/utils.dart';
 
@@ -15,7 +14,11 @@ class Database extends BaseFields {
   Parent parent = Parent.none();
 
   /// The title of this database.
-  List<Text> title = <Text>[];
+  List<NotionText> title = <NotionText>[];
+
+  NotionIcon icon;
+
+  String url;
 
   /// The properties of this database.
   DatabaseProperties properties = DatabaseProperties();
@@ -27,7 +30,9 @@ class Database extends BaseFields {
   /// Can receive the [title], the [createdTime], the [lastEditedTime] and the database [id].
   ///
   Database({
-    this.title = const <Text>[],
+    this.title = const <NotionText>[],
+    this.icon = const NotionIcon(),
+    this.url = '',
     @deprecated String createdTime = '',
     @deprecated String lastEditedTime = '',
     @deprecated String id = '',
@@ -44,7 +49,9 @@ class Database extends BaseFields {
   /// Can receive the [parent] (none parent), [title] (empty), the [createdTime] (""), the [lastEditedTime] ("") and the database [id] ("") but every parameter is optional.
   Database.withDefaults({
     this.parent = const Parent.none(),
-    this.title = const <Text>[],
+    this.icon = const NotionIcon(),
+    this.title = const <NotionText>[],
+    this.url = '',
     String createdTime = '',
     String lastEditedTime = '',
     String id = '',
@@ -66,7 +73,9 @@ class Database extends BaseFields {
   ///
   Database.newDatabase({
     required this.parent,
-    this.title = const <Text>[],
+    this.icon = const NotionIcon(),
+    this.title = const <NotionText>[],
+    this.url = '',
     String pagesColumnName = 'Name',
     DatabaseProperties? properties,
   }) : this.properties = DatabaseProperties(map: {
@@ -84,7 +93,9 @@ class Database extends BaseFields {
   factory Database.fromJson(Map<String, dynamic> json) => Database.withDefaults(
         id: json['id'] ?? '',
         parent: Parent.fromJson(json['parent'] ?? {}),
-        title: Text.fromListJson(json['title'] ?? []),
+        icon: NotionIcon.fromJson(json['icon'] ?? {}),
+        url: json['url'] ?? '',
+        title: NotionText.fromListJson(json['title'] ?? []),
         createdTime: json['created_time'] ?? '',
         lastEditedTime: json['last_edited_time'] ?? '',
       ).addPropertiesFromJson(json['properties'] ?? {});

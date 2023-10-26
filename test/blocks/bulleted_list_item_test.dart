@@ -20,7 +20,7 @@ void main() {
     });
 
     test('Create an instance with information', () {
-      BulletedListItem block = BulletedListItem(text: Text('A')).addText('B');
+      BulletedListItem block = BulletedListItem(text: NotionText('A')).addText('B');
 
       expect(block.content.length, 2);
       expect(block.content.first.text, 'A');
@@ -29,14 +29,14 @@ void main() {
 
     test('Create an instance with mixed information', () {
       BulletedListItem block = BulletedListItem(
-        text: Text('first'),
+        text: NotionText('first'),
         texts: [
-          Text('foo'),
-          Text('bar'),
+          NotionText('foo'),
+          NotionText('bar'),
         ],
       ).addText('last').addChild(Paragraph(texts: [
-            Text('A'),
-            Text('B'),
+            NotionText('A'),
+            NotionText('B'),
           ]));
 
       expect(block.content.length, 4);
@@ -47,18 +47,18 @@ void main() {
 
     test('Create an instance with children', () {
       BulletedListItem block = BulletedListItem(
-        text: Text('bulleted'),
+        text: NotionText('bulleted'),
       ).addChildren([
         Heading(
-          text: Text(
+          text: NotionText(
             'Subtitle',
             annotations: TextAnnotations(color: ColorsTypes.Green),
           ),
         ),
         Paragraph(
           texts: [
-            Text('A'),
-            Text('B'),
+            NotionText('A'),
+            NotionText('B'),
           ],
         ),
       ]);
@@ -68,10 +68,10 @@ void main() {
     });
 
     test('Create json from instance', () {
-      Map<String, dynamic> json = BulletedListItem(text: Text('A'))
+      Map<String, dynamic> json = BulletedListItem(text: NotionText('A'))
           .addChild(Paragraph(texts: [
-            Text('A'),
-            Text('B'),
+            NotionText('A'),
+            NotionText('B'),
           ]))
           .toJson();
 

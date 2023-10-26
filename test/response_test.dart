@@ -66,8 +66,8 @@ void main() {
           [
             Paragraph(
               texts: [
-                Text('A'),
-                Text('B'),
+                NotionText('A'),
+                NotionText('B'),
               ],
             )
           ],
@@ -86,7 +86,7 @@ void main() {
         parent: Parent.database(id: testDatabaseId ?? ''),
       ).addProperty(
         name: 'TEST',
-        property: TitlePageProperty(content: [Text('ABC')]),
+        property: TitlePageProperty(content: [NotionText('ABC')]),
       );
 
       var res = await pages.create(page);

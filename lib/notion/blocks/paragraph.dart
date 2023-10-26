@@ -8,7 +8,7 @@ class Paragraph extends Block {
   @override
   final BlockTypes type = BlockTypes.Paragraph;
 
-  List<Text> _content = [];
+  List<NotionText> _content = [];
   List<Block> _children = [];
 
   /// The separator for the Text objects.
@@ -17,10 +17,10 @@ class Paragraph extends Block {
 
   /// The content of this block.
   @Deprecated('Instead use `content`')
-  List<Text> get texts => _content.toList();
+  List<NotionText> get texts => _content.toList();
 
   /// The content of this block.
-  List<Text> get content => _content.toList();
+  List<NotionText> get content => _content.toList();
 
   /// The children of this block.
   List<Block> get children => _children.toList();
@@ -33,8 +33,8 @@ class Paragraph extends Block {
   ///
   /// Also a [textSeparator] can be anexed to separate the texts on the json generated using the `toJson()` function. The separator is used because when the text is displayed is all together without any kind of separation and adding the separator that behavior is avoided. By default the [textSeparator] is an space (" ").
   Paragraph({
-    Text? text,
-    List<Text> texts = const [],
+    NotionText? text,
+    List<NotionText> texts = const [],
     List<Block> children = const [],
     @deprecated this.textSeparator = ' ',
   }) {
@@ -47,14 +47,14 @@ class Paragraph extends Block {
 
   /// Add a new [text] to the paragraph content and returns this instance.
   @Deprecated('Use `addText(Block)` instead')
-  Paragraph add(Text text) {
+  Paragraph add(NotionText text) {
     this._content.add(text);
     return this;
   }
 
   /// Add a [text] to the rich text array and returns this instance. Also can receive the [annotations] of the text.
   Paragraph addText(String text, {TextAnnotations? annotations}) {
-    this._content.add(Text(text, annotations: annotations));
+    this._content.add(NotionText(text, annotations: annotations));
     return this;
   }
 

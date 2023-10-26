@@ -15,7 +15,7 @@ void main() {
     });
 
     test('Create new instance with data', () {
-      Database database = Database(title: [Text('Title')])
+      Database database = Database(title: [NotionText('Title')])
           .addProperty(
               name: 'Tags',
               property: MultiSelectDatabaseProperty(options: [
@@ -25,12 +25,12 @@ void main() {
           .addProperty(
               name: 'Details',
               property: RichTextDatabaseProperty(content: [
-                Text('Detail A'),
-                Text('Detail B'),
+                NotionText('Detail A'),
+                NotionText('Detail B'),
               ]))
           .addProperty(
               name: 'Name',
-              property: TitleDatabaseProperty(content: [Text('Something here...')]));
+              property: TitleDatabaseProperty(content: [NotionText('Something here...')]));
 
       expect(database, isNotNull);
       expect(database.title.length, 1);
@@ -41,7 +41,7 @@ void main() {
     });
 
     test('Create json from instance', () {
-      Map<String, dynamic> database = Database(title: [Text('Title')])
+      Map<String, dynamic> database = Database(title: [NotionText('Title')])
           .addProperty(
               name: 'Tags',
               property: MultiSelectDatabaseProperty(options: [
@@ -51,12 +51,12 @@ void main() {
           .addProperty(
               name: 'Details',
               property: RichTextDatabaseProperty(content: [
-                Text('Detail A'),
-                Text('Detail B'),
+                NotionText('Detail A'),
+                NotionText('Detail B'),
               ]))
           .addProperty(
               name: 'Name',
-              property: TitleDatabaseProperty(content: [Text('Something here...')]))
+              property: TitleDatabaseProperty(content: [NotionText('Something here...')]))
           .toJson();
 
       expect(database, isNotNull);

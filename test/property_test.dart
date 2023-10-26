@@ -65,7 +65,7 @@ void main() {
     });
 
     test('Create json from Property inherited class', () {
-      Property prop = TitlePageProperty(content: [Text('Title')]);
+      Property prop = TitlePageProperty(content: [NotionText('Title')]);
       Map<String, dynamic> json = prop.toJson();
 
       String strType = propertyTypeToString(PropertiesTypes.Title);
@@ -104,7 +104,7 @@ void main() {
 
   group('Title property =>', () {
     test('Create an instance of property', () {
-      TitlePageProperty prop = TitlePageProperty(content: [Text('TITLE')]);
+      TitlePageProperty prop = TitlePageProperty(content: [NotionText('TITLE')]);
 
       expect(prop.type, PropertiesTypes.Title);
       expect(prop.content, isNotEmpty);
@@ -112,7 +112,7 @@ void main() {
     });
 
     test('Create a json from property', () {
-      Map<String, dynamic> json = TitlePageProperty(content: [Text('TITLE')]).toJson();
+      Map<String, dynamic> json = TitlePageProperty(content: [NotionText('TITLE')]).toJson();
 
       String strType = propertyTypeToString(PropertiesTypes.Title);
       expect(json['type'], strType);
@@ -123,7 +123,7 @@ void main() {
 
   group('RichText property =>', () {
     test('Create an instance of property', () {
-      RichTextPageProperty rich = RichTextPageProperty(content: [Text('A'), Text('B')]);
+      RichTextPageProperty rich = RichTextPageProperty(content: [NotionText('A'), NotionText('B')]);
 
       expect(rich.type, PropertiesTypes.RichText);
       expect(rich.content, isNotEmpty);
@@ -133,7 +133,7 @@ void main() {
     });
     test('Create a json from property', () {
       Map<String, dynamic> json =
-      RichTextPageProperty(content: [Text('A'), Text('B')]).toJson();
+      RichTextPageProperty(content: [NotionText('A'), NotionText('B')]).toJson();
 
       String strType = propertyTypeToString(PropertiesTypes.RichText);
       expect(json['type'], strType);

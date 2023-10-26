@@ -27,11 +27,11 @@ void main() {
 
     test('Create an instance with mixed information', () {
       Paragraph paragraph =
-          Paragraph(text: Text('first'), texts: [Text('foo'), Text('bar')])
+          Paragraph(text: NotionText('first'), texts: [NotionText('foo'), NotionText('bar')])
               .addText('last')
               .addChild(Paragraph(texts: [
-                Text('A'),
-                Text('B'),
+                NotionText('A'),
+                NotionText('B'),
               ]));
 
       expect(paragraph.content.length, 4);
@@ -41,17 +41,17 @@ void main() {
     });
 
     test('Create an instance with children', () {
-      Paragraph paragraph = Paragraph(text: Text('paragraph')).addChildren([
+      Paragraph paragraph = Paragraph(text: NotionText('paragraph')).addChildren([
         Heading(
-          text: Text(
+          text: NotionText(
             'Subtitle',
             annotations: TextAnnotations(color: ColorsTypes.Green),
           ),
         ),
         Paragraph(
           texts: [
-            Text('A'),
-            Text('B'),
+            NotionText('A'),
+            NotionText('B'),
           ],
         ),
       ]);
@@ -65,8 +65,8 @@ void main() {
           .addText('A')
           .addText('B')
           .addChild(Paragraph(texts: [
-            Text('A'),
-            Text('B'),
+            NotionText('A'),
+            NotionText('B'),
           ]))
           .toJson();
 
@@ -110,7 +110,7 @@ void main() {
 
       List jsonTexts = json[blockTypeToString(BlockTypes.Paragraph)]['text'];
 
-      List<Text> texts = Text.fromListJson(jsonTexts);
+      List<NotionText> texts = NotionText.fromListJson(jsonTexts);
 
       expect(texts, isList);
       expect(texts.first.text, char + separator);

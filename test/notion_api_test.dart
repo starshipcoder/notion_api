@@ -56,7 +56,7 @@ void main() {
 
       final NotionPage page = NotionPage(
         parent: Parent.database(id: testDatabaseId ?? ''),
-        title: Text('NotionClient (v1): Page test'),
+        title: NotionText('NotionClient (v1): Page test'),
       );
 
       var res = await pages.create(page);
@@ -78,12 +78,12 @@ void main() {
 
     test('Create a page with full example', () async {
       Children fullContent = Children.withBlocks([
-        Heading(text: Text('This the title')),
+        Heading(text: NotionText('This the title')),
         Paragraph(texts: [
-          Text(
+          NotionText(
             'Here you can write all the content of the paragraph but if you want to have another style for a single word you will have to do ',
           ),
-          Text(
+          NotionText(
             'this. ',
             annotations: TextAnnotations(
               color: ColorsTypes.Green,
@@ -91,74 +91,74 @@ void main() {
               italic: true,
             ),
           ),
-          Text(
+          NotionText(
             'Then you can continue writing all your content. See that if you separate the paragraph to stylized some parts you have to take in count the spaces because the ',
           ),
-          Text('textSeparator', annotations: TextAnnotations(code: true)),
-          Text(
+          NotionText('textSeparator', annotations: TextAnnotations(code: true)),
+          NotionText(
               ' will be deprecated. Maybe you will see this with extra spaces because the separator but soon will be remove.')
         ], children: [
           Heading(
-            text: Text('This is a subtitle for the paragraph'),
+            text: NotionText('This is a subtitle for the paragraph'),
             type: 2,
           ),
           Paragraph(texts: [
-            Text(
+            NotionText(
               'You can also have children for some blocks like ',
             ),
-            Text(
+            NotionText(
               'Paragraph',
               annotations: TextAnnotations(code: true),
             ),
-            Text(', '),
-            Text(
+            NotionText(', '),
+            NotionText(
               'ToDo',
               annotations: TextAnnotations(code: true),
             ),
-            Text(', '),
-            Text(
+            NotionText(', '),
+            NotionText(
               'BulletedListItems',
               annotations: TextAnnotations(code: true),
             ),
-            Text(' or '),
-            Text(
+            NotionText(' or '),
+            NotionText(
               'NumberedListItems',
               annotations: TextAnnotations(code: true),
             ),
-            Text('.'),
+            NotionText('.'),
           ]),
           Paragraph(
-            text: Text(
+            text: NotionText(
               'Also, if your paragraph will have the same style you can write all your text directly like this to avoid using a list.',
             ),
           ),
         ]),
-        Heading(text: Text('Blocks'), type: 2),
-        Heading(text: Text('ToDo'), type: 3),
-        ToDo(text: Text('Daily meeting'), checked: true),
-        ToDo(text: Text('Clean the house')),
-        ToDo(text: Text('Do the laundry')),
-        ToDo(text: Text('Call mom'), children: [
+        Heading(text: NotionText('Blocks'), type: 2),
+        Heading(text: NotionText('ToDo'), type: 3),
+        ToDo(text: NotionText('Daily meeting'), checked: true),
+        ToDo(text: NotionText('Clean the house')),
+        ToDo(text: NotionText('Do the laundry')),
+        ToDo(text: NotionText('Call mom'), children: [
           Paragraph(texts: [
-            Text('Note: ', annotations: TextAnnotations(bold: true)),
-            Text('Remember to call her before 20:00'),
+            NotionText('Note: ', annotations: TextAnnotations(bold: true)),
+            NotionText('Remember to call her before 20:00'),
           ]),
         ]),
-        Heading(text: Text('Lists'), type: 3),
-        BulletedListItem(text: Text('Milk')),
-        BulletedListItem(text: Text('Cereal')),
-        BulletedListItem(text: Text('Eggs')),
-        BulletedListItem(text: Text('Tortillas of course')),
+        Heading(text: NotionText('Lists'), type: 3),
+        BulletedListItem(text: NotionText('Milk')),
+        BulletedListItem(text: NotionText('Cereal')),
+        BulletedListItem(text: NotionText('Eggs')),
+        BulletedListItem(text: NotionText('Tortillas of course')),
         Paragraph(
-          text: Text('The numbered list are ordered by default by notion.'),
+          text: NotionText('The numbered list are ordered by default by notion.'),
         ),
-        NumberedListItem(text: Text('Notion')),
-        NumberedListItem(text: Text('Keep by Google')),
-        NumberedListItem(text: Text('Evernote')),
-        Heading(text: Text('Toggle'), type: 3),
-        Toggle(text: Text('Toogle items'), children: [
+        NumberedListItem(text: NotionText('Notion')),
+        NumberedListItem(text: NotionText('Keep by Google')),
+        NumberedListItem(text: NotionText('Evernote')),
+        Heading(text: NotionText('Toggle'), type: 3),
+        Toggle(text: NotionText('Toogle items'), children: [
           Paragraph(
-            text: Text(
+            text: NotionText(
               'Toogle items are blocks that can show or hide their children, and their children can be any other block.',
             ),
           ),
@@ -169,7 +169,7 @@ void main() {
 
       final NotionPage page = NotionPage(
         parent: Parent.database(id: testDatabaseId ?? ''),
-        title: Text('notion_api example'),
+        title: NotionText('notion_api example'),
       );
 
       var newPage = await notion.pages.create(page);
@@ -189,7 +189,7 @@ void main() {
 
       var res = await pages.update('15db928d5d2a43ada59e3136663d41f6',
           properties: PageProperties(map: {
-            'Property': RichTextPageProperty(content: [Text('A')])
+            'Property': RichTextPageProperty(content: [NotionText('A')])
           }));
 
       expect(res.status, 200);
@@ -257,7 +257,7 @@ void main() {
       NotionResponse res = await databases.create(Database.newDatabase(
         parent: Parent.page(id: testPageId ?? ''),
         title: [
-          Text('Database from test'),
+          NotionText('Database from test'),
         ],
         pagesColumnName: 'Custom pages column',
         properties: DatabaseProperties(map: {
@@ -325,12 +325,12 @@ void main() {
       NotionResponse res = await blocks.append(
         to: testBlockId as String,
         children: Children.withBlocks([
-          Heading(text: Text('This the title')),
+          Heading(text: NotionText('This the title')),
           Paragraph(texts: [
-            Text(
+            NotionText(
               'Here you can write all the content of the paragraph but if you want to have another style for a single word you will have to do ',
             ),
-            Text(
+            NotionText(
               'this. ',
               annotations: TextAnnotations(
                 color: ColorsTypes.Green,
@@ -338,74 +338,74 @@ void main() {
                 italic: true,
               ),
             ),
-            Text(
+            NotionText(
               'Then you can continue writing all your content. See that if you separate the paragraph to stylized some parts you have to take in count the spaces because the ',
             ),
-            Text('textSeparator', annotations: TextAnnotations(code: true)),
-            Text(
+            NotionText('textSeparator', annotations: TextAnnotations(code: true)),
+            NotionText(
                 ' will be deprecated. Maybe you will see this with extra spaces because the separator but soon will be remove.')
           ], children: [
             Heading(
-              text: Text('This is a subtitle for the paragraph'),
+              text: NotionText('This is a subtitle for the paragraph'),
               type: 2,
             ),
             Paragraph(texts: [
-              Text(
+              NotionText(
                 'You can also have children for some blocks like ',
               ),
-              Text(
+              NotionText(
                 'Paragraph',
                 annotations: TextAnnotations(code: true),
               ),
-              Text(', '),
-              Text(
+              NotionText(', '),
+              NotionText(
                 'ToDo',
                 annotations: TextAnnotations(code: true),
               ),
-              Text(', '),
-              Text(
+              NotionText(', '),
+              NotionText(
                 'BulletedListItems',
                 annotations: TextAnnotations(code: true),
               ),
-              Text(' or '),
-              Text(
+              NotionText(' or '),
+              NotionText(
                 'NumberedListItems',
                 annotations: TextAnnotations(code: true),
               ),
-              Text('.'),
+              NotionText('.'),
             ]),
             Paragraph(
-              text: Text(
+              text: NotionText(
                 'Also, if your paragraph will have the same style you can write all your text directly like this to avoid using a list.',
               ),
             ),
           ]),
-          Heading(text: Text('Blocks'), type: 2),
-          Heading(text: Text('ToDo'), type: 3),
-          ToDo(text: Text('Daily meeting'), checked: true),
-          ToDo(text: Text('Clean the house')),
-          ToDo(text: Text('Do the laundry')),
-          ToDo(text: Text('Call mom'), children: [
+          Heading(text: NotionText('Blocks'), type: 2),
+          Heading(text: NotionText('ToDo'), type: 3),
+          ToDo(text: NotionText('Daily meeting'), checked: true),
+          ToDo(text: NotionText('Clean the house')),
+          ToDo(text: NotionText('Do the laundry')),
+          ToDo(text: NotionText('Call mom'), children: [
             Paragraph(texts: [
-              Text('Note: ', annotations: TextAnnotations(bold: true)),
-              Text('Remember to call her before 20:00'),
+              NotionText('Note: ', annotations: TextAnnotations(bold: true)),
+              NotionText('Remember to call her before 20:00'),
             ]),
           ]),
-          Heading(text: Text('Lists'), type: 3),
-          BulletedListItem(text: Text('Milk')),
-          BulletedListItem(text: Text('Cereal')),
-          BulletedListItem(text: Text('Eggs')),
-          BulletedListItem(text: Text('Tortillas of course')),
+          Heading(text: NotionText('Lists'), type: 3),
+          BulletedListItem(text: NotionText('Milk')),
+          BulletedListItem(text: NotionText('Cereal')),
+          BulletedListItem(text: NotionText('Eggs')),
+          BulletedListItem(text: NotionText('Tortillas of course')),
           Paragraph(
-            text: Text('The numbered list are ordered by default by notion.'),
+            text: NotionText('The numbered list are ordered by default by notion.'),
           ),
-          NumberedListItem(text: Text('Notion')),
-          NumberedListItem(text: Text('Keep by Google')),
-          NumberedListItem(text: Text('Evernote')),
-          Heading(text: Text('Toggle'), type: 3),
-          Toggle(text: Text('Toogle items'), children: [
+          NumberedListItem(text: NotionText('Notion')),
+          NumberedListItem(text: NotionText('Keep by Google')),
+          NumberedListItem(text: NotionText('Evernote')),
+          Heading(text: NotionText('Toggle'), type: 3),
+          Toggle(text: NotionText('Toogle items'), children: [
             Paragraph(
-              text: Text(
+              text: NotionText(
                 'Toogle items are blocks that can show or hide their children, and their children can be any other block.',
               ),
             ),
@@ -423,10 +423,10 @@ void main() {
       NotionResponse res = await blocks.append(
         to: testBlockId as String,
         children: Children.withBlocks([
-          Heading(text: Text('Test')),
+          Heading(text: NotionText('Test')),
           Paragraph(texts: [
-            Text('Lorem ipsum (A)'),
-            Text(
+            NotionText('Lorem ipsum (A)'),
+            NotionText(
               'Lorem ipsum (B)',
               annotations: TextAnnotations(
                 bold: true,
@@ -435,7 +435,7 @@ void main() {
               ),
             ),
           ], children: [
-            Heading(text: Text('Subtitle'), type: 3),
+            Heading(text: NotionText('Subtitle'), type: 3),
           ]),
         ]),
       );
@@ -450,19 +450,19 @@ void main() {
       NotionResponse res = await blocks.append(
         to: testBlockId as String,
         children: Children.withBlocks([
-          ToDo(text: Text('This is a todo item A')),
+          ToDo(text: NotionText('This is a todo item A')),
           ToDo(
             texts: [
-              Text('This is a todo item'),
-              Text(
+              NotionText('This is a todo item'),
+              NotionText(
                 'B',
                 annotations: TextAnnotations(bold: true),
               ),
             ],
           ),
-          ToDo(text: Text('Todo item with children'), children: [
-            BulletedListItem(text: Text('A')),
-            BulletedListItem(text: Text('B')),
+          ToDo(text: NotionText('Todo item with children'), children: [
+            BulletedListItem(text: NotionText('A')),
+            BulletedListItem(text: NotionText('B')),
           ])
         ]),
       );
@@ -478,15 +478,15 @@ void main() {
         to: testBlockId as String,
         children: Children.withBlocks(
           [
-            BulletedListItem(text: Text('This is a bulleted list item A')),
-            BulletedListItem(text: Text('This is a bulleted list item B')),
+            BulletedListItem(text: NotionText('This is a bulleted list item A')),
+            BulletedListItem(text: NotionText('This is a bulleted list item B')),
             BulletedListItem(
-              text: Text('This is a bulleted list item with children'),
+              text: NotionText('This is a bulleted list item with children'),
               children: [
                 Paragraph(texts: [
-                  Text('A'),
-                  Text('B'),
-                  Text('C'),
+                  NotionText('A'),
+                  NotionText('B'),
+                  NotionText('C'),
                 ])
               ],
             ),
@@ -506,43 +506,43 @@ void main() {
           [
             Paragraph(
               texts: [
-                Text(
+                NotionText(
                   'gray',
                   annotations: TextAnnotations(color: ColorsTypes.Gray),
                 ),
-                Text(
+                NotionText(
                   'brown',
                   annotations: TextAnnotations(color: ColorsTypes.Brown),
                 ),
-                Text(
+                NotionText(
                   'orange',
                   annotations: TextAnnotations(color: ColorsTypes.Orange),
                 ),
-                Text(
+                NotionText(
                   'yellow',
                   annotations: TextAnnotations(color: ColorsTypes.Yellow),
                 ),
-                Text(
+                NotionText(
                   'green',
                   annotations: TextAnnotations(color: ColorsTypes.Green),
                 ),
-                Text(
+                NotionText(
                   'blue',
                   annotations: TextAnnotations(color: ColorsTypes.Blue),
                 ),
-                Text(
+                NotionText(
                   'purple',
                   annotations: TextAnnotations(color: ColorsTypes.Purple),
                 ),
-                Text(
+                NotionText(
                   'pink',
                   annotations: TextAnnotations(color: ColorsTypes.Pink),
                 ),
-                Text(
+                NotionText(
                   'red',
                   annotations: TextAnnotations(color: ColorsTypes.Red),
                 ),
-                Text(
+                NotionText(
                   'default',
                   annotations: TextAnnotations(color: ColorsTypes.Default),
                 ),
@@ -563,17 +563,17 @@ void main() {
         to: testBlockId as String,
         children: Children.withBlocks(
           [
-            NumberedListItem(text: Text('This is a numbered list item A')),
-            NumberedListItem(text: Text('This is a numbered list item B')),
+            NumberedListItem(text: NotionText('This is a numbered list item A')),
+            NumberedListItem(text: NotionText('This is a numbered list item B')),
             NumberedListItem(
-              text: Text('This is a bulleted list item with children'),
+              text: NotionText('This is a bulleted list item with children'),
               children: [
                 Paragraph(texts: [
-                  Text(
+                  NotionText(
                     'This paragraph start with color gray ',
                     annotations: TextAnnotations(color: ColorsTypes.Gray),
                   ),
-                  Text(
+                  NotionText(
                     'and end with brown',
                     annotations: TextAnnotations(color: ColorsTypes.Brown),
                   ),
@@ -596,17 +596,17 @@ void main() {
         children: Children.withBlocks(
           [
             Toggle(
-              text: Text('This is a toggle block'),
+              text: NotionText('This is a toggle block'),
               children: [
                 Paragraph(
                   texts: [
-                    Text(
+                    NotionText(
                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis dolor sed ex egestas, et vehicula tellus faucibus. Sed pellentesque tellus eget imperdiet vulputate.')
                   ],
                 ),
-                BulletedListItem(text: Text('A')),
-                BulletedListItem(text: Text('B')),
-                BulletedListItem(text: Text('B')),
+                BulletedListItem(text: NotionText('A')),
+                BulletedListItem(text: NotionText('B')),
+                BulletedListItem(text: NotionText('B')),
               ],
             ),
           ],

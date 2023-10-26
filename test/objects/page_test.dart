@@ -23,7 +23,7 @@ void main() {
       NotionPage page = NotionPage.empty();
 
       const String oldTitle = 'OLD';
-      page.title = Text(oldTitle);
+      page.title = NotionText(oldTitle);
 
       expect(page.properties.getByName('title'), isNotNull);
       expect(page.properties.getByName('title').isTitle, true);
@@ -32,7 +32,7 @@ void main() {
       expect(page.properties.getByName('title').value.first.text, oldTitle);
 
       const String newTitle = 'NEW';
-      page.title = Text(newTitle);
+      page.title = NotionText(newTitle);
 
       expect(page.properties.getByName('title'), isNotNull);
       expect(page.properties.getByName('title').isTitle, true);
@@ -53,12 +53,12 @@ void main() {
               .addProperty(
                   name: 'Details',
                   property: RichTextPageProperty(content: [
-                    Text('Detail A'),
-                    Text('Detail B'),
+                    NotionText('Detail A'),
+                    NotionText('Detail B'),
                   ]))
               .addProperty(
                   name: 'Name',
-                  property: TitlePageProperty(content: [Text('Something here...')]));
+                  property: TitlePageProperty(content: [NotionText('Something here...')]));
 
       expect(page.properties.entries, isNotEmpty);
       expect(page.properties.getByName('Tags').isMultiSelect, true);
@@ -78,12 +78,12 @@ void main() {
               .addProperty(
                   name: 'Details',
                   property: RichTextPageProperty(content: [
-                    Text('Detail A'),
-                    Text('Detail B'),
+                    NotionText('Detail A'),
+                    NotionText('Detail B'),
                   ]))
               .addProperty(
                   name: 'Name',
-                  property: TitlePageProperty(content: [Text('Something here...')]))
+                  property: TitlePageProperty(content: [NotionText('Something here...')]))
               .toJson();
 
       expect(page['object'], isNull);
@@ -147,7 +147,7 @@ void main() {
       NotionPage pageWithChildren = NotionPage(
           parent: parent,
           children: Children.withBlocks([
-            Heading(text: Text('A')),
+            Heading(text: NotionText('A')),
           ]));
       NotionPage pageWithoutChildren = NotionPage(parent: parent);
 

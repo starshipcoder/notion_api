@@ -1,6 +1,5 @@
 import 'package:notion_api/notion.dart';
 import 'package:notion_api/notion/general/base_fields.dart';
-import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:notion_api/notion/general/lists/children.dart';
 
 import 'parent.dart';
@@ -16,6 +15,10 @@ class NotionPage extends BaseFields {
 
   /// The field that defined if is archived or not.
   bool archived;
+
+  NotionIcon icon;
+
+  String url;
 
   /// The content of the page.
   Children? children;
@@ -33,10 +36,12 @@ class NotionPage extends BaseFields {
   /// for when a new page is created.
   NotionPage({
     required this.parent,
+    this.icon = const NotionIcon(type: IconType.none),
+    this.url = '',
     this.archived = false,
     this.children,
     String id = '',
-    Text? title,
+    NotionText? title,
   }) {
     this.id = id;
     if (title != null) {
@@ -50,7 +55,10 @@ class NotionPage extends BaseFields {
   /// Constructor for empty page.
   NotionPage.empty()
       : this.parent = Parent.none(),
-        this.archived = false;
+        this.archived = false,
+        this.icon = const NotionIcon(),
+        this.url = '',
+        super();
 
   /// Contructor from json.
   factory NotionPage.fromJson(Map<String, dynamic> json) {
@@ -58,6 +66,8 @@ class NotionPage extends BaseFields {
       id: json['id'] ?? '',
       parent: Parent.fromJson(json['parent'] ?? {}),
       archived: json['archived'] ?? false,
+      icon: NotionIcon.fromJson(json['icon'] ?? {}),
+      url: json['url'] ?? '',
     ).addPropertiesFromJson(json['properties'] ?? {});
     page.setBaseProperties(
         createdTime: json['created_time'] ?? '',
@@ -66,7 +76,7 @@ class NotionPage extends BaseFields {
   }
 
   /// Set the [title] of the page.
-  set title(Text title) {
+  set title(NotionText title) {
     // Only set one title at a time.
     if (this.properties.contains('title')) {
       this.properties.remove('title');

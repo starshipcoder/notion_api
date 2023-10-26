@@ -20,7 +20,7 @@ void main() {
     });
 
     test('Create an instance with information', () {
-      ToDo todo = ToDo(text: Text('A'), checked: true).addText('B');
+      ToDo todo = ToDo(text: NotionText('A'), checked: true).addText('B');
 
       expect(todo.checked, true);
       expect(todo.content.length, 2);
@@ -30,15 +30,15 @@ void main() {
 
     test('Create an instance with mixed information', () {
       ToDo todo = ToDo(
-        text: Text('first'),
+        text: NotionText('first'),
         texts: [
-          Text('foo'),
-          Text('bar'),
+          NotionText('foo'),
+          NotionText('bar'),
         ],
         checked: true,
       ).addText('last').addChild(Paragraph(texts: [
-            Text('A'),
-            Text('B'),
+            NotionText('A'),
+            NotionText('B'),
           ]));
 
       expect(todo.checked, true);
@@ -50,19 +50,19 @@ void main() {
 
     test('Create an instance with children', () {
       ToDo todo = ToDo(
-        text: Text('todo'),
+        text: NotionText('todo'),
         checked: true,
       ).addChildren([
         Heading(
-          text: Text(
+          text: NotionText(
             'Subtitle',
             annotations: TextAnnotations(color: ColorsTypes.Green),
           ),
         ),
         Paragraph(
           texts: [
-            Text('A'),
-            Text('B'),
+            NotionText('A'),
+            NotionText('B'),
           ],
         ),
       ]);
@@ -73,10 +73,10 @@ void main() {
     });
 
     test('Create json from instance', () {
-      Map<String, dynamic> json = ToDo(text: Text('A'))
+      Map<String, dynamic> json = ToDo(text: NotionText('A'))
           .addChild(Paragraph(texts: [
-            Text('A'),
-            Text('B'),
+            NotionText('A'),
+            NotionText('B'),
           ]))
           .toJson();
 

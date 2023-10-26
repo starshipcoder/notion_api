@@ -96,23 +96,23 @@ class TitlePageProperty extends PageProperty {
   String? name;
 
   /// The property content.
-  List<Text> content;
+  List<NotionText> content;
 
   /// The value of the content.
   @override
-  List<Text> get value => this.content;
+  List<NotionText> get value => this.content;
 
   /// Main title property constructor.
   ///
   /// Can receive a list ot texts as the title [content].
-  TitlePageProperty({this.content = const <Text>[], this.name});
+  TitlePageProperty({this.content = const <NotionText>[], this.name});
 
   /// Create a new property instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
   TitlePageProperty.fromJson(Map<String, dynamic> json, {String? subfield})
       : this.name = json['name'] ?? '',
-        this.content = Text.fromListJson(((subfield != null
+        this.content = NotionText.fromListJson(((subfield != null
                     ? json[propertyTypeToString(PropertiesTypes.Title)][subfield]
                     : json[propertyTypeToString(PropertiesTypes.Title)]) ??
                 []) as List)
@@ -144,22 +144,22 @@ class RichTextPageProperty extends PageProperty {
   final PropertiesTypes type = PropertiesTypes.RichText;
 
   /// The list of rich text.
-  List<Text> content;
+  List<NotionText> content;
 
   /// The value of the content.
   @override
-  List<Text> get value => this.content;
+  List<NotionText> get value => this.content;
 
   /// Main RichText constructor.
   ///
   /// Can receive the [content] as a list of texts.
-  RichTextPageProperty({this.content = const <Text>[]});
+  RichTextPageProperty({this.content = const <NotionText>[]});
 
   /// Create a new rich text instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
   RichTextPageProperty.fromJson(Map<String, dynamic> json)
-      : this.content = Text.fromListJson(json[propertyTypeToString(PropertiesTypes.RichText)] is List
+      : this.content = NotionText.fromListJson(json[propertyTypeToString(PropertiesTypes.RichText)] is List
             ? json[propertyTypeToString(PropertiesTypes.RichText)] as List
             : []),
         super(id: json['id']);

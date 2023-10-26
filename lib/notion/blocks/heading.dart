@@ -8,10 +8,10 @@ class Heading extends Block {
   @override
   BlockTypes type = BlockTypes.H1;
 
-  List<Text> _content = [];
+  List<NotionText> _content = [];
 
   /// The content of this block.
-  List<Text> get content => _content.toList();
+  List<NotionText> get content => _content.toList();
 
   /// Main heading constructor.
   ///
@@ -19,8 +19,8 @@ class Heading extends Block {
   ///
   /// Also can receive the [type] of the heading as an integer between 1 and 3. Set to 1 by default when no specified or when is out of the range declared before.
   Heading({
-    Text? text,
-    List<Text>? texts,
+    NotionText? text,
+    List<NotionText>? texts,
     int type = 1,
   }) {
     if (text != null) {
@@ -45,14 +45,14 @@ class Heading extends Block {
 
   /// Add a new [text] to the paragraph content and returns this instance.
   @Deprecated('Use `addText(Block)` instead')
-  Heading add(Text text) {
+  Heading add(NotionText text) {
     this._content.add(text);
     return this;
   }
 
   /// Add a [text] to the rich text array and returns this instance. Also can receive the [annotations] of the text.
   Heading addText(String text, {TextAnnotations? annotations}) {
-    this._content.add(Text(text, annotations: annotations));
+    this._content.add(NotionText(text, annotations: annotations));
     return this;
   }
 

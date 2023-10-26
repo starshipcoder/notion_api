@@ -20,9 +20,9 @@ void main() {
 
     test('Create new instance with data', () {
       Children children = Children()
-          .add(Heading(text: Text('A')))
-          .add(Paragraph(text: Text('B')))
-          .add(ToDo(text: Text('C')));
+          .add(Heading(text: NotionText('A')))
+          .add(Paragraph(text: NotionText('B')))
+          .add(ToDo(text: NotionText('C')));
 
       expect(children.isNotEmpty, true);
       expect(children.length, 3);
@@ -30,9 +30,9 @@ void main() {
 
     test('Create json (for API) from instance', () {
       Map<String, dynamic> children = Children()
-          .add(Heading(text: Text('A')))
-          .add(Paragraph(text: Text('B')))
-          .add(ToDo(text: Text('C')))
+          .add(Heading(text: NotionText('A')))
+          .add(Paragraph(text: NotionText('B')))
+          .add(ToDo(text: NotionText('C')))
           .toJson();
 
       expect(children['children'], isList);
@@ -87,11 +87,11 @@ void main() {
 
     test('Add blocks in distinct ways', () {
       Children deprecated = Children(
-        heading: Heading(text: Text('Test')),
+        heading: Heading(text: NotionText('Test')),
         paragraph: Paragraph(
           texts: [
-            Text('Lorem ipsum (A)'),
-            Text(
+            NotionText('Lorem ipsum (A)'),
+            NotionText(
               'Lorem ipsum (B)',
               annotations: TextAnnotations(
                 bold: true,
@@ -104,11 +104,11 @@ void main() {
       );
 
       Children children1 = Children.withBlocks([
-        Heading(text: Text('Test')),
+        Heading(text: NotionText('Test')),
         Paragraph(
           texts: [
-            Text('Lorem ipsum (A)'),
-            Text(
+            NotionText('Lorem ipsum (A)'),
+            NotionText(
               'Lorem ipsum (B)',
               annotations: TextAnnotations(
                 bold: true,
@@ -121,9 +121,9 @@ void main() {
       ]);
 
       Children children2 =
-          Children().add(Heading(text: Text('Test'))).add(Paragraph(texts: [
-                Text('Lorem ipsum (A)'),
-                Text('Lorem ipsum (B)',
+          Children().add(Heading(text: NotionText('Test'))).add(Paragraph(texts: [
+                NotionText('Lorem ipsum (A)'),
+                NotionText('Lorem ipsum (B)',
                     annotations: TextAnnotations(
                       bold: true,
                       underline: true,
@@ -132,10 +132,10 @@ void main() {
               ]));
 
       Children children3 = Children().addAll([
-        Heading(text: Text('Test')),
+        Heading(text: NotionText('Test')),
         Paragraph(texts: [
-          Text('Lorem ipsum (A)'),
-          Text('Lorem ipsum (B)',
+          NotionText('Lorem ipsum (A)'),
+          NotionText('Lorem ipsum (B)',
               annotations: TextAnnotations(
                 bold: true,
                 underline: true,

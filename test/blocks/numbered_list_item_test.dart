@@ -19,7 +19,7 @@ void main() {
     });
 
     test('Create an instance with information', () {
-      NumberedListItem block = NumberedListItem(text: Text('A')).addText('B');
+      NumberedListItem block = NumberedListItem(text: NotionText('A')).addText('B');
 
       expect(block.content.length, 2);
       expect(block.content.first.text, 'A');
@@ -28,14 +28,14 @@ void main() {
 
     test('Create an instance with mixed information', () {
       NumberedListItem block = NumberedListItem(
-        text: Text('first'),
+        text: NotionText('first'),
         texts: [
-          Text('foo'),
-          Text('bar'),
+          NotionText('foo'),
+          NotionText('bar'),
         ],
       ).addText('last').addChild(Paragraph(texts: [
-            Text('A'),
-            Text('B'),
+            NotionText('A'),
+            NotionText('B'),
           ]));
 
       expect(block.content.length, 4);
@@ -46,18 +46,18 @@ void main() {
 
     test('Create an instance with children', () {
       NumberedListItem block = NumberedListItem(
-        text: Text('numbered'),
+        text: NotionText('numbered'),
       ).addChildren([
         Heading(
-          text: Text(
+          text: NotionText(
             'Subtitle',
             annotations: TextAnnotations(color: ColorsTypes.Green),
           ),
         ),
         Paragraph(
           texts: [
-            Text('A'),
-            Text('B'),
+            NotionText('A'),
+            NotionText('B'),
           ],
         ),
       ]);
@@ -67,10 +67,10 @@ void main() {
     });
 
     test('Create json from instance', () {
-      Map<String, dynamic> json = NumberedListItem(text: Text('A'))
+      Map<String, dynamic> json = NumberedListItem(text: NotionText('A'))
           .addChild(Paragraph(texts: [
-            Text('A'),
-            Text('B'),
+            NotionText('A'),
+            NotionText('B'),
           ]))
           .toJson();
 

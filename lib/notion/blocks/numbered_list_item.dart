@@ -8,11 +8,11 @@ class NumberedListItem extends Block {
   @override
   final BlockTypes type = BlockTypes.NumberedListItem;
 
-  List<Text> _content = [];
+  List<NotionText> _content = [];
   List<Block> _children = [];
 
   /// The content of this block.
-  List<Text> get content => _content.toList();
+  List<NotionText> get content => _content.toList();
 
   /// The children of this block.
   List<Block> get children => _children.toList();
@@ -21,8 +21,8 @@ class NumberedListItem extends Block {
   ///
   /// Can receive a single [text] or a list of [texts]. If both are included also both fields are added to the heading content adding first the [text] field. Also can receive the [children] of the block.
   NumberedListItem({
-    Text? text,
-    List<Text> texts = const [],
+    NotionText? text,
+    List<NotionText> texts = const [],
     List<Block> children = const [],
   }) {
     if (text != null) {
@@ -34,7 +34,7 @@ class NumberedListItem extends Block {
 
   /// Add a [text] to the rich text array and returns this instance. Also can receive the [annotations] of the text.
   NumberedListItem addText(String text, {TextAnnotations? annotations}) {
-    this._content.add(Text(text, annotations: annotations));
+    this._content.add(NotionText(text, annotations: annotations));
     return this;
   }
 

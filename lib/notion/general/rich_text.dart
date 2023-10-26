@@ -2,7 +2,7 @@ import 'types/notion_types.dart';
 import '../../utils/utils.dart';
 
 /// A representation of the Rich Text Notion.
-class Text {
+class NotionText {
   String _type = 'text';
 
   /// The text intself.
@@ -17,12 +17,12 @@ class Text {
   /// Main text constructor.
   ///
   /// Required the [text] itself. Also can receive the [annotations] and/or the [url] of the text.
-  Text(this.text, {this.annotations, this.url});
+  NotionText(this.text, {this.annotations, this.url});
 
   /// Create a new Text instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
-  Text.fromJson(Map<String, dynamic> json)
+  NotionText.fromJson(Map<String, dynamic> json)
       : this.text = json['text']['content'] ?? '',
         this.annotations = TextAnnotations.fromJson(json['annotations'] ?? {}),
         this.url = json['href'] != null ? Uri.parse(json['href']) : null;
@@ -81,9 +81,9 @@ class Text {
   }
 
   /// Map a list of texts from a [json] list with dynamics.
-  static List<Text> fromListJson(List<dynamic> json) {
-    List<Text> texts = [];
-    json.forEach((e) => texts.add(Text.fromJson(e)));
+  static List<NotionText> fromListJson(List<dynamic> json) {
+    List<NotionText> texts = [];
+    json.forEach((e) => texts.add(NotionText.fromJson(e)));
     return texts;
   }
 }

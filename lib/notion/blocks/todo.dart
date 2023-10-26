@@ -8,7 +8,7 @@ class ToDo extends Block {
   @override
   final BlockTypes type = BlockTypes.ToDo;
 
-  List<Text> _content = [];
+  List<NotionText> _content = [];
   List<Block> _children = [];
 
   /// The separator for the Text objects.
@@ -19,7 +19,7 @@ class ToDo extends Block {
   bool checked;
 
   /// The content of this block.
-  List<Text> get content => _content.toList();
+  List<NotionText> get content => _content.toList();
 
   /// The children of this block.
   List<Block> get children => _children.toList();
@@ -34,8 +34,8 @@ class ToDo extends Block {
   ///
   /// Also a [textSeparator] can be anexed to separate the texts on the json generated using the `toJson()` function. The separator is used because when the text is displayed is all together without any kind of separation and adding the separator that behavior is avoided. By default the [textSeparator] is an space (" ").
   ToDo({
-    Text? text,
-    List<Text> texts = const [],
+    NotionText? text,
+    List<NotionText> texts = const [],
     List<Block> children = const [],
     this.checked = false,
     @deprecated this.textSeparator = ' ',
@@ -58,14 +58,14 @@ class ToDo extends Block {
 
   /// Add a new [text] to the paragraph content and returns this instance.
   @Deprecated('Use `addText(Block)` instead')
-  ToDo add(Text text) {
+  ToDo add(NotionText text) {
     this._content.add(text);
     return this;
   }
 
   /// Add a [text] to the rich text array and returns this instance. Also can receive the [annotations] of the text.
   ToDo addText(String text, {TextAnnotations? annotations}) {
-    this._content.add(Text(text, annotations: annotations));
+    this._content.add(NotionText(text, annotations: annotations));
     return this;
   }
 

@@ -21,6 +21,9 @@ export 'package:notion_api/notion/general/properties/property.dart';
 export 'package:notion_api/notion/general/properties/properties.dart';
 export 'package:notion_api/notion/objects/pages.dart';
 export 'package:notion_api/notion/general/types/notion_types.dart';
+export 'package:notion_api/notion/objects/database.dart';
+export 'package:notion_api/notion/general/rich_text.dart';
+export 'package:notion_api/notion/general/notion_icon.dart';
 
 
 /// A Notion API client.

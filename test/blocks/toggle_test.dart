@@ -21,13 +21,13 @@ void main() {
     });
 
     test('Create an instance with information', () {
-      Toggle block = Toggle(text: Text('A'))
+      Toggle block = Toggle(text: NotionText('A'))
           .addText('B')
           .addChild(
-              Paragraph(text: Text('This is a child of the toggle item.')))
+              Paragraph(text: NotionText('This is a child of the toggle item.')))
           .addChildren([
-        BulletedListItem(text: Text('First bulleted item')),
-        NumberedListItem(text: Text('First numbered item')),
+        BulletedListItem(text: NotionText('First bulleted item')),
+        NumberedListItem(text: NotionText('First numbered item')),
       ]);
 
       expect(block.content.length, 2);
@@ -38,18 +38,18 @@ void main() {
 
     test('Create an instance with mixed information', () {
       Toggle block = Toggle(
-        text: Text('first'),
+        text: NotionText('first'),
         texts: [
-          Text('foo'),
-          Text('bar'),
+          NotionText('foo'),
+          NotionText('bar'),
         ],
       )
           .addText('last')
           .addChild(
-              Paragraph(text: Text('This is a child of the toggle item.')))
+              Paragraph(text: NotionText('This is a child of the toggle item.')))
           .addChildren([
-        BulletedListItem(text: Text('First bulleted item')),
-        NumberedListItem(text: Text('First numbered item')),
+        BulletedListItem(text: NotionText('First bulleted item')),
+        NumberedListItem(text: NotionText('First numbered item')),
       ]);
 
       expect(block.content.length, 4);
@@ -59,9 +59,9 @@ void main() {
     });
 
     test('Create json from instance', () {
-      Map<String, dynamic> json = Toggle(text: Text('A'), children: [
-        BulletedListItem(text: Text('First bulleted item')),
-        NumberedListItem(text: Text('First numbered item')),
+      Map<String, dynamic> json = Toggle(text: NotionText('A'), children: [
+        BulletedListItem(text: NotionText('First bulleted item')),
+        NumberedListItem(text: NotionText('First numbered item')),
       ]).toJson();
 
       expect(json['type'],

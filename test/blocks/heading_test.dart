@@ -33,7 +33,7 @@ void main() {
     });
 
     test('Create an instance with information', () {
-      Heading heading = Heading(text: Text('A')).addText('B');
+      Heading heading = Heading(text: NotionText('A')).addText('B');
 
       expect(heading.content.length, 2);
       expect(heading.content.first.text, 'A');
@@ -42,7 +42,7 @@ void main() {
 
     test('Create an instance with mixed information', () {
       Heading heading =
-          Heading(text: Text('first'), texts: [Text('foo'), Text('bar')])
+          Heading(text: NotionText('first'), texts: [NotionText('foo'), NotionText('bar')])
               .addText('last');
 
       expect(heading.content.length, 4);
@@ -51,7 +51,7 @@ void main() {
     });
 
     test('Create json from instance', () {
-      Map<String, dynamic> json = Heading(text: Text('A')).toJson();
+      Map<String, dynamic> json = Heading(text: NotionText('A')).toJson();
 
       expect(json['type'],
           allOf([isNotNull, isNotEmpty, blockTypeToString(BlockTypes.H1)]));

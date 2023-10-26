@@ -1,5 +1,4 @@
 import 'package:notion_api/notion.dart';
-import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:notion_api/utils/utils.dart';
 
 /// A representation of a single property for any Notion object.
@@ -43,8 +42,7 @@ class DatabaseProperty extends Property {
     PropertiesTypes type = extractPropertyType(json);
     switch (type) {
       case PropertiesTypes.Title:
-        bool contentIsList = Property.contentIsList(json, type);
-        return TitleDatabaseProperty.fromJson(json, subfield: contentIsList ? null : 'title');
+        return TitleDatabaseProperty.fromJson(json);
       case PropertiesTypes.RichText:
         return RichTextDatabaseProperty.fromJson(json);
       case PropertiesTypes.MultiSelect:
@@ -99,25 +97,23 @@ class TitleDatabaseProperty extends DatabaseProperty {
   String? name;
 
   /// The property content.
-  List<Text> content;
+  List<NotionText> content;
 
   /// The value of the content.
   @override
-  List<Text> get value => this.content;
+  List<NotionText> get value => this.content;
 
   /// Main title property constructor.
   ///
   /// Can receive a list ot texts as the title [content].
-  TitleDatabaseProperty({this.content = const <Text>[], this.name});
+  TitleDatabaseProperty({this.content = const <NotionText>[], this.name});
 
   /// Create a new property instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
-  TitleDatabaseProperty.fromJson(Map<String, dynamic> json, {String? subfield})
+  TitleDatabaseProperty.fromJson(Map<String, dynamic> json)
       : this.name = json['name'] ?? '',
-        this.content = Text.fromListJson(((subfield != null
-                    ? json[propertyTypeToString(PropertiesTypes.Title)][subfield]
-                    : json[propertyTypeToString(PropertiesTypes.Title)]) ??
+        this.content = NotionText.fromListJson(((json[propertyTypeToString(PropertiesTypes.Title)]['title']) ??
                 []) as List)
             .toList(),
         super(id: json['id']);
@@ -147,22 +143,22 @@ class RichTextDatabaseProperty extends DatabaseProperty {
   final PropertiesTypes type = PropertiesTypes.RichText;
 
   /// The list of rich text.
-  List<Text> content;
+  List<NotionText> content;
 
   /// The value of the content.
   @override
-  List<Text> get value => this.content;
+  List<NotionText> get value => this.content;
 
   /// Main RichText constructor.
   ///
   /// Can receive the [content] as a list of texts.
-  RichTextDatabaseProperty({this.content = const <Text>[]});
+  RichTextDatabaseProperty({this.content = const <NotionText>[]});
 
   /// Create a new rich text instance from json.
   ///
   /// Receive a [json] from where the information is extracted.
   RichTextDatabaseProperty.fromJson(Map<String, dynamic> json)
-      : this.content = Text.fromListJson(json[propertyTypeToString(PropertiesTypes.RichText)] is List
+      : this.content = NotionText.fromListJson(json[propertyTypeToString(PropertiesTypes.RichText)] is List
             ? json[propertyTypeToString(PropertiesTypes.RichText)] as List
             : []),
         super(id: json['id']);
