@@ -66,8 +66,8 @@ class PageProperty extends Property {
 
   /// Returns true if the properties are empty.
   static bool isEmpty(Map<String, dynamic> json, PropertyType type) {
-    if (json[propertyTypeToString(type)] != null) {
-      return json[propertyTypeToString(type)]!.isEmpty;
+    if (json[type.toJsonName] != null) {
+      return json[type.toJsonName]!.isEmpty;
     }
     return true;
   }
@@ -99,7 +99,7 @@ class TitlePageProperty extends PageProperty {
   /// Receive a [json] from where the information is extracted.
   TitlePageProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.name = json['name'] ?? '',
-        this.content = NotionText.fromListJson(((json[propertyTypeToString(PropertyType.Title)]) ??
+        this.content = NotionText.fromListJson(((json[PropertyType.Title.toJsonName]) ??
             []) as List)
             .toList(),
         super(id: json['id'], propName: propName);
@@ -141,8 +141,8 @@ class RichTextPageProperty extends PageProperty {
   ///
   /// Receive a [json] from where the information is extracted.
   RichTextPageProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.content = NotionText.fromListJson(json[propertyTypeToString(PropertyType.RichText)] is List
-            ? json[propertyTypeToString(PropertyType.RichText)] as List
+      : this.content = NotionText.fromListJson(json[PropertyType.RichText.toJsonName] is List
+            ? json[PropertyType.RichText.toJsonName] as List
             : []),
         super(id: json['id'], propName: propName);
 
@@ -179,7 +179,7 @@ class MultiSelectPageProperty extends PageProperty {
   MultiSelectPageProperty({this.options = const <MultiSelectOption>[], required super.id, required super.propName});
 
   MultiSelectPageProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.options = MultiSelectOption.fromListJson((json[propertyTypeToString(PropertyType.MultiSelect)]) as List),
+      : this.options = MultiSelectOption.fromListJson((json[PropertyType.MultiSelect.toJsonName]) as List),
         super(id: json['id'], propName: propName);
 
   /// Add a new [option] to the multi select options and returns this instance.

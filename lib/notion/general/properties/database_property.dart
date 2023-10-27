@@ -8,7 +8,6 @@ class DatabaseProperty extends Property {
   /// Can receive the property [id].
   DatabaseProperty({required super.id, required super.propName});
 
-
   /// Convert this to a valid json representation for the Notion API.
   Map<String, dynamic> toJson() {
     if (type == PropertyType.None) {
@@ -37,10 +36,10 @@ class DatabaseProperty extends Property {
   static DatabaseProperty propertyFromJson(Map<String, dynamic> json, String propName) {
     PropertyType type = extractPropertyType(json);
     switch (type) {
-      case PropertyType.Title:
-        return TitleDatabaseProperty.fromJson(json, propName);
-      case PropertyType.RichText:
-        return RichTextDatabaseProperty.fromJson(json, propName);
+      // case PropertyType.Title:
+      //   return TitleDatabaseProperty.fromJson(json, propName);
+      // case PropertyType.RichText:
+      //   return RichTextDatabaseProperty.fromJson(json, propName);
       case PropertyType.MultiSelect:
         return MultiSelectDatabaseProperty.fromJson(json, propName);
       case PropertyType.Status:
@@ -49,18 +48,16 @@ class DatabaseProperty extends Property {
         return SelectDatabaseProperty.fromJson(json, propName);
       case PropertyType.Number:
         return NumberDatabaseProperty.fromJson(json, propName);
-      case PropertyType.Checkbox:
-      //     return CheckboxDatabaseProperty.fromJson(json);
-      // case PropertiesTypes.Date:
-      //   return DateDatabaseProperty.fromJson(json);
+      case PropertyType.Date:
+     //   return DateDatabaseProperty.fromJson(json, propName);
       // return EmailDatabaseProperty.fromJson(json);
       //   case PropertiesTypes.PhoneNumber:
       //     return PhoneNumberDatabaseProperty.fromJson(json);
+      case PropertyType.Checkbox:
+      case PropertyType.Title:
+      case PropertyType.RichText:
       case PropertyType.URL:
-      //   return URLDatabaseProperty.fromJson(json);
-
       case PropertyType.PhoneNumber:
-      case PropertyType.Date:
       case PropertyType.Email:
       default:
         return TypedDatabaseProperty(type: type, id: json['id'], propName: propName);
@@ -69,13 +66,14 @@ class DatabaseProperty extends Property {
 
   /// Returns true if the properties are empty.
   static bool isEmpty(Map<String, dynamic> json, PropertyType type) {
-    if (json[propertyTypeToString(type)] != null) {
-      return json[propertyTypeToString(type)]!.isEmpty;
+    if (json[type.toJsonName] != null) {
+      return json[type.toJsonName]!.isEmpty;
     }
     return true;
   }
 }
 
+// pour les properties qui n'ont que le type
 class TypedDatabaseProperty extends DatabaseProperty {
   final PropertyType type;
 
@@ -117,9 +115,8 @@ class TitleDatabaseProperty extends DatabaseProperty {
   /// Receive a [json] from where the information is extracted.
   TitleDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.name = json['name'] ?? '',
-        this.content = NotionText.fromListJson(((json[propertyTypeToString(PropertyType.Title)]['title']) ??
-                []) as List)
-            .toList(),
+        this.content =
+            NotionText.fromListJson(((json[PropertyType.Title.toJsonName]['title']) ?? []) as List).toList(),
         super(id: json['id'], propName: propName);
 
   /// Convert this to a valid json representation for the Notion API.
@@ -158,8 +155,8 @@ class RichTextDatabaseProperty extends DatabaseProperty {
   ///
   /// Receive a [json] from where the information is extracted.
   RichTextDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.content = NotionText.fromListJson(json[propertyTypeToString(PropertyType.RichText)] is List
-            ? json[propertyTypeToString(PropertyType.RichText)] as List
+      : this.content = NotionText.fromListJson(json[PropertyType.RichText.toJsonName] is List
+            ? json[PropertyType.RichText.toJsonName] as List
             : []),
         super(id: json['id'], propName: propName);
 
@@ -194,7 +191,8 @@ class MultiSelectDatabaseProperty extends DatabaseProperty {
   MultiSelectDatabaseProperty({this.options = const <MultiSelectOption>[], required super.id, required super.propName});
 
   MultiSelectDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.options = MultiSelectOption.fromListJson((json[propertyTypeToString(PropertyType.MultiSelect)]['options']) as List),
+      : this.options =
+            MultiSelectOption.fromListJson((json[PropertyType.MultiSelect.toJsonName]['options']) as List),
         super(id: json['id'], propName: propName);
 
   /// Add a new [option] to the multi select options and returns this instance.
@@ -271,12 +269,10 @@ class CheckboxDatabaseProperty extends DatabaseProperty {
 
 /// A representation of a date property for any Notion object.
 class DateDatabaseProperty extends DatabaseProperty {
-  DateTime startDate;
-
   @override
   final PropertyType type = PropertyType.Date;
 
-  DateDatabaseProperty({required this.startDate, required super.id, required super.propName});
+  DateDatabaseProperty({required super.id, required super.propName});
 
   @override
   Map<String, dynamic> toJson() {
@@ -284,17 +280,10 @@ class DateDatabaseProperty extends DatabaseProperty {
 
     json['id'] = this.id;
 
-    json[this.strType] = {
-      "start":
-          "${startDate.year}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}"
-    };
-
     return json;
   }
 
-  DateDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.startDate = DateTime.parse(json['date']['start']),
-        super(id: json['id'], propName: propName);
+  DateDatabaseProperty.fromJson(Map<String, dynamic> json, String propName) : super(id: json['id'], propName: propName);
 }
 
 class EmailDatabaseProperty extends DatabaseProperty {
@@ -359,7 +348,6 @@ class URLDatabaseProperty extends DatabaseProperty {
 
     json['id'] = this.id;
 
-
     json[this.strType] = this.url;
 
     return json;
@@ -385,7 +373,6 @@ class SelectDatabaseProperty extends DatabaseProperty {
 
     json['id'] = this.id;
 
-
     json[this.strType] = {
       'name': this.name,
       'options': options.map((option) => option.toJson()).toList(),
@@ -397,7 +384,7 @@ class SelectDatabaseProperty extends DatabaseProperty {
   SelectDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.name = json['name'],
         this.options = (json['select']['options'] as List).map((e) => Option.fromJson(e)).toList(),
-      super(id: json['id'], propName: propName);
+        super(id: json['id'], propName: propName);
 }
 
 class StatusDatabaseProperty extends DatabaseProperty {
@@ -416,7 +403,6 @@ class StatusDatabaseProperty extends DatabaseProperty {
 
     json['id'] = this.id;
 
-
     json['status'] = {
       'name': name,
       'options': options.map((option) => option.toJson()).toList(),
@@ -428,10 +414,7 @@ class StatusDatabaseProperty extends DatabaseProperty {
 
   StatusDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.name = json['name'],
-        this.options = (json['status']['options'] as List)            .map((e) => Option.fromJson(e))
-            .toList(),
-        this.groups = (json['status']['groups'] as List)
-            .map((e) => Group.fromJson(e))
-            .toList(),
+        this.options = (json['status']['options'] as List).map((e) => Option.fromJson(e)).toList(),
+        this.groups = (json['status']['groups'] as List).map((e) => Group.fromJson(e)).toList(),
         super(id: json['id'], propName: propName);
 }

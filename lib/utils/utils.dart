@@ -163,51 +163,53 @@ ObjectTypes stringToObjectType(String type) {
   }
 }
 
-/// Returns the string value of the given property [type].
-String propertyTypeToString(PropertyType type) {
-  switch (type) {
-    case PropertyType.RichText:
-      return 'rich_text';
-    case PropertyType.Number:
-      return 'number';
-    case PropertyType.Select:
-      return 'select';
-    case PropertyType.MultiSelect:
-      return 'multi_select';
-    case PropertyType.Date:
-      return 'date';
-    case PropertyType.People:
-      return 'people';
-    case PropertyType.File:
-      return 'file';
-    case PropertyType.Checkbox:
-      return 'checkbox';
-    case PropertyType.URL:
-      return 'url';
-    case PropertyType.Email:
-      return 'email';
-    case PropertyType.PhoneNumber:
-      return 'phone_number';
-    case PropertyType.Formula:
-      return 'formula';
-    case PropertyType.Relation:
-      return 'relation';
-    case PropertyType.Rollup:
-      return 'rollup';
-    case PropertyType.CreatedTime:
-      return 'created_time';
-    case PropertyType.CreatedBy:
-      return 'created_by';
-    case PropertyType.LastEditedTime:
-      return 'last_edited_time';
-    case PropertyType.LastEditedBy:
-      return 'last_edited_by';
-    case PropertyType.Title:
-      return 'title';
-    case PropertyType.Status:
-      return 'status';
-    case PropertyType.None:
-      return '';
+extension ObjectTypesExtension on PropertyType {
+  /// Returns the string value of the given object [type].
+  String get toJsonName {
+    switch (this) {
+      case PropertyType.RichText:
+        return 'rich_text';
+      case PropertyType.Number:
+        return 'number';
+      case PropertyType.Select:
+        return 'select';
+      case PropertyType.MultiSelect:
+        return 'multi_select';
+      case PropertyType.Date:
+        return 'date';
+      case PropertyType.People:
+        return 'people';
+      case PropertyType.File:
+        return 'file';
+      case PropertyType.Checkbox:
+        return 'checkbox';
+      case PropertyType.URL:
+        return 'url';
+      case PropertyType.Email:
+        return 'email';
+      case PropertyType.PhoneNumber:
+        return 'phone_number';
+      case PropertyType.Formula:
+        return 'formula';
+      case PropertyType.Relation:
+        return 'relation';
+      case PropertyType.Rollup:
+        return 'rollup';
+      case PropertyType.CreatedTime:
+        return 'created_time';
+      case PropertyType.CreatedBy:
+        return 'created_by';
+      case PropertyType.LastEditedTime:
+        return 'last_edited_time';
+      case PropertyType.LastEditedBy:
+        return 'last_edited_by';
+      case PropertyType.Title:
+        return 'title';
+      case PropertyType.Status:
+        return 'status';
+      case PropertyType.None:
+        return '';
+    }
   }
 }
 

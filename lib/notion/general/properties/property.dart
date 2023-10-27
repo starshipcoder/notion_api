@@ -15,7 +15,7 @@ abstract class Property {
   dynamic get value => false;
 
   /// The string value for this property type.
-  String get strType => propertyTypeToString(type);
+  String get strType => type.toJsonName;
 
   /// Returns true if property is Title type.
   bool get isTitle => type == PropertyType.Title;
@@ -61,8 +61,8 @@ abstract class Property {
 
   /// Returns true if the properties are empty.
   static bool isEmpty(Map<String, dynamic> json, PropertyType type) {
-    if (json[propertyTypeToString(type)] != null) {
-      return json[propertyTypeToString(type)]!.isEmpty;
+    if (json[type.toJsonName] != null) {
+      return json[type.toJsonName]!.isEmpty;
     }
     return true;
   }
