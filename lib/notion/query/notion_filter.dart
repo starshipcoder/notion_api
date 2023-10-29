@@ -40,38 +40,7 @@ extension TextFilterTypeExtension on TextFilterField {
   }
 }
 
-class DatabaseFilter {
-  const DatabaseFilter(this.filters, [this.operator = LogicOperator.and]);
 
-  final List<PropertyFilter> filters;
-  final LogicOperator operator;
-
-  Map<String, dynamic> toJson() {
-    List<PropertyFilter> validFilters = this.filters.where((element) => element.isValid()).toList();
-
-    if (validFilters.isEmpty) return {};
-    if (validFilters.length == 1) return filters.first.toJson();
-    return {
-      '${operator.name}': validFilters.map((filter) => filter.toJson()).toList(),
-    };
-  }
-
-  bool isValid() {
-    return filters.any((element) => element.isValid());
-  }
-
-  DatabaseFilter copyWith({List<PropertyFilter>? filters, LogicOperator? operator}) {
-    return DatabaseFilter(
-      filters ?? this.filters,
-      operator ?? this.operator,
-    );
-  }
-
-  @override
-  String toString() {
-    return 'DatabaseFilter{filters: $filters, operator: $operator}';
-  }
-}
 
 abstract class PropertyFilter {
   final String propName;

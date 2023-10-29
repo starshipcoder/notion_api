@@ -24,8 +24,9 @@ export 'package:notion_api/notion/general/types/notion_types.dart';
 export 'package:notion_api/notion/objects/database.dart';
 export 'package:notion_api/notion/general/rich_text.dart';
 export 'package:notion_api/notion/general/notion_icon.dart';
-export 'package:notion_api/notion/request/notion_filter.dart';
-export 'package:notion_api/notion/request/notion_sort.dart';
+export 'package:notion_api/notion/query/notion_filter.dart';
+export 'package:notion_api/notion/query/notion_sort.dart';
+export 'package:notion_api/notion/query/notion_query.dart';
 
 
 /// A Notion API client.

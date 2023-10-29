@@ -386,7 +386,7 @@ class SelectPageProperty extends PageProperty {
 
     json['id'] = this.id;
 
-    json[this.strType] = this.value?.toJson();
+    json[this.strType] = this.value?.toFilterJson();
 
     return json;
   }
@@ -412,7 +412,7 @@ class StatusPageProperty extends PageProperty {
 
     json['id'] = this.id;
 
-    json[this.strType] = this.value?.toJson();
+    json[this.strType] = this.value?.toFilterJson();
 
     return json;
   }

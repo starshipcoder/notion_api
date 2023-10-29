@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:notion_api/base_client.dart';
 import 'package:notion_api/notion/objects/database.dart';
-import 'package:notion_api/notion/request/notion_sort.dart';
+import 'package:notion_api/notion/query/notion_sort.dart';
 
 import 'responses/notion_response.dart';
 import 'statics.dart';
