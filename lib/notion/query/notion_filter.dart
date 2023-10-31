@@ -6,41 +6,31 @@ enum LogicOperator { and, or }
 
 enum TextFilterField {
   contains,
-  doesNotContain,
-  doesNotEqual,
-  endsWith,
+  does_not_contain,
+  does_not_equal,
+  ends_with,
   equals,
-  isEmpty,
-  isNotEmpty,
-  startsWith,
+  is_empty,
+  is_not_empty,
+  starts_with,
 }
 
-extension TextFilterTypeExtension on TextFilterField {
-  String get toJsonName {
-    switch (this) {
-      case TextFilterField.contains:
-        return 'contains';
-      case TextFilterField.doesNotContain:
-        return 'does_not_contain';
-      case TextFilterField.doesNotEqual:
-        return 'does_not_equal';
-      case TextFilterField.endsWith:
-        return 'ends_with';
-      case TextFilterField.equals:
-        return 'equals';
-      case TextFilterField.isEmpty:
-        return 'is_empty';
-      case TextFilterField.isNotEmpty:
-        return 'is_not_empty';
-      case TextFilterField.startsWith:
-        return 'starts_with';
-      default:
-        return 'unknown';
-    }
-  }
+enum DateFilterField {
+  after,
+  before,
+  equals,
+  is_empty,
+  is_not_empty,
+  next_month,
+  next_week,
+  next_year,
+  on_or_after,
+  on_or_before,
+  past_month,
+  past_week,
+  past_year,
+  this_week,
 }
-
-
 
 abstract class PropertyFilter {
   final String propName;
@@ -62,8 +52,6 @@ abstract class PropertyFilter {
 
   @override
   int get hashCode => propName.hashCode ^ type.hashCode;
-
-
 }
 
 class CheckboxFilter extends PropertyFilter {
@@ -104,8 +92,6 @@ class CheckboxFilter extends PropertyFilter {
 
   @override
   int get hashCode => super.hashCode ^ value.hashCode;
-
-
 }
 
 class TextFilter extends PropertyFilter {
@@ -117,23 +103,23 @@ class TextFilter extends PropertyFilter {
   Map<String, dynamic> toJson() {
     switch (filterField) {
       case TextFilterField.contains:
-      case TextFilterField.doesNotContain:
-      case TextFilterField.doesNotEqual:
-      case TextFilterField.endsWith:
+      case TextFilterField.does_not_contain:
+      case TextFilterField.does_not_equal:
+      case TextFilterField.ends_with:
       case TextFilterField.equals:
-      case TextFilterField.startsWith:
+      case TextFilterField.starts_with:
         return {
           'property': '$propName',
           '${type.toJsonName}': {
-            '${filterField.toJsonName}': '$query',
+            '${filterField.name}': '$query',
           }
         };
-      case TextFilterField.isEmpty:
-      case TextFilterField.isNotEmpty:
+      case TextFilterField.is_empty:
+      case TextFilterField.is_not_empty:
         return {
           'property': '$propName',
           '${type.toJsonName}': {
-            '${filterField.toJsonName}': true,
+            '${filterField.name}': true,
           }
         };
     }
@@ -162,14 +148,14 @@ class TextFilter extends PropertyFilter {
   bool isValid() {
     switch (filterField) {
       case TextFilterField.contains:
-      case TextFilterField.doesNotContain:
-      case TextFilterField.doesNotEqual:
-      case TextFilterField.endsWith:
+      case TextFilterField.does_not_contain:
+      case TextFilterField.does_not_equal:
+      case TextFilterField.ends_with:
       case TextFilterField.equals:
-      case TextFilterField.startsWith:
+      case TextFilterField.starts_with:
         return query != null && query!.isNotEmpty;
-      case TextFilterField.isEmpty:
-      case TextFilterField.isNotEmpty:
+      case TextFilterField.is_empty:
+      case TextFilterField.is_not_empty:
         return true;
     }
   }
@@ -177,14 +163,112 @@ class TextFilter extends PropertyFilter {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          super == other && other is TextFilter && runtimeType == other.runtimeType &&
-              filterField == other.filterField && query == other.query;
+          super == other &&
+              other is TextFilter &&
+              runtimeType == other.runtimeType &&
+              filterField == other.filterField &&
+              query == other.query;
 
   @override
   int get hashCode => super.hashCode ^ filterField.hashCode ^ query.hashCode;
-
-
 }
+
+class DateFilter extends PropertyFilter {
+  final DateFilterField filterField;
+  final String? date; // une date au format ISO-8601 ou Today
+
+  DateFilter(
+      {this.date, required super.propName, required this.filterField, required super.type});
+
+  Map<String, dynamic> toJson() {
+    switch (filterField) {
+      case DateFilterField.after:
+      case DateFilterField.before:
+      case DateFilterField.equals:
+      case DateFilterField.on_or_after:
+      case DateFilterField.on_or_before:
+        String _date = date!;
+        if (date == "Today") {
+          DateTime now = DateTime.now();
+          _date = now.copyWith(hour: 0, minute: 0, millisecond: 0, microsecond: 0).toIso8601String();
+        }
+        return {
+          'property': '$propName',
+          '${type.toJsonName}': {
+            '${filterField.name}': '$_date',
+          }
+        };
+      case DateFilterField.is_empty:
+      case DateFilterField.is_not_empty:
+        return {
+          'property': '$propName',
+          '${type.toJsonName}': {
+            '${filterField.name}': true,
+          }
+        };
+      case DateFilterField.next_month:
+      case DateFilterField.next_week:
+      case DateFilterField.next_year:
+      case DateFilterField.past_month:
+      case DateFilterField.past_week:
+      case DateFilterField.past_year:
+      case DateFilterField.this_week:
+        return {
+          'property': '$propName',
+          '${type.toJsonName}': {
+            '${filterField.name}': {},
+          }
+        };
+    }
+  }
+
+  @override
+  String toString() {
+    return 'DateFilter{filterType: $filterField, date: $date}';
+  }
+
+  @override
+  PropertyFilter generalCopyWith({String? propName, PropertyType? type}) {
+    return copyWith(propName: propName, type: type);
+  }
+
+  DateFilter copyWith({String? propName,
+    PropertyType? type,
+    DateFilterField? filterField,
+    String? date,
+  }) {
+    return DateFilter(
+      type: type ?? this.type,
+      propName: propName ?? this.propName,
+      filterField: filterField ?? this.filterField,
+      date: date ?? this.date,
+    );
+  }
+
+  @override
+  bool isValid() {
+    switch (filterField) {
+      case DateFilterField.is_empty:
+      case DateFilterField.is_not_empty:
+        return true;
+      default:
+        return date != null && date!.isNotEmpty;
+    }
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          super == other &&
+              other is DateFilter &&
+              runtimeType == other.runtimeType &&
+              filterField == other.filterField &&
+              date == other.date;
+
+  @override
+  int get hashCode => super.hashCode ^ filterField.hashCode ^ date.hashCode;
+}
+
 
 extension PropertyFilterExtension on DatabaseProperty {
   PropertyFilter toPropertyFilter() {
@@ -197,6 +281,8 @@ extension PropertyFilterExtension on DatabaseProperty {
       case PropertyType.PhoneNumber:
       case PropertyType.Email:
         return TextFilter(propName: propName, type: type, filterField: TextFilterField.contains);
+      case PropertyType.Date:
+        return DateFilter(propName: propName, type: type, filterField: DateFilterField.this_week);
       default:
         throw Exception('Property type not supported');
     }
