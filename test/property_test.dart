@@ -1,5 +1,4 @@
 import 'package:notion_api/notion.dart';
-import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:notion_api/utils/utils.dart';
 import 'package:test/test.dart';
 
@@ -169,7 +168,7 @@ void main() {
 
       expect(option.name, 'A');
       expect(option.id, isNull);
-      expect(option.color, ColorsTypes.Default);
+      expect(option.color, ColorsTypes.default_);
     });
 
     test('Create an option from json', () {
@@ -178,7 +177,7 @@ void main() {
 
       expect(option.name, 'A');
       expect(option.id, isNull);
-      expect(option.color, ColorsTypes.Brown);
+      expect(option.color, ColorsTypes.brown);
     });
 
     test('Create a json from property', () {
@@ -195,21 +194,21 @@ void main() {
 
     test('Create a json from option without id', () {
       Map<String, dynamic> json =
-          MultiSelectOption(name: 'A', color: ColorsTypes.Brown).toJson();
+          MultiSelectOption(name: 'A', color: ColorsTypes.brown).toJson();
 
       expect(json['name'], 'A');
       expect(json['id'], isNull);
-      expect(json['color'], contains(colorTypeToString(ColorsTypes.Brown)));
+      expect(json['color'], contains(colorTypeToString(ColorsTypes.brown)));
     });
 
     test('Create a json from option with id', () {
       Map<String, dynamic> json =
-          MultiSelectOption(name: 'A', color: ColorsTypes.Brown, id: 'a')
+          MultiSelectOption(name: 'A', color: ColorsTypes.brown, id: 'a')
               .toJson();
 
       expect(json['name'], 'A');
       expect(json['id'], isNotNull);
-      expect(json['color'], contains(colorTypeToString(ColorsTypes.Brown)));
+      expect(json['color'], contains(colorTypeToString(ColorsTypes.brown)));
     });
 
     test('Create an options list from json', () {

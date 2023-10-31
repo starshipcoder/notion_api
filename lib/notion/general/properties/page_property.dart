@@ -1,5 +1,4 @@
 import 'package:notion_api/notion.dart';
-import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:notion_api/utils/utils.dart';
 
 /// A representation of a single property for any Notion object.
@@ -99,9 +98,7 @@ class TitlePageProperty extends PageProperty {
   /// Receive a [json] from where the information is extracted.
   TitlePageProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.name = json['name'] ?? '',
-        this.content = NotionText.fromListJson(((json[PropertyType.Title.toJsonName]) ??
-            []) as List)
-            .toList(),
+        this.content = NotionText.fromListJson(((json[PropertyType.Title.toJsonName]) ?? []) as List).toList(),
         super(id: json['id'], propName: propName);
 
   /// Convert this to a valid json representation for the Notion API.
@@ -111,7 +108,6 @@ class TitlePageProperty extends PageProperty {
 
     json['id'] = this.id;
     json['name'] = this.name;
-
 
     json[this.strType] = this.content.map((e) => e.toJson()).toList();
 
@@ -141,9 +137,8 @@ class RichTextPageProperty extends PageProperty {
   ///
   /// Receive a [json] from where the information is extracted.
   RichTextPageProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.content = NotionText.fromListJson(json[PropertyType.RichText.toJsonName] is List
-            ? json[PropertyType.RichText.toJsonName] as List
-            : []),
+      : this.content = NotionText.fromListJson(
+            json[PropertyType.RichText.toJsonName] is List ? json[PropertyType.RichText.toJsonName] as List : []),
         super(id: json['id'], propName: propName);
 
   /// Convert this to a valid json representation for the Notion API.
@@ -151,9 +146,7 @@ class RichTextPageProperty extends PageProperty {
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = {'type': strType};
 
-    if (id != null) {
-      json['id'] = id;
-    }
+    json['id'] = id;
 
     json[strType] = content.map((e) => e.toJson()).toList();
 
@@ -167,23 +160,23 @@ class MultiSelectPageProperty extends PageProperty {
   @override
   final PropertyType type = PropertyType.MultiSelect;
 
-  List<MultiSelectOption> options;
+  List<Option> options;
 
   /// The options of the multi select.
   @override
-  List<MultiSelectOption> get value => this.options;
+  List<Option> get value => this.options;
 
   /// Main multi select constructor.
   ///
   /// Can receive the list6 of the options.
-  MultiSelectPageProperty({this.options = const <MultiSelectOption>[], required super.id, required super.propName});
+  MultiSelectPageProperty({this.options = const <Option>[], required super.id, required super.propName});
 
   MultiSelectPageProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.options = MultiSelectOption.fromListJson((json[PropertyType.MultiSelect.toJsonName]) as List),
+      : this.options = ((json[PropertyType.MultiSelect.toJsonName]) as List).map((e) => Option.fromJson(e)).toList(),
         super(id: json['id'], propName: propName);
 
   /// Add a new [option] to the multi select options and returns this instance.
-  MultiSelectPageProperty addOption(MultiSelectOption option) {
+  MultiSelectPageProperty addOption(Option option) {
     this.options.add(option);
     return this;
   }

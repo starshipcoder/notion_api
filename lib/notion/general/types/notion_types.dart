@@ -51,16 +51,16 @@ enum PropertyType {
 
 /// The basic colors.
 enum ColorsTypes {
-  Gray,
-  Brown,
-  Orange,
-  Yellow,
-  Green,
-  Blue,
-  Purple,
-  Pink,
-  Red,
-  Default,
+  gray,
+  brown,
+  orange,
+  yellow,
+  green,
+  blue,
+  purple,
+  pink,
+  red,
+  default$,
 }
 
 /// The parent types for pages objects.

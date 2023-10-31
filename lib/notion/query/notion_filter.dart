@@ -7,29 +7,61 @@ enum LogicOperator { and, or }
 enum TextFilterField {
   contains,
   does_not_contain,
-  does_not_equal,
-  ends_with,
   equals,
+  does_not_equal,
+  starts_with,
+  ends_with,
   is_empty,
   is_not_empty,
-  starts_with,
 }
 
 enum DateFilterField {
-  after,
   before,
+  after,
+  on_or_before,
+  on_or_after,
   equals,
+  this_week,
+  next_week,
+  next_month,
+  next_year,
+  past_week,
+  past_month,
+  past_year,
   is_empty,
   is_not_empty,
-  next_month,
-  next_week,
-  next_year,
-  on_or_after,
-  on_or_before,
-  past_month,
-  past_week,
-  past_year,
-  this_week,
+}
+
+enum SelectFilterField {
+  equals,
+  does_not_equal,
+  is_empty,
+  is_not_empty,
+}
+
+enum StatusFilterField {
+  equals,
+  does_not_equal,
+  is_empty,
+  is_not_empty,
+}
+
+enum MultiSelectFilterField {
+  contains,
+  does_not_contain,
+  is_empty,
+  is_not_empty,
+}
+
+enum NumberFilterField {
+  equals,
+  does_not_equal,
+  greater_than,
+  less_than,
+  greater_than_or_equal_to,
+  less_than_or_equal_to,
+  is_empty,
+  is_not_empty,
 }
 
 abstract class PropertyFilter {
@@ -47,8 +79,7 @@ abstract class PropertyFilter {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is PropertyFilter && runtimeType == other.runtimeType && propName == other.propName &&
-              type == other.type;
+      other is PropertyFilter && runtimeType == other.runtimeType && propName == other.propName && type == other.type;
 
   @override
   int get hashCode => propName.hashCode ^ type.hashCode;
@@ -88,7 +119,7 @@ class CheckboxFilter extends PropertyFilter {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          super == other && other is CheckboxFilter && runtimeType == other.runtimeType && value == other.value;
+      super == other && other is CheckboxFilter && runtimeType == other.runtimeType && value == other.value;
 
   @override
   int get hashCode => super.hashCode ^ value.hashCode;
@@ -163,11 +194,11 @@ class TextFilter extends PropertyFilter {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          super == other &&
-              other is TextFilter &&
-              runtimeType == other.runtimeType &&
-              filterField == other.filterField &&
-              query == other.query;
+      super == other &&
+          other is TextFilter &&
+          runtimeType == other.runtimeType &&
+          filterField == other.filterField &&
+          query == other.query;
 
   @override
   int get hashCode => super.hashCode ^ filterField.hashCode ^ query.hashCode;
@@ -177,8 +208,7 @@ class DateFilter extends PropertyFilter {
   final DateFilterField filterField;
   final String? date; // une date au format ISO-8601 ou Today
 
-  DateFilter(
-      {this.date, required super.propName, required this.filterField, required super.type});
+  DateFilter({this.date, required super.propName, required this.filterField, required super.type});
 
   Map<String, dynamic> toJson() {
     switch (filterField) {
@@ -232,7 +262,8 @@ class DateFilter extends PropertyFilter {
     return copyWith(propName: propName, type: type);
   }
 
-  DateFilter copyWith({String? propName,
+  DateFilter copyWith({
+    String? propName,
     PropertyType? type,
     DateFilterField? filterField,
     String? date,
@@ -259,16 +290,314 @@ class DateFilter extends PropertyFilter {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          super == other &&
-              other is DateFilter &&
-              runtimeType == other.runtimeType &&
-              filterField == other.filterField &&
-              date == other.date;
+      super == other &&
+          other is DateFilter &&
+          runtimeType == other.runtimeType &&
+          filterField == other.filterField &&
+          date == other.date;
 
   @override
   int get hashCode => super.hashCode ^ filterField.hashCode ^ date.hashCode;
+
 }
 
+class MultiSelectFilter extends PropertyFilter {
+  final List<String> values;
+  final MultiSelectFilterField filterField;
+
+  MultiSelectFilter({required super.propName, required this.values, required this.filterField})
+      : super(type: PropertyType.MultiSelect);
+
+  @override
+  Map<String, dynamic> toJson() {
+    switch (filterField) {
+      case MultiSelectFilterField.contains:
+      case MultiSelectFilterField.does_not_contain:
+        if (values.length == 1) {
+          return {
+            'property': '$propName',
+            'multi_select': {
+              '${filterField.name}': '$values',
+            }
+          };
+        } else {
+          return {
+            "or": values
+                .map((e) => {
+                      'property': '$propName',
+                      'multi_select': {
+                        '${filterField.name}': '$e',
+                      }
+                    })
+                .toList()
+          };
+        }
+      case MultiSelectFilterField.is_empty:
+      case MultiSelectFilterField.is_not_empty:
+        return {
+          'property': '$propName',
+          'multi_select': {
+            '${filterField.name}': true,
+          }
+        };
+    }
+  }
+
+  @override
+  bool isValid() {
+    switch (filterField) {
+      case MultiSelectFilterField.contains:
+      case MultiSelectFilterField.does_not_contain:
+        return values.isNotEmpty;
+      case MultiSelectFilterField.is_empty:
+      case MultiSelectFilterField.is_not_empty:
+        return true;
+    }
+  }
+
+  @override
+  PropertyFilter generalCopyWith({String? propName, PropertyType? type}) {
+    return copyWith(propName: propName);
+  }
+
+  MultiSelectFilter copyWith({List<String>? values, String? propName, MultiSelectFilterField? filterField}) {
+    return MultiSelectFilter(
+      propName: propName ?? this.propName,
+      values: values ?? this.values,
+      filterField: filterField ?? this.filterField,
+    );
+  }
+
+  @override
+  String toString() => 'MultiSelectFilter{propName: $propName, filterField: $filterField, values: $values}';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      super == other && other is MultiSelectFilter && runtimeType == other.runtimeType && values == other.values;
+
+  @override
+  int get hashCode => super.hashCode ^ values.hashCode;
+}
+
+class SelectFilter extends PropertyFilter {
+  final List<String> values;
+  final SelectFilterField filterField;
+
+  SelectFilter({required super.propName, required this.values, required this.filterField})
+      : super(type: PropertyType.Select);
+
+  @override
+  Map<String, dynamic> toJson() {
+    switch (filterField) {
+      case SelectFilterField.equals:
+      case SelectFilterField.does_not_equal:
+        if (values.length == 1) {
+          return {
+            'property': '$propName',
+            'select': {
+              '${filterField.name}': '${values.first}',
+            }
+          };
+        } else {
+          return {
+            "or": values
+                .map((e) => {
+                      'property': '$propName',
+                      'select': {
+                        '${filterField.name}': '$e',
+                      }
+                    })
+                .toList()
+          };
+        }
+      case SelectFilterField.is_empty:
+      case SelectFilterField.is_not_empty:
+        return {
+          'property': '$propName',
+          'select': {
+            '${filterField.name}': true,
+          }
+        };
+    }
+  }
+
+  @override
+  bool isValid() {
+    switch (filterField) {
+      case SelectFilterField.equals:
+      case SelectFilterField.does_not_equal:
+        return values.isNotEmpty;
+      case SelectFilterField.is_empty:
+      case SelectFilterField.is_not_empty:
+        return true;
+    }
+  }
+
+  @override
+  PropertyFilter generalCopyWith({String? propName, PropertyType? type}) {
+    return copyWith(propName: propName);
+  }
+
+  SelectFilter copyWith({List<String>? values, String? propName, SelectFilterField? filterField}) {
+    return SelectFilter(
+      propName: propName ?? this.propName,
+      values: values ?? this.values,
+      filterField: filterField ?? this.filterField,
+    );
+  }
+
+  @override
+  String toString() => 'SelectFilter{propName: $propName, filterField: $filterField, values: $values}';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      super == other && other is SelectFilter && runtimeType == other.runtimeType && values == other.values;
+
+  @override
+  int get hashCode => super.hashCode ^ values.hashCode;
+}
+
+class StatusFilter extends PropertyFilter {
+  final List<String> values;
+  final StatusFilterField filterField;
+
+  StatusFilter({required super.propName, required this.values, required this.filterField})
+      : super(type: PropertyType.Status);
+
+  @override
+  Map<String, dynamic> toJson() {
+    switch (filterField) {
+      case StatusFilterField.equals:
+      case StatusFilterField.does_not_equal:
+        if (values.length == 1) {
+          return {
+            'property': '$propName',
+            'status': {
+              '${filterField.name}': '${values.first}',
+            }
+          };
+        } else {
+          return {
+            "or": values
+                .map((e) => {
+                      'property': '$propName',
+                      'status': {
+                        '${filterField.name}': '$e',
+                      }
+                    })
+                .toList()
+          };
+        }
+      case StatusFilterField.is_empty:
+      case StatusFilterField.is_not_empty:
+        return {
+          'property': '$propName',
+          'status': {
+            '${filterField.name}': true,
+          }
+        };
+    }
+  }
+
+  @override
+  bool isValid() {
+    switch (filterField) {
+      case StatusFilterField.equals:
+      case StatusFilterField.does_not_equal:
+        return values.isNotEmpty;
+      case StatusFilterField.is_empty:
+      case StatusFilterField.is_not_empty:
+        return true;
+    }
+  }
+
+  @override
+  PropertyFilter generalCopyWith({String? propName, PropertyType? type}) {
+    return copyWith(propName: propName);
+  }
+
+  StatusFilter copyWith({List<String>? values, String? propName, StatusFilterField? filterField}) {
+    return StatusFilter(
+      propName: propName ?? this.propName,
+      values: values ?? this.values,
+      filterField: filterField ?? this.filterField,
+    );
+  }
+
+  @override
+  String toString() => 'StatusFilter{propName: $propName, filterField: $filterField, values: $values}';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      super == other && other is StatusFilter && runtimeType == other.runtimeType && values == other.values;
+
+  @override
+  int get hashCode => super.hashCode ^ values.hashCode;
+}
+
+class NumberFilter extends PropertyFilter {
+  final double number;
+  final NumberFilterField filterField;
+
+  NumberFilter({required super.propName, required this.number, required this.filterField})
+      : super(type: PropertyType.Number);
+
+  @override
+  Map<String, dynamic> toJson() {
+    switch (filterField) {
+      case NumberFilterField.equals:
+      case NumberFilterField.does_not_equal:
+      case NumberFilterField.greater_than:
+      case NumberFilterField.less_than:
+      case NumberFilterField.greater_than_or_equal_to:
+      case NumberFilterField.less_than_or_equal_to:
+        return {
+          'property': '$propName',
+          'number': {
+            '${filterField.name}': number,
+          }
+        };
+      case NumberFilterField.is_empty:
+      case NumberFilterField.is_not_empty:
+        return {
+          'property': '$propName',
+          'number': {
+            '${filterField.name}': true,
+          }
+        };
+    }
+  }
+
+  @override
+  bool isValid() => true;
+
+  @override
+  PropertyFilter generalCopyWith({String? propName, PropertyType? type}) {
+    return copyWith(propName: propName);
+  }
+
+  NumberFilter copyWith({double? number, String? propName, NumberFilterField? filterField}) {
+    return NumberFilter(
+      propName: propName ?? this.propName,
+      number: number ?? this.number,
+      filterField: filterField ?? this.filterField,
+    );
+  }
+
+  @override
+  String toString() => 'NumberFilter{propName: $propName, filterField: $filterField, number: $number}';
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      super == other && other is NumberFilter && runtimeType == other.runtimeType && number == other.number;
+
+  @override
+  int get hashCode => super.hashCode ^ number.hashCode;
+}
 
 extension PropertyFilterExtension on DatabaseProperty {
   PropertyFilter toPropertyFilter() {
@@ -282,7 +611,15 @@ extension PropertyFilterExtension on DatabaseProperty {
       case PropertyType.Email:
         return TextFilter(propName: propName, type: type, filterField: TextFilterField.contains);
       case PropertyType.Date:
-        return DateFilter(propName: propName, type: type, filterField: DateFilterField.this_week);
+        return DateFilter(propName: propName, type: type, filterField: DateFilterField.on_or_before, date: "Today");
+      case PropertyType.Number:
+        return NumberFilter(propName: propName, filterField: NumberFilterField.greater_than, number: 0);
+      case PropertyType.Select:
+        return SelectFilter(propName: propName, filterField: SelectFilterField.equals, values: []);
+      case PropertyType.MultiSelect:
+        return MultiSelectFilter(propName: propName, filterField: MultiSelectFilterField.contains, values: []);
+      case PropertyType.Status:
+        return StatusFilter(propName: propName, filterField: StatusFilterField.equals, values: []);
       default:
         throw Exception('Property type not supported');
     }

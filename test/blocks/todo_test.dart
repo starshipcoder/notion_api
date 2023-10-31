@@ -56,7 +56,7 @@ void main() {
         Heading(
           text: NotionText(
             'Subtitle',
-            annotations: TextAnnotations(color: ColorsTypes.Green),
+            annotations: TextAnnotations(color: ColorsTypes.green),
           ),
         ),
         Paragraph(

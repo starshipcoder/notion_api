@@ -49,7 +49,7 @@ class DatabaseProperty extends Property {
       case PropertyType.Number:
         return NumberDatabaseProperty.fromJson(json, propName);
       case PropertyType.Date:
-     //   return DateDatabaseProperty.fromJson(json, propName);
+      //   return DateDatabaseProperty.fromJson(json, propName);
       // return EmailDatabaseProperty.fromJson(json);
       //   case PropertiesTypes.PhoneNumber:
       //     return PhoneNumberDatabaseProperty.fromJson(json);
@@ -115,8 +115,7 @@ class TitleDatabaseProperty extends DatabaseProperty {
   /// Receive a [json] from where the information is extracted.
   TitleDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.name = json['name'] ?? '',
-        this.content =
-            NotionText.fromListJson(((json[PropertyType.Title.toJsonName]['title']) ?? []) as List).toList(),
+        this.content = NotionText.fromListJson(((json[PropertyType.Title.toJsonName]['title']) ?? []) as List).toList(),
         super(id: json['id'], propName: propName);
 
   /// Convert this to a valid json representation for the Notion API.
@@ -155,9 +154,8 @@ class RichTextDatabaseProperty extends DatabaseProperty {
   ///
   /// Receive a [json] from where the information is extracted.
   RichTextDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.content = NotionText.fromListJson(json[PropertyType.RichText.toJsonName] is List
-            ? json[PropertyType.RichText.toJsonName] as List
-            : []),
+      : this.content = NotionText.fromListJson(
+            json[PropertyType.RichText.toJsonName] is List ? json[PropertyType.RichText.toJsonName] as List : []),
         super(id: json['id'], propName: propName);
 
   /// Convert this to a valid json representation for the Notion API.
@@ -179,24 +177,24 @@ class MultiSelectDatabaseProperty extends DatabaseProperty {
   @override
   final PropertyType type = PropertyType.MultiSelect;
 
-  List<MultiSelectOption> options;
+  List<Option> options;
 
   /// The options of the multi select.
   @override
-  List<MultiSelectOption> get value => this.options;
+  List<Option> get value => this.options;
 
   /// Main multi select constructor.
   ///
   /// Can receive the list6 of the options.
-  MultiSelectDatabaseProperty({this.options = const <MultiSelectOption>[], required super.id, required super.propName});
+  MultiSelectDatabaseProperty({this.options = const <Option>[], required super.id, required super.propName});
 
   MultiSelectDatabaseProperty.fromJson(Map<String, dynamic> json, String propName)
       : this.options =
-            MultiSelectOption.fromListJson((json[PropertyType.MultiSelect.toJsonName]['options']) as List),
+            ((json[PropertyType.MultiSelect.toJsonName]['options']) as List).map((e) => Option.fromJson(e)).toList(),
         super(id: json['id'], propName: propName);
 
   /// Add a new [option] to the multi select options and returns this instance.
-  MultiSelectDatabaseProperty addOption(MultiSelectOption option) {
+  MultiSelectDatabaseProperty addOption(Option option) {
     this.options.add(option);
     return this;
   }

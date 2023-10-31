@@ -47,7 +47,6 @@ abstract class Property {
 
     json['id'] = id;
 
-
     return json;
   }
 
@@ -68,54 +67,10 @@ abstract class Property {
   }
 }
 
-/// A representation of a multi select option property for any Notion object.
-class MultiSelectOption {
-  /// The option name.
-  String name;
-
-  /// The option id.
-  String? id;
-
-  /// The option color.
-  ColorsTypes color;
-
-  /// Main multi select option property constructor.
-  ///
-  /// Required the [name] field to display a text for the option. Also can receive the [id] and the [color] of the option.
-  MultiSelectOption(
-      {required this.name, this.id, this.color = ColorsTypes.Default});
-
-  /// Create a new multi select instance from json.
-  ///
-  /// Receive a [json] from where the information is extracted.
-  MultiSelectOption.fromJson(Map<String, dynamic> json)
-      : this.name = json['name'] ?? '',
-        this.id = json['id'],
-        this.color = stringToColorType(json['color'] ?? '');
-
-  /// Convert this to a valid json representation for the Notion API.
-  Map<String, dynamic> toJson() {
-    Map<String, dynamic> json = {
-      'name': name,
-      'color': colorTypeToString(color),
-    };
-
-    if (id != null) {
-      json['id'] = id;
-    }
-
-    return json;
-  }
-
-  /// Map a list of options from a [json] list with dynamics.
-  static List<MultiSelectOption> fromListJson(List<dynamic> options) =>
-      options.map((e) => MultiSelectOption.fromJson(e)).toList();
-}
-
 class Option {
   final String id;
   final String name;
-  final String color;
+  final ColorsTypes color;
 
   Option(this.id, this.name, this.color);
 
@@ -131,7 +86,7 @@ class Option {
     return Option(
       json['id'],
       json['name'],
-      json['color'],
+      stringToColorType(json['color']),
     );
   }
 }

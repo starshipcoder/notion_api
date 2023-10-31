@@ -122,7 +122,7 @@ class TextAnnotations {
     this.strikethrough = false,
     this.underline = false,
     this.code = false,
-    this.color = ColorsTypes.Default,
+    this.color = ColorsTypes.default$,
   });
 
   /// Create a new text annotation instance from json.

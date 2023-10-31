@@ -1,7 +1,6 @@
 import 'package:notion_api/notion.dart';
 import 'package:notion_api/notion/blocks/heading.dart';
 import 'package:notion_api/notion/general/lists/children.dart';
-import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:notion_api/notion/objects/parent.dart';
 import 'package:notion_api/utils/utils.dart';
 import 'package:test/test.dart';

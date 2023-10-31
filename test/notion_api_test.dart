@@ -8,11 +8,9 @@ import 'package:notion_api/notion/blocks/paragraph.dart';
 import 'package:notion_api/notion/blocks/todo.dart';
 import 'package:notion_api/notion/blocks/toggle.dart';
 import 'package:notion_api/notion/general/lists/children.dart';
-import 'package:notion_api/notion/objects/database.dart';
 import 'package:notion_api/notion.dart';
 import 'package:notion_api/notion/objects/parent.dart';
 import 'package:notion_api/responses/notion_response.dart';
-import 'package:notion_api/notion/general/rich_text.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -86,7 +84,7 @@ void main() {
           NotionText(
             'this. ',
             annotations: TextAnnotations(
-              color: ColorsTypes.Green,
+              color: ColorsTypes.green,
               bold: true,
               italic: true,
             ),
@@ -262,8 +260,8 @@ void main() {
         pagesColumnName: 'Custom pages column',
         properties: DatabaseProperties(map: {
           'Description': MultiSelectDatabaseProperty(options: [
-            MultiSelectOption(name: 'Read', color: ColorsTypes.Blue),
-            MultiSelectOption(name: 'Sleep', color: ColorsTypes.Green),
+            MultiSelectOption(name: 'Read', color: ColorsTypes.blue),
+            MultiSelectOption(name: 'Sleep', color: ColorsTypes.green),
           ])
         }),
       ));
@@ -333,7 +331,7 @@ void main() {
             NotionText(
               'this. ',
               annotations: TextAnnotations(
-                color: ColorsTypes.Green,
+                color: ColorsTypes.green,
                 bold: true,
                 italic: true,
               ),
@@ -431,7 +429,7 @@ void main() {
               annotations: TextAnnotations(
                 bold: true,
                 underline: true,
-                color: ColorsTypes.Orange,
+                color: ColorsTypes.orange,
               ),
             ),
           ], children: [
@@ -508,43 +506,43 @@ void main() {
               texts: [
                 NotionText(
                   'gray',
-                  annotations: TextAnnotations(color: ColorsTypes.Gray),
+                  annotations: TextAnnotations(color: ColorsTypes.gray),
                 ),
                 NotionText(
                   'brown',
-                  annotations: TextAnnotations(color: ColorsTypes.Brown),
+                  annotations: TextAnnotations(color: ColorsTypes.brown),
                 ),
                 NotionText(
                   'orange',
-                  annotations: TextAnnotations(color: ColorsTypes.Orange),
+                  annotations: TextAnnotations(color: ColorsTypes.orange),
                 ),
                 NotionText(
                   'yellow',
-                  annotations: TextAnnotations(color: ColorsTypes.Yellow),
+                  annotations: TextAnnotations(color: ColorsTypes.yellow),
                 ),
                 NotionText(
                   'green',
-                  annotations: TextAnnotations(color: ColorsTypes.Green),
+                  annotations: TextAnnotations(color: ColorsTypes.green),
                 ),
                 NotionText(
                   'blue',
-                  annotations: TextAnnotations(color: ColorsTypes.Blue),
+                  annotations: TextAnnotations(color: ColorsTypes.blue),
                 ),
                 NotionText(
                   'purple',
-                  annotations: TextAnnotations(color: ColorsTypes.Purple),
+                  annotations: TextAnnotations(color: ColorsTypes.purple),
                 ),
                 NotionText(
                   'pink',
-                  annotations: TextAnnotations(color: ColorsTypes.Pink),
+                  annotations: TextAnnotations(color: ColorsTypes.pink),
                 ),
                 NotionText(
                   'red',
-                  annotations: TextAnnotations(color: ColorsTypes.Red),
+                  annotations: TextAnnotations(color: ColorsTypes.red),
                 ),
                 NotionText(
                   'default',
-                  annotations: TextAnnotations(color: ColorsTypes.Default),
+                  annotations: TextAnnotations(color: ColorsTypes.default_),
                 ),
               ],
             ),
@@ -571,11 +569,11 @@ void main() {
                 Paragraph(texts: [
                   NotionText(
                     'This paragraph start with color gray ',
-                    annotations: TextAnnotations(color: ColorsTypes.Gray),
+                    annotations: TextAnnotations(color: ColorsTypes.gray),
                   ),
                   NotionText(
                     'and end with brown',
-                    annotations: TextAnnotations(color: ColorsTypes.Brown),
+                    annotations: TextAnnotations(color: ColorsTypes.brown),
                   ),
                 ])
               ],

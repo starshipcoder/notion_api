@@ -96,7 +96,7 @@ void main() {
               annotations: TextAnnotations(
                 bold: true,
                 underline: true,
-                color: ColorsTypes.Orange,
+                color: ColorsTypes.orange,
               ),
             ),
           ],
@@ -113,7 +113,7 @@ void main() {
               annotations: TextAnnotations(
                 bold: true,
                 underline: true,
-                color: ColorsTypes.Orange,
+                color: ColorsTypes.orange,
               ),
             ),
           ],
@@ -127,7 +127,7 @@ void main() {
                     annotations: TextAnnotations(
                       bold: true,
                       underline: true,
-                      color: ColorsTypes.Orange,
+                      color: ColorsTypes.orange,
                     ))
               ]));
 
@@ -139,7 +139,7 @@ void main() {
               annotations: TextAnnotations(
                 bold: true,
                 underline: true,
-                color: ColorsTypes.Orange,
+                color: ColorsTypes.orange,
               ))
         ])
       ]);

@@ -73,52 +73,20 @@ BlockTypes stringToBlockType(String type) {
 /// Returns the string value of the given [color] type.
 String colorTypeToString(ColorsTypes color) {
   switch (color) {
-    case ColorsTypes.Gray:
-      return 'gray';
-    case ColorsTypes.Brown:
-      return 'brown';
-    case ColorsTypes.Orange:
-      return 'orange';
-    case ColorsTypes.Yellow:
-      return 'yellow';
-    case ColorsTypes.Green:
-      return 'green';
-    case ColorsTypes.Blue:
-      return 'blue';
-    case ColorsTypes.Purple:
-      return 'purple';
-    case ColorsTypes.Pink:
-      return 'pink';
-    case ColorsTypes.Red:
-      return 'red';
-    case ColorsTypes.Default:
+    case ColorsTypes.default$:
       return 'default';
+    default:
+      return color.name;
   }
 }
 
 /// Returns the color type of the given [color] type string.
 ColorsTypes stringToColorType(String color) {
   switch (color) {
-    case 'gray':
-      return ColorsTypes.Gray;
-    case 'brown':
-      return ColorsTypes.Brown;
-    case 'orange':
-      return ColorsTypes.Orange;
-    case 'yellow':
-      return ColorsTypes.Yellow;
-    case 'green':
-      return ColorsTypes.Green;
-    case 'blue':
-      return ColorsTypes.Blue;
-    case 'purple':
-      return ColorsTypes.Purple;
-    case 'pink':
-      return ColorsTypes.Pink;
-    case 'red':
-      return ColorsTypes.Red;
+    case 'default':
+      return ColorsTypes.default$;
     default:
-      return ColorsTypes.Default;
+      return ColorsTypes.values.firstWhere((element) => element.name == color);
   }
 }
 
