@@ -12,7 +12,7 @@ class DatabaseQuery {
     List<PropertyFilter> validFilters = this.filters.where((element) => element.isValid()).toList();
 
     if (validFilters.isEmpty) return {};
-    if (validFilters.length == 1) return filters.first.toJson();
+    if (validFilters.length == 1) return validFilters.first.toJson();
     return {
       '${filterOperator.name}': validFilters.map((filter) => filter.toJson()).toList(),
     };
