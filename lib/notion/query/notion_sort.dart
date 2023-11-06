@@ -1,19 +1,21 @@
 import 'package:notion_api/notion.dart';
+import 'package:uuid/uuid.dart';
 
 enum SortDirection { ascending, descending }
 
 class DatabaseSort {
+  final String uuid;
   final String propName;
   final SortDirection direction;
 
-  DatabaseSort({required this.propName, required this.direction});
+  const DatabaseSort({required this.uuid, required this.propName, required this.direction});
 
   factory DatabaseSort.ascending(String propName) {
-    return DatabaseSort(propName: propName, direction: SortDirection.ascending);
+    return DatabaseSort(uuid: const Uuid().v4(), propName: propName, direction: SortDirection.ascending);
   }
 
   factory DatabaseSort.descending(String propName) {
-    return DatabaseSort(propName: propName, direction: SortDirection.descending);
+    return DatabaseSort(uuid: const Uuid().v4(), propName: propName, direction: SortDirection.descending);
   }
 
   Map<String, String> toJson() {
@@ -30,6 +32,7 @@ class DatabaseSort {
 
   copyWith({String? propName, SortDirection? direction}) {
     return DatabaseSort(
+      uuid: uuid,
       propName: propName ?? this.propName,
       direction: direction ?? this.direction,
     );

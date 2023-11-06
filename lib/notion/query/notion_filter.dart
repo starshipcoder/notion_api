@@ -1,6 +1,7 @@
 import 'package:notion_api/notion/general/properties/database_property.dart';
 import 'package:notion_api/notion/general/types/notion_types.dart';
 import 'package:notion_api/utils/utils.dart';
+import 'package:uuid/uuid.dart';
 
 enum LogicOperator { and, or }
 
@@ -65,10 +66,11 @@ enum NumberFilterField {
 }
 
 abstract class PropertyFilter {
+  final String uuid;
   final String propName;
   final PropertyType type;
 
-  PropertyFilter({required this.propName, required this.type});
+  const PropertyFilter({required this.uuid, required this.propName, required this.type});
 
   Map<String, dynamic> toJson();
 
@@ -88,7 +90,10 @@ abstract class PropertyFilter {
 class CheckboxFilter extends PropertyFilter {
   final bool value;
 
-  CheckboxFilter({required super.propName, required this.value}) : super(type: PropertyType.Checkbox);
+  CheckboxFilter({required super.uuid, required super.propName, required this.value}) : super(type: PropertyType.Checkbox) {
+    // TODO: implement CheckboxFilter
+    throw UnimplementedError();
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -110,7 +115,7 @@ class CheckboxFilter extends PropertyFilter {
   }
 
   CheckboxFilter copyWith({bool? value, String? propName}) {
-    return CheckboxFilter(propName: propName ?? this.propName, value: value ?? this.value);
+    return CheckboxFilter(uuid: uuid, propName: propName ?? this.propName, value: value ?? this.value,);
   }
 
   @override
@@ -129,7 +134,7 @@ class TextFilter extends PropertyFilter {
   final TextFilterField filterField;
   final String? query;
 
-  TextFilter({this.query, required super.propName, required this.filterField, required super.type});
+  const TextFilter({required super.uuid, this.query, required super.propName, required this.filterField, required super.type});
 
   Map<String, dynamic> toJson() {
     switch (filterField) {
@@ -168,6 +173,7 @@ class TextFilter extends PropertyFilter {
 
   TextFilter copyWith({String? propName, PropertyType? type, TextFilterField? filterField, String? query}) {
     return TextFilter(
+      uuid: uuid,
       type: type ?? this.type,
       propName: propName ?? this.propName,
       filterField: filterField ?? this.filterField,
@@ -208,7 +214,7 @@ class DateFilter extends PropertyFilter {
   final DateFilterField filterField;
   final String? date; // une date au format ISO-8601 ou Today
 
-  DateFilter({this.date, required super.propName, required this.filterField, required super.type});
+  const DateFilter({required super.uuid, this.date, required super.propName, required this.filterField, required super.type});
 
   Map<String, dynamic> toJson() {
     switch (filterField) {
@@ -269,6 +275,7 @@ class DateFilter extends PropertyFilter {
     String? date,
   }) {
     return DateFilter(
+      uuid: uuid,
       type: type ?? this.type,
       propName: propName ?? this.propName,
       filterField: filterField ?? this.filterField,
@@ -298,14 +305,13 @@ class DateFilter extends PropertyFilter {
 
   @override
   int get hashCode => super.hashCode ^ filterField.hashCode ^ date.hashCode;
-
 }
 
 class MultiSelectFilter extends PropertyFilter {
   final List<String> values;
   final MultiSelectFilterField filterField;
 
-  MultiSelectFilter({required super.propName, required this.values, required this.filterField})
+  const MultiSelectFilter({required super.uuid, required super.propName, required this.values, required this.filterField})
       : super(type: PropertyType.MultiSelect);
 
   @override
@@ -362,6 +368,7 @@ class MultiSelectFilter extends PropertyFilter {
 
   MultiSelectFilter copyWith({List<String>? values, String? propName, MultiSelectFilterField? filterField}) {
     return MultiSelectFilter(
+      uuid: uuid,
       propName: propName ?? this.propName,
       values: values ?? this.values,
       filterField: filterField ?? this.filterField,
@@ -384,7 +391,7 @@ class SelectFilter extends PropertyFilter {
   final List<String> values;
   final SelectFilterField filterField;
 
-  SelectFilter({required super.propName, required this.values, required this.filterField})
+  const SelectFilter({required super.uuid, required super.propName, required this.values, required this.filterField})
       : super(type: PropertyType.Select);
 
   @override
@@ -441,6 +448,7 @@ class SelectFilter extends PropertyFilter {
 
   SelectFilter copyWith({List<String>? values, String? propName, SelectFilterField? filterField}) {
     return SelectFilter(
+      uuid: uuid,
       propName: propName ?? this.propName,
       values: values ?? this.values,
       filterField: filterField ?? this.filterField,
@@ -463,7 +471,7 @@ class StatusFilter extends PropertyFilter {
   final List<String> values;
   final StatusFilterField filterField;
 
-  StatusFilter({required super.propName, required this.values, required this.filterField})
+  const StatusFilter({required super.uuid, required super.propName, required this.values, required this.filterField})
       : super(type: PropertyType.Status);
 
   @override
@@ -520,6 +528,7 @@ class StatusFilter extends PropertyFilter {
 
   StatusFilter copyWith({List<String>? values, String? propName, StatusFilterField? filterField}) {
     return StatusFilter(
+      uuid: uuid,
       propName: propName ?? this.propName,
       values: values ?? this.values,
       filterField: filterField ?? this.filterField,
@@ -542,7 +551,7 @@ class NumberFilter extends PropertyFilter {
   final double number;
   final NumberFilterField filterField;
 
-  NumberFilter({required super.propName, required this.number, required this.filterField})
+  const NumberFilter({required super.uuid, required super.propName, required this.number, required this.filterField})
       : super(type: PropertyType.Number);
 
   @override
@@ -581,6 +590,7 @@ class NumberFilter extends PropertyFilter {
 
   NumberFilter copyWith({double? number, String? propName, NumberFilterField? filterField}) {
     return NumberFilter(
+      uuid: uuid,
       propName: propName ?? this.propName,
       number: number ?? this.number,
       filterField: filterField ?? this.filterField,
@@ -600,26 +610,26 @@ class NumberFilter extends PropertyFilter {
 }
 
 extension PropertyFilterExtension on DatabaseProperty {
-  PropertyFilter toPropertyFilter() {
+  PropertyFilter createNewFilter() {
     switch (type) {
       case PropertyType.Checkbox:
-        return CheckboxFilter(propName: propName, value: true);
+        return CheckboxFilter(uuid: Uuid().v4(), propName: propName, value: true);
       case PropertyType.Title:
       case PropertyType.RichText:
       case PropertyType.URL:
       case PropertyType.PhoneNumber:
       case PropertyType.Email:
-        return TextFilter(propName: propName, type: type, filterField: TextFilterField.contains);
+        return TextFilter(uuid: Uuid().v4(), propName: propName, type: type, filterField: TextFilterField.contains);
       case PropertyType.Date:
-        return DateFilter(propName: propName, type: type, filterField: DateFilterField.on_or_before, date: "Today");
+        return DateFilter(uuid: Uuid().v4(), propName: propName, type: type, filterField: DateFilterField.on_or_before, date: "Today");
       case PropertyType.Number:
-        return NumberFilter(propName: propName, filterField: NumberFilterField.greater_than, number: 0);
+        return NumberFilter(uuid: Uuid().v4(), propName: propName, filterField: NumberFilterField.greater_than, number: 0);
       case PropertyType.Select:
-        return SelectFilter(propName: propName, filterField: SelectFilterField.equals, values: []);
+        return SelectFilter(uuid: Uuid().v4(), propName: propName, filterField: SelectFilterField.equals, values: []);
       case PropertyType.MultiSelect:
-        return MultiSelectFilter(propName: propName, filterField: MultiSelectFilterField.contains, values: []);
+        return MultiSelectFilter(uuid: Uuid().v4(), propName: propName, filterField: MultiSelectFilterField.contains, values: []);
       case PropertyType.Status:
-        return StatusFilter(propName: propName, filterField: StatusFilterField.equals, values: []);
+        return StatusFilter(uuid: Uuid().v4(), propName: propName, filterField: StatusFilterField.equals, values: []);
       default:
         throw Exception('Property type not supported');
     }
