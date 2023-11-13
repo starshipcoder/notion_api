@@ -84,6 +84,7 @@ String colorTypeToString(ColorsTypes color) {
 ColorsTypes stringToColorType(String color) {
   switch (color) {
     case 'default':
+    case '':
       return ColorsTypes.default$;
     default:
       return ColorsTypes.values.firstWhere((element) => element.name == color);

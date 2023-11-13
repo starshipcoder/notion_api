@@ -312,7 +312,7 @@ class EmailPageProperty extends PageProperty {
   }
 
   EmailPageProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.email = (json['email'] is String) ? json['email'] : "",
+      : this.email = (json['email'] is String) ? json['email'] : '',
         super(id: json['id'], propName: propName);
 }
 
@@ -336,7 +336,7 @@ class PhoneNumberPageProperty extends PageProperty {
   }
 
   PhoneNumberPageProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.phone = json['phone_number'] ?? "",
+      : this.phone = json['phone_number'] ?? '',
         super(id: json['id'], propName: propName);
 }
 
@@ -360,7 +360,7 @@ class URLPageProperty extends PageProperty {
   }
 
   URLPageProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.url = json['url'],
+      : this.url = json['url'] ?? '',
         super(id: json['id'], propName: propName);
 }
 
@@ -384,9 +384,14 @@ class SelectPageProperty extends PageProperty {
     return json;
   }
 
+  // SelectPageProperty.fromJson(Map<String, dynamic> json, String propName)
+  //     : this.name = json['select']['name'],
+  //       this.color = stringToColorType(json['select']['color'] ?? ''),
+  //       super(id: json['id'], propName: propName);
+
   SelectPageProperty.fromJson(Map<String, dynamic> json, String propName)
-      : this.name = json['select']['name'],
-        this.color = stringToColorType(json['select']['color'] ?? ''),
+      : name = json['select']?['name'] ?? '',
+        color = stringToColorType(json['select'] != null ? json['select']['color'] ?? '' : ''),
         super(id: json['id'], propName: propName);
 }
 
